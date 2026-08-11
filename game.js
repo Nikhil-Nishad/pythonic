@@ -1491,12 +1491,13 @@ class SnakeGame {
             { x: center - 2, y: center }
         ];
 
-        // Clear power-ups
+        // Clear power-ups & obstacles
         this.powerUps.clear();
         this.activePowerUp = null;
         this.powerUpPosition = null;
         this.ghostMode = false;
         this.shieldActive = false;
+        this.obstacles = [];
 
         this.spawnFood();
         this.hideAllOverlays();
@@ -1527,6 +1528,60 @@ class SnakeGame {
         this.lastFrameTime = performance.now();
         this.gameLoop();
         this.announce('Game resumed');
+    }
+
+    levelUp() {
+        this.level++;
+        this.foodEaten = 0;
+        this.speed = Math.max(CONFIG.MIN_SPEED, CONFIG.INITIAL_SPEED - (this.level - 1) * CONFIG.SPEED_INCREMENT);
+
+        // Pause snake movement for 2 seconds (2000ms) on level up
+        this.state = GameState.LEVEL_UP;
+        this.audio.playLevelUp();
+        this.screenShake.shake(10, 400);
+
+        if (this.levelUpOverlay && this.levelUpNumber) {
+            this.levelUpNumber.textContent = this.level;
+            this.levelUpOverlay.classList.remove('hidden');
+        }
+
+        this.spawnObstacles();
+        this.announce(`Level Up! Level ${this.level}`);
+
+        // 2-second pause timer before resuming gameplay loop
+        setTimeout(() => {
+            if (this.levelUpOverlay) {
+                this.levelUpOverlay.classList.add('hidden');
+            }
+            if (this.state === GameState.LEVEL_UP) {
+                this.state = GameState.PLAYING;
+                this.lastMoveTime = performance.now();
+                this.lastFrameTime = performance.now();
+                this.spawnFood();
+                this.gameLoop();
+            }
+        }, 2000);
+    }
+
+    spawnObstacles() {
+        this.obstacles = [];
+        if (this.level < 3) return;
+
+        const obstacleCount = Math.min(8, (this.level - 2) * 2);
+        let emptyCells = [];
+        for (let y = 1; y < this.gridSize - 1; y++) {
+            for (let x = 1; x < this.gridSize - 1; x++) {
+                if (!this.snake.some(seg => seg.x === x && seg.y === y) &&
+                    !(this.food && this.food.x === x && this.food.y === y)) {
+                    emptyCells.push({ x, y });
+                }
+            }
+        }
+
+        for (let i = 0; i < obstacleCount && emptyCells.length > 0; i++) {
+            const idx = Math.floor(Math.random() * emptyCells.length);
+            this.obstacles.push(emptyCells.splice(idx, 1)[0]);
+        }
     }
 
     gameOver() {
@@ -1801,6 +1856,18 @@ class SnakeGame {
             }
         }
 
+        // Obstacle collision
+        if (!this.ghostMode && this.obstacles && this.obstacles.some(obs => obs.x === newHead.x && obs.y === newHead.y)) {
+            if (this.shieldActive) {
+                this.shieldActive = false;
+                this.powerUps.activePowerUps.delete(PowerUpType.SHIELD);
+                this.audio.playPowerUpExpire();
+            } else {
+                this.gameOver();
+                return;
+            }
+        }
+
         // Move snake
         this.snake.unshift(newHead);
 
@@ -1992,6 +2059,9 @@ class SnakeGame {
             this.drawPowerUp();
         }
 
+        // Obstacles
+        this.drawObstacles();
+
         // Food
         this.drawFood();
 
@@ -2006,6 +2076,40 @@ class SnakeGame {
 
         // Active power-up indicators
         this.drawPowerUpIndicators();
+    }
+
+    drawObstacles() {
+        if (!this.obstacles || this.obstacles.length === 0) return;
+        const radius = 4;
+        this.obstacles.forEach(obs => {
+            const x = obs.x * this.tileSize;
+            const y = obs.y * this.tileSize;
+
+            if (this.showGlow) {
+                this.ctx.shadowColor = '#f85149';
+                this.ctx.shadowBlur = 10;
+            }
+
+            this.ctx.fillStyle = '#da3633';
+            this.ctx.strokeStyle = '#f85149';
+            this.ctx.lineWidth = 2;
+
+            this.roundRect(x + 2, y + 2, this.tileSize - 4, this.tileSize - 4, radius);
+            this.ctx.fill();
+            this.ctx.stroke();
+
+            // Inner hazard mark
+            this.ctx.strokeStyle = '#ffffff';
+            this.ctx.lineWidth = 1.5;
+            this.ctx.beginPath();
+            this.ctx.moveTo(x + 6, y + 6);
+            this.ctx.lineTo(x + this.tileSize - 6, y + this.tileSize - 6);
+            this.ctx.moveTo(x + this.tileSize - 6, y + 6);
+            this.ctx.lineTo(x + 6, y + this.tileSize - 6);
+            this.ctx.stroke();
+
+            this.ctx.shadowBlur = 0;
+        });
     }
 
     drawGrid() {

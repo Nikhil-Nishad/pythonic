@@ -1,8 +1,9 @@
-const CACHE_NAME = 'snake-game-v3.0.0';
+const CACHE_NAME = 'snake-game-v3.1.0';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
     './instructions.html',
+    './blog.html',
     './styles.css',
     './game.js',
     './src/scoring.js',
