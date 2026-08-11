@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "node --test tests/*.test.js",
-    "start": "npx serve . --clean-urls false"
+    "start": "npx serve ."
   },
   "keywords": [
     "snake-game",
