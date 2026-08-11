@@ -1,4 +1,4 @@
-const CACHE_NAME = 'snake-game-v4.0.0';
+const CACHE_NAME = 'snake-game-v4.1.0';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -37,16 +37,19 @@ self.addEventListener('fetch', (event) => {
 
     const url = new URL(event.request.url);
 
-    // HTML Navigation requests: Network First, Fallback to Cache
+    // Skip non-origin requests
+    if (url.origin !== self.origin) return;
+
+    // For HTML navigation requests, try network first, fallback to cached HTML
     if (event.request.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname === '/' || !url.pathname.includes('.')) {
         event.respondWith(
             fetch(event.request)
-                .then((response) => {
-                    if (response && response.status === 200) {
-                        const copy = response.clone();
-                        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+                .then((networkResponse) => {
+                    if (networkResponse && networkResponse.status === 200) {
+                        const responseClone = networkResponse.clone();
+                        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
                     }
-                    return response;
+                    return networkResponse;
                 })
                 .catch(() => {
                     return caches.match(event.request).then((cached) => {
@@ -60,16 +63,16 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // Static assets: Cache First, Fallback to Network
+    // For static assets (CSS, JS, manifest), try cache first, fallback to network
     event.respondWith(
-        caches.match(event.request).then((cached) => {
-            if (cached) return cached;
-            return fetch(event.request).then((response) => {
-                if (response && response.status === 200) {
-                    const copy = response.clone();
-                    caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+        caches.match(event.request).then((cachedResponse) => {
+            if (cachedResponse) return cachedResponse;
+            return fetch(event.request).then((networkResponse) => {
+                if (networkResponse && networkResponse.status === 200) {
+                    const responseClone = networkResponse.clone();
+                    caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
                 }
-                return response;
+                return networkResponse;
             });
         })
     );
