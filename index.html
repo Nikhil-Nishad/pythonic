@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Modern Snake Game - High quality, mobile-friendly, engaging gameplay">
+    <meta name="theme-color" content="#0d1117">
+    <title>Snake Game | Modern Edition</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Background ambient effects -->
+        <div class="ambient-bg" aria-hidden="true">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+        </div>
+
+        <!-- Particle canvas for effects -->
+        <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
+
+        <!-- Main game card -->
+        <main class="game-card" role="main" aria-label="Snake Game">
+            <!-- Header -->
+            <header class="game-header">
+                <div class="game-title">
+                    <svg class="snake-icon" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                        <path d="M4 16C4 10.477 8.477 6 14 6H18C23.523 6 28 10.477 28 16C28 21.523 23.523 26 18 26H14C8.477 26 4 21.523 4 16Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 14C12 13.4477 12.4477 13 13 13C13.5523 13 14 13.4477 14 14C14 14.5523 13.5523 15 13 15C12.4477 15 12 14.5523 12 14Z" fill="currentColor"/>
+                        <path d="M20 14C20 13.4477 20.4477 13 21 13C21.5523 13 22 13.4477 22 14C22 14.5523 21.5523 15 21 15C20.4477 15 20 14.5523 20 14Z" fill="currentColor"/>
+                    </svg>
+                    <h1>Snake</h1>
+                </div>
+                <div class="game-stats" aria-live="polite" aria-label="Game statistics">
+                    <div class="stat">
+                        <span class="stat-label">Score</span>
+                        <span class="stat-value" id="score">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Best</span>
+                        <span class="stat-value" id="high-score">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Level</span>
+                        <span class="stat-value" id="level">1</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Game Canvas Area -->
+            <div class="game-canvas-wrapper">
+                <canvas id="game-canvas" class="game-canvas" aria-label="Game board" role="application"></canvas>
+                <div class="canvas-overlay" id="start-overlay" role="dialog" aria-modal="true" aria-labelledby="overlay-title">
+                    <div class="overlay-content">
+                        <h2 id="overlay-title">Snake</h2>
+                        <p class="overlay-subtitle">Classic reimagined</p>
+                        <div class="controls-preview" aria-label="Control instructions">
+                            <div class="control-row">
+                                <kbd class="key" aria-label="Up">↑</kbd>
+                                <kbd class="key" aria-label="Down">↓</kbd>
+                                <kbd class="key" aria-label="Left">←</kbd>
+                                <kbd class="key" aria-label="Right">→</kbd>
+                                <span class="control-desc">Move</span>
+                            </div>
+                            <div class="control-row touch-hint" aria-label="Touch controls">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path d="M12 2v20M2 12h20"/>
+                                </svg>
+                                <span>Swipe to move</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" id="start-btn" type="button">
+                            <span class="btn-text">Start Game</span>
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                                <polygon points="5 3 19 12 5 21"/>
+                            </svg>
+                        </button>
+                        <p class="overlay-hint">Press <kbd>Space</kbd> or tap to start</p>
+                    </div>
+                </div>
+                <div class="canvas-overlay hidden" id="pause-overlay" role="dialog" aria-modal="true" aria-labelledby="pause-title">
+                    <div class="overlay-content">
+                        <h2 id="pause-title">Paused</h2>
+                        <button class="btn btn-secondary" id="resume-btn" type="button">
+                            <span class="btn-text">Resume</span>
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                                <rect x="6" y="4" width="4" height="16"/>
+                                <rect x="14" y="4" width="4" height="16"/>
+                            </svg>
+                        </button>
+                        <p class="overlay-hint">Press <kbd>Space</kbd> or tap to continue</p>
+                    </div>
+                </div>
+                <div class="canvas-overlay hidden" id="game-over-overlay" role="dialog" aria-modal="true" aria-labelledby="gameover-title">
+                    <div class="overlay-content game-over-content">
+                        <h2 id="gameover-title">Game Over</h2>
+                        <div class="final-stats" aria-label="Final game statistics">
+                            <div class="final-stat">
+                                <span class="final-stat-value" id="final-score">0</span>
+                                <span class="final-stat-label">Final Score</span>
+                            </div>
+                            <div class="final-stat">
+                                <span class="final-stat-value" id="final-level">1</span>
+                                <span class="final-stat-label">Level Reached</span>
+                            </div>
+                            <div class="final-stat">
+                                <span class="final-stat-value" id="final-length">3</span>
+                                <span class="final-stat-label">Length</span>
+                            </div>
+                        </div>
+                        <div class="new-record hidden" id="new-record" aria-live="assertive">
+                            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <span>New High Score!</span>
+                        </div>
+                        <div class="btn-group">
+                            <button class="btn btn-primary" id="restart-btn" type="button">
+                                <span class="btn-text">Play Again</span>
+                                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                                    <path d="M3 3v5h5"/>
+                                </svg>
+                            </button>
+                            <button class="btn btn-ghost" id="menu-btn" type="button">
+                                <span class="btn-text">Main Menu</span>
+                                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                                    <line x1="3" y1="12" x2="21" y2="12"/>
+                                    <line x1="3" y1="6" x2="21" y2="6"/>
+                                    <line x1="3" y1="18" x2="21" y2="18"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="canvas-overlay hidden" id="level-up-overlay" role="status" aria-live="polite" aria-label="Level up notification">
+                    <div class="level-up-content">
+                        <div class="level-up-badge">
+                            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <span>Level <span id="level-up-number">2</span></span>
+                        </div>
+                        <p>Speed Increased!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Touch Controls -->
+            <div class="touch-controls" id="touch-controls" role="navigation" aria-label="Touch controls" aria-hidden="true">
+                <button class="touch-btn" data-dir="up" aria-label="Move up" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                        <path d="M18 15l-6-6-6 6"/>
+                    </svg>
+                </button>
+                <div class="touch-row">
+                    <button class="touch-btn" data-dir="left" aria-label="Move left" type="button">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                            <path d="M15 18l-6-6 6-6"/>
+                        </svg>
+                    </button>
+                    <button class="touch-btn" data-dir="down" aria-label="Move down" type="button">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                            <path d="M6 9l6 6 6-6"/>
+                        </svg>
+                    </button>
+                    <button class="touch-btn" data-dir="right" aria-label="Move right" type="button">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                            <path d="M9 18l6-6-6-6"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Settings Panel -->
+            <div class="settings-panel hidden" id="settings-panel" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+                <div class="settings-content">
+                    <header class="settings-header">
+                        <h2 id="settings-title">Settings</h2>
+                        <button class="icon-btn" id="close-settings" aria-label="Close settings" type="button">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </header>
+                    <div class="settings-body">
+                        <fieldset class="setting-group">
+                            <legend>Audio</legend>
+                            <label class="toggle">
+                                <input type="checkbox" id="sound-toggle" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Sound Effects</span>
+                            </label>
+                            <label class="toggle">
+                                <input type="checkbox" id="music-toggle" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Ambient Music</span>
+                            </label>
+                        </fieldset>
+                        <fieldset class="setting-group">
+                            <legend>Visuals</legend>
+                            <label class="toggle">
+                                <input type="checkbox" id="particles-toggle" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Particle Effects</span>
+                            </label>
+                            <label class="toggle">
+                                <input type="checkbox" id="glow-toggle" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Glow Effects</span>
+                            </label>
+                            <label class="toggle">
+                                <input type="checkbox" id="grid-toggle" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Grid Lines</span>
+                            </label>
+                            <label class="toggle">
+                                <input type="checkbox" id="theme-toggle" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Dark Mode</span>
+                            </label>
+                        </fieldset>
+                        <fieldset class="setting-group">
+                            <legend>Audio Levels</legend>
+                            <div class="slider-setting">
+                                <label for="master-volume" class="slider-label">
+                                    <span class="slider-name">Master Volume</span>
+                                    <span class="slider-value" id="master-volume-value">30%</span>
+                                </label>
+                                <input type="range" id="master-volume" min="0" max="100" value="30" class="slider" aria-label="Master volume">
+                            </div>
+                            <div class="slider-setting">
+                                <label for="sfx-volume" class="slider-label">
+                                    <span class="slider-name">Sound Effects</span>
+                                    <span class="slider-value" id="sfx-volume-value">40%</span>
+                                </label>
+                                <input type="range" id="sfx-volume" min="0" max="100" value="40" class="slider" aria-label="Sound effects volume">
+                            </div>
+                            <div class="slider-setting">
+                                <label for="music-volume" class="slider-label">
+                                    <span class="slider-name">Music Volume</span>
+                                    <span class="slider-value" id="music-volume-value">15%</span>
+                                </label>
+                                <input type="range" id="music-volume" min="0" max="100" value="15" class="slider" aria-label="Music volume">
+                            </div>
+                        </fieldset>
+                        <fieldset class="setting-group">
+                            <legend>Gameplay</legend>
+                            <label class="toggle">
+                                <input type="checkbox" id="walls-toggle" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Wall Collision</span>
+                            </label>
+                            <label class="toggle">
+                                <input type="checkbox" id="haptic-toggle">
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Haptic Feedback</span>
+                            </label>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Floating Action Buttons -->
+        <div class="fab-group">
+            <button class="fab" id="settings-fab" aria-label="Settings" type="button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+            </button>
+            <button class="fab" id="sound-fab" aria-label="Toggle sound" type="button">
+                <svg class="sound-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                </svg>
+                <svg class="sound-off hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                    <line x1="23" y1="9" x2="17" y2="15"/>
+                    <line x1="17" y1="9" x2="23" y2="15"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script src="game.js" type="module"></script>
+</body>
+</html>
