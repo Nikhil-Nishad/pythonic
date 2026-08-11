@@ -1,53 +1,45 @@
-# Version 4 Project Plan – Real-Time Multiplayer, Custom Cosmetics & AI Difficulty
+# Version 4 Project Plan – Single-Player AI Rival, Custom Cosmetics & Procedural Web Audio
 
-Below is the structured roadmap and architectural specification for **Version 4.0**:
+Below is the enhanced, structured feature specification and architecture roadmap for **Version 4.0** (Client-side focus with 0 backend/WebSocket overhead):
 
 ---
 
-## 1️⃣ Feature Pillars
+## 1️⃣ Key Feature Pillars
 
 | # | Feature | Details / Deliverable |
 |---|---------|-----------------------|
-| 1 | **Real-Time Multiplayer** | 1v1 Dual Battles powered by persistent WebSockets / WebRTC. Players compete on split-screen canvas grids to trap each other's snake. |
-| 2 | **Custom Skins & Cosmetics** | Unlockable visual snake skins (Neon Cyber, Dragon Scale, Retro Pixel, Golden Royalty) earned via score achievements. |
-| 3 | **AI Adaptive Difficulty** | Dynamic AI Bot opponent mode using A* pathfinding and adaptive speed curves based on player performance metrics. |
-| 4 | **Web Audio Synthesizer** | Pure Web Audio API procedural sound synthesizer (sine/square/sawtooth oscillators) replacing sample audio for 0-byte footprint audio effects. |
-| 5 | **Native Haptics & Gamepad API** | Full Bluetooth / USB Gamepad controller support (Xbox, PlayStation, Joy-Con) and Web Vibration API haptics. |
+| 1 | **Custom Skins & Visual Cosmetics** | Unlockable snake skins (Neon Cyber, Matrix Rain, Dragon Scale, Retro 8-Bit, Golden Royalty) earned via score achievements. Includes live skin selector modal & custom particle effects. |
+| 2 | **AI Rival Bot Mode (VS AI)** | Single-player arcade battle mode against an AI rival snake on the same grid using A* pathfinding & dynamic safety collision avoidance. |
+| 3 | **Procedural Web Audio Synthesizer** | Zero-asset Web Audio API synth engine generating 8-bit sound effects (jump, eat, power-up, game over) & procedural synthwave ambient music using pure oscillators (sine, square, sawtooth). |
+| 4 | **Daily Quests & Achievement Badges** | Rotating daily challenge missions (e.g. "Eat 5 Golden Apples in one run", "Reach Level 5 without hitting walls") with unlockable badge trophies. |
+| 5 | **Score Card Exporter & Social Share** | High-score victory card generator creating downloadable PNG image badges of final game stats for easy sharing. |
 
 ---
 
-## 2️⃣ Architecture & Directory Breakdown
+## 2️⃣ Modular Directory Structure (`src/`)
 
 ```
 src/
-├── multiplayer/
-│   ├── socketClient.js       # WebSocket connection manager
-│   ├── rtcPeer.js            # WebRTC P2P dual-battle room negotiation
-│   └── matchmaker.js         # Matchmaking queue engine
 ├── skins/
-│   ├── skinRegistry.js       # Skin definitions, color palettes & shaders
-│   └── skinStore.js          # Unlocked cosmetics persistence manager
+│   ├── skinRegistry.js       # Skin color palettes, glow styles & particle themes
+│   └── skinStore.js          # Unlocked cosmetics & active skin selection persistence
 ├── ai/
-│   ├── pathfinding.js        # A* grid navigation algorithm
-│   └── botController.js      # Adaptive difficulty state machine
+│   ├── pathfinding.js        # A* grid pathfinding algorithm for AI rival snake
+│   └── botController.js      # AI bot behavior state machine & difficulty manager
 ├── audio/
-│   └── synthAudio.js         # Web Audio procedural oscillator synth engine
+│   └── synthAudio.js         # Procedural Web Audio API oscillator sound synthesizer
+├── quests/
+│   └── questManager.js       # Daily quests generator & progress tracker
+└── share/
+    └── scoreExporter.js      # Canvas-based high score victory card image exporter
 ```
 
 ---
 
-## 3️⃣ Milestone Schedule (Version 4.0 -> 4.2)
+## 3️⃣ Implementation Checklist
 
-- **v4.0.0 (Q4 2026)**: Web Audio synth engine, custom snake skins registry, and Gamepad API integration.
-- **v4.1.0 (Q1 2027)**: Single-player AI bot opponent mode with A* pathfinding.
-- **v4.2.0 (Q2 2027)**: Full WebSockets / WebRTC 1v1 multiplayer dual battle arena.
-
----
-
-## 4️⃣ Task Checklist
-
-- [ ] Implement `SynthAudioEngine` replacing audio files with Web Audio oscillators.
-- [ ] Add `SkinRegistry` and snake skin selection grid in settings modal.
-- [ ] Implement Gamepad API input handler.
-- [ ] Build A* pathfinding AI bot engine.
-- [ ] Deploy WebSocket multiplayer matchmaking server.
+- [ ] Implement `SkinRegistry` and `SkinStore` modules with 5 unique visual themes and a Skin Selector UI modal.
+- [ ] Implement `Pathfinding` (A* algorithm) and `BotController` to render an AI Rival Snake in VS AI game mode.
+- [ ] Implement `SynthAudioEngine` replacing external audio calls with zero-latency Web Audio oscillators.
+- [ ] Implement `QuestManager` for daily challenge tracking & streak rewards.
+- [ ] Integrate Victory Card Canvas Exporter for downloading shareable score cards.

@@ -2,6 +2,12 @@ import { ScoringEngine } from './src/scoring.js';
 import { LeaderboardService } from './src/leaderboard.js';
 import { TutorialManager } from './src/tutorial.js';
 import { VitalsMonitor } from './src/vitals.js';
+import { SkinRegistry } from './src/skins/skinRegistry.js';
+import { SkinStore } from './src/skins/skinStore.js';
+import { BotController } from './src/ai/botController.js';
+import { SynthAudioEngine } from './src/audio/synthAudio.js';
+import { QuestManager } from './src/quests/questManager.js';
+import { ScoreExporter } from './src/share/scoreExporter.js';
 
 /**
  * Modern Snake Game - High Quality Implementation
@@ -914,23 +920,59 @@ class SnakeGame {
         this.statistics = new StatisticsTracker();
         this.performance = new PerformanceMonitor();
 
-        // Modular V3 Engines
+        // Modular V3 & V4 Engines
         this.scoringEngine = new ScoringEngine();
         this.leaderboardService = new LeaderboardService();
         this.tutorialManager = new TutorialManager();
         this.vitalsMonitor = new VitalsMonitor();
+        this.skinStore = new SkinStore();
+        this.botController = new BotController(this.gridSize);
+        this.synthAudio = new SynthAudioEngine();
+        this.questManager = new QuestManager();
 
-        // Leaderboard UI elements
+        // UI elements
         this.leaderboardFab = document.getElementById('leaderboard-fab');
         this.leaderboardPanel = document.getElementById('leaderboard-panel');
         this.closeLeaderboardBtn = document.getElementById('close-leaderboard');
         this.leaderboardBody = document.getElementById('leaderboard-body');
+
+        this.skinsFab = document.getElementById('skins-fab');
+        this.skinPanel = document.getElementById('skin-panel');
+        this.closeSkinsBtn = document.getElementById('close-skins');
+        this.skinGrid = document.getElementById('skin-grid');
+
+        this.questsFab = document.getElementById('quests-fab');
+        this.questsPanel = document.getElementById('quests-panel');
+        this.closeQuestsBtn = document.getElementById('close-quests');
+        this.questsList = document.getElementById('quests-list');
+
+        this.shareBtn = document.getElementById('share-btn');
 
         if (this.leaderboardFab) {
             this.leaderboardFab.addEventListener('click', () => this.openLeaderboard());
         }
         if (this.closeLeaderboardBtn) {
             this.closeLeaderboardBtn.addEventListener('click', () => this.closeLeaderboard());
+        }
+
+        if (this.skinsFab) {
+            this.skinsFab.addEventListener('click', () => this.openSkinsModal());
+        }
+        if (this.closeSkinsBtn) {
+            this.closeSkinsBtn.addEventListener('click', () => this.closeSkinsModal());
+        }
+
+        if (this.questsFab) {
+            this.questsFab.addEventListener('click', () => this.openQuestsModal());
+        }
+        if (this.closeQuestsBtn) {
+            this.closeQuestsBtn.addEventListener('click', () => this.closeQuestsModal());
+        }
+
+        if (this.shareBtn) {
+            this.shareBtn.addEventListener('click', () => {
+                ScoreExporter.downloadVictoryCard(this.score, this.level, this.snake.length);
+            });
         }
 
         // Power-up state
@@ -991,6 +1033,75 @@ class SnakeGame {
     closeLeaderboard() {
         if (!this.leaderboardPanel) return;
         this.leaderboardPanel.classList.add('hidden');
+    }
+
+    openSkinsModal() {
+        if (!this.skinPanel) return;
+        this.renderSkins();
+        this.skinPanel.classList.remove('hidden');
+    }
+
+    closeSkinsModal() {
+        if (!this.skinPanel) return;
+        this.skinPanel.classList.add('hidden');
+    }
+
+    renderSkins() {
+        if (!this.skinGrid || !this.skinStore) return;
+        const skins = SkinRegistry.getAllSkins();
+        const activeId = this.skinStore.activeSkinId;
+
+        this.skinGrid.innerHTML = skins.map(skin => {
+            const isUnlocked = this.skinStore.isUnlocked(skin.id);
+            const isActive = skin.id === activeId;
+
+            return `
+                <div class="skin-card ${isActive ? 'active' : ''} ${!isUnlocked ? 'locked' : ''}" data-skin="${skin.id}">
+                    <div class="skin-icon">${skin.icon}</div>
+                    <div class="skin-name">${skin.name}</div>
+                    <div class="skin-status">${isActive ? 'Active' : (isUnlocked ? 'Select' : skin.unlockCriteria || 'Locked')}</div>
+                </div>
+            `;
+        }).join('');
+
+        this.skinGrid.querySelectorAll('.skin-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const skinId = card.getAttribute('data-skin');
+                if (this.skinStore.setActiveSkin(skinId)) {
+                    this.renderSkins();
+                    this.announce(`Selected skin: ${skinId}`);
+                }
+            });
+        });
+    }
+
+    openQuestsModal() {
+        if (!this.questsPanel) return;
+        this.renderQuests();
+        this.questsPanel.classList.remove('hidden');
+    }
+
+    closeQuestsModal() {
+        if (!this.questsPanel) return;
+        this.questsPanel.classList.add('hidden');
+    }
+
+    renderQuests() {
+        if (!this.questsList || !this.questManager) return;
+        const quests = this.questManager.getQuests();
+
+        this.questsList.innerHTML = quests.map(quest => `
+            <div class="quest-card">
+                <div class="quest-info">
+                    <h3>${quest.title} ${quest.completed ? '✅' : ''}</h3>
+                    <p>${quest.desc} (${quest.progress}/${quest.target})</p>
+                    <div class="quest-progress-bar">
+                        <div class="quest-progress-fill" style="width: ${Math.min(100, (quest.progress / quest.target) * 100)}%;"></div>
+                    </div>
+                </div>
+                <div class="quest-reward">${quest.reward}</div>
+            </div>
+        `).join('');
     }
 
     renderLeaderboard() {
@@ -1472,6 +1583,7 @@ class SnakeGame {
         // Reset state
         this.state = GameState.PLAYING;
         if (this.scoringEngine) this.scoringEngine.reset();
+        if (this.botController) this.botController.reset();
         this.score = 0;
         this.level = 1;
         this.speed = CONFIG.INITIAL_SPEED;
@@ -1820,6 +1932,14 @@ class SnakeGame {
     }
 
     update() {
+        // AI Rival step
+        if (this.botController) {
+            const botRes = this.botController.move(this.food, this.obstacles, this.snake);
+            if (botRes.ateFood) {
+                this.spawnFood();
+            }
+        }
+
         this.direction = this.nextDirection;
         const dir = Directions[this.direction];
         const head = this.snake[0];
@@ -1927,6 +2047,10 @@ class SnakeGame {
 
     eatFood() {
         this.audio.playEat(this.foodType === FoodType.BONUS);
+        if (this.synthAudio) {
+            if (this.foodType === FoodType.BONUS) this.synthAudio.playBonus();
+            else this.synthAudio.playEat();
+        }
         if (this.hapticEnabled) this.vibrate(this.foodType === FoodType.BONUS ? 30 : 15);
 
         const scoreResult = this.scoringEngine.registerFoodEat(this.foodType);
@@ -1935,6 +2059,15 @@ class SnakeGame {
             this.highScore = this.scoringEngine.highScore;
         }
         this.foodEaten++;
+
+        // Update Quest progress
+        if (this.questManager) {
+            this.questManager.updateProgress({
+                bonusEaten: this.foodType === FoodType.BONUS ? 1 : 0,
+                level: this.level,
+                score: this.score
+            });
+        }
 
         const fx = this.food.x * this.tileSize + this.tileSize / 2;
         const fy = this.food.y * this.tileSize + this.tileSize / 2;
@@ -2034,6 +2167,13 @@ class SnakeGame {
         this.scoreEl.textContent = this.score;
         this.levelEl.textContent = this.level;
 
+        if (this.skinStore) {
+            const newlyUnlocked = this.skinStore.checkUnlocks(this.score, this.level);
+            if (newlyUnlocked.length > 0) {
+                this.announce(`New skin unlocked: ${newlyUnlocked[0].name}`);
+            }
+        }
+
         if (this.score > this.highScore) {
             this.highScore = this.score;
             this.saveHighScore();
@@ -2068,6 +2208,11 @@ class SnakeGame {
         // Snake
         this.drawSnake();
 
+        // AI Rival Snake
+        if (this.botController) {
+            this.drawBotSnake();
+        }
+
         // Particles
         this.particles.render();
 
@@ -2076,6 +2221,27 @@ class SnakeGame {
 
         // Active power-up indicators
         this.drawPowerUpIndicators();
+    }
+
+    drawBotSnake() {
+        if (!this.botController || !this.botController.body) return;
+        this.botController.body.forEach((seg, index) => {
+            const x = seg.x * this.tileSize;
+            const y = seg.y * this.tileSize;
+            const isHead = index === 0;
+
+            if (isHead && this.showGlow) {
+                this.ctx.shadowColor = this.botController.glow;
+                this.ctx.shadowBlur = 12;
+            } else {
+                this.ctx.shadowBlur = 0;
+            }
+
+            this.ctx.fillStyle = this.botController.color;
+            this.roundRect(x + 1, y + 1, this.tileSize - 2, this.tileSize - 2, isHead ? 6 : 4);
+            this.ctx.fill();
+            this.ctx.shadowBlur = 0;
+        });
     }
 
     drawObstacles() {
@@ -2267,24 +2433,22 @@ class SnakeGame {
     }
 
     drawSnake() {
+        const activeSkin = this.skinStore ? this.skinStore.getActiveSkin() : null;
+        const skinColors = activeSkin ? activeSkin.colors : CONFIG.COLORS;
+
         this.snake.forEach((seg, index) => {
             const x = seg.x * this.tileSize;
             const y = seg.y * this.tileSize;
             const isHead = index === 0;
             const isTail = index === this.snake.length - 1;
-            const progress = this.snake.length > 1 ? index / (this.snake.length - 1) : 0;
 
-            // Color interpolation
             let color;
             if (isHead) {
-                color = CONFIG.COLORS.snakeHead;
+                color = skinColors.head || CONFIG.COLORS.snakeHead;
             } else if (isTail) {
-                color = CONFIG.COLORS.snakeTail;
+                color = skinColors.tail || CONFIG.COLORS.snakeTail;
             } else {
-                const r = Math.round(lerp(88, 31, progress));
-                const g = Math.round(lerp(166, 111, progress));
-                const b = Math.round(lerp(255, 235, progress));
-                color = `rgb(${r}, ${g}, ${b})`;
+                color = skinColors.body || CONFIG.COLORS.snakeBody;
             }
 
             // Ghost mode transparency

@@ -1575,4 +1575,118 @@ kbd.key {
 .btn-large {
     padding: 16px 36px;
     font-size: 1.1rem;
+}
+
+/* ============================================
+ * Version 4.0.0 Enhancements (Skins & Quests)
+ * ============================================ */
+
+/* Skin Selector Grid */
+.skin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.skin-card {
+    padding: 16px;
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.skin-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-primary);
+}
+
+.skin-card.active {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.skin-card.locked {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.skin-icon {
+    font-size: 2rem;
+}
+
+.skin-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--fg-primary);
+    text-align: center;
+}
+
+.skin-status {
+    font-size: 0.75rem;
+    color: var(--fg-muted);
+    text-align: center;
+}
+
+/* Daily Quests List */
+.quests-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.quest-card {
+    padding: 14px 18px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.quest-info h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--fg-primary);
+}
+
+.quest-info p {
+    font-size: 0.8rem;
+    color: var(--fg-muted);
+    margin-top: 2px;
+}
+
+.quest-progress-bar {
+    width: 100px;
+    height: 8px;
+    background: var(--bg-primary);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin-top: 6px;
+}
+
+.quest-progress-fill {
+    height: 100%;
+    background: var(--accent-primary);
+    border-radius: var(--radius-full);
+}
+
+.quest-reward {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent-warning);
+    background: rgba(210, 153, 34, 0.15);
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    white-space: nowrap;
 }
