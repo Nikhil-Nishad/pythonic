@@ -1,0 +1,21 @@
+{
+  "name": "modern-snake-game",
+  "version": "3.0.0",
+  "description": "A Google-level SEO optimized, modern interactive Snake browser game with Leaderboards, PWA, smooth animations, and audio.",
+  "main": "game.js",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "start": "npx serve ."
+  },
+  "keywords": [
+    "snake-game",
+    "browser-game",
+    "pwa",
+    "seo-friendly",
+    "interactive-game",
+    "leaderboard"
+  ],
+  "author": "Nikhil Nishad",
+  "license": "MIT"
+}

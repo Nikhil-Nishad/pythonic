@@ -1,3 +1,8 @@
+import { ScoringEngine } from './src/scoring.js';
+import { LeaderboardService } from './src/leaderboard.js';
+import { TutorialManager } from './src/tutorial.js';
+import { VitalsMonitor } from './src/vitals.js';
+
 /**
  * Modern Snake Game - High Quality Implementation
  * Features: Smooth animations, particle effects, sound, levels, touch controls, settings
@@ -909,6 +914,25 @@ class SnakeGame {
         this.statistics = new StatisticsTracker();
         this.performance = new PerformanceMonitor();
 
+        // Modular V3 Engines
+        this.scoringEngine = new ScoringEngine();
+        this.leaderboardService = new LeaderboardService();
+        this.tutorialManager = new TutorialManager();
+        this.vitalsMonitor = new VitalsMonitor();
+
+        // Leaderboard UI elements
+        this.leaderboardFab = document.getElementById('leaderboard-fab');
+        this.leaderboardPanel = document.getElementById('leaderboard-panel');
+        this.closeLeaderboardBtn = document.getElementById('close-leaderboard');
+        this.leaderboardBody = document.getElementById('leaderboard-body');
+
+        if (this.leaderboardFab) {
+            this.leaderboardFab.addEventListener('click', () => this.openLeaderboard());
+        }
+        if (this.closeLeaderboardBtn) {
+            this.closeLeaderboardBtn.addEventListener('click', () => this.closeLeaderboard());
+        }
+
         // Power-up state
         this.activePowerUp = null;
         this.powerUpPosition = null;
@@ -956,6 +980,52 @@ class SnakeGame {
         setTimeout(() => {
             this.announcer.textContent = message;
         }, 50);
+    }
+
+    openLeaderboard() {
+        if (!this.leaderboardPanel) return;
+        this.renderLeaderboard();
+        this.leaderboardPanel.classList.remove('hidden');
+    }
+
+    closeLeaderboard() {
+        if (!this.leaderboardPanel) return;
+        this.leaderboardPanel.classList.add('hidden');
+    }
+
+    renderLeaderboard() {
+        if (!this.leaderboardBody || !this.leaderboardService) return;
+        const scores = this.leaderboardService.getTopScores();
+
+        this.leaderboardBody.innerHTML = scores.map((entry, index) => `
+            <tr>
+                <td><span class="rank-badge rank-${index + 1}">${index + 1}</span></td>
+                <td>
+                    <div class="player-info">
+                        <span class="player-avatar">${entry.avatar || '🐍'}</span>
+                        <span>${entry.name}</span>
+                    </div>
+                </td>
+                <td class="score-value-cell">${entry.score}</td>
+                <td>Level ${entry.level || 1}</td>
+            </tr>
+        `).join('');
+    }
+
+    spawnFloatingScore(text, canvasX, canvasY, isCombo = false) {
+        const container = document.querySelector('.game-canvas-wrapper') || document.body;
+        const popup = document.createElement('div');
+        popup.className = `floating-score-popup ${isCombo ? 'combo' : ''}`;
+        popup.textContent = text;
+        popup.style.left = `${canvasX}px`;
+        popup.style.top = `${canvasY}px`;
+
+        container.appendChild(popup);
+        setTimeout(() => {
+            if (popup && popup.parentElement) {
+                popup.parentElement.removeChild(popup);
+            }
+        }, 800);
     }
 
     async init() {
@@ -1401,6 +1471,7 @@ class SnakeGame {
 
         // Reset state
         this.state = GameState.PLAYING;
+        if (this.scoringEngine) this.scoringEngine.reset();
         this.score = 0;
         this.level = 1;
         this.speed = CONFIG.INITIAL_SPEED;
@@ -1468,7 +1539,7 @@ class SnakeGame {
 
         if (this.hapticEnabled) this.vibrate([50, 30, 50, 30, 100]);
 
-        // Check high score
+        // Check high score & leaderboard
         const isNewRecord = this.score > this.highScore;
         if (isNewRecord) {
             this.highScore = this.score;
@@ -1476,6 +1547,10 @@ class SnakeGame {
             this.updateHighScoreDisplay();
             this.newRecordEl.classList.remove('hidden');
             this.announce('New high score!');
+        }
+
+        if (this.leaderboardService && this.leaderboardService.isHighScore(this.score)) {
+            this.leaderboardService.addEntry('Player', this.score, this.level);
         }
 
         // Update final stats
@@ -1787,24 +1862,11 @@ class SnakeGame {
         this.audio.playEat(this.foodType === FoodType.BONUS);
         if (this.hapticEnabled) this.vibrate(this.foodType === FoodType.BONUS ? 30 : 15);
 
-        let points = CONFIG.BASE_POINTS;
-        if (this.foodType === FoodType.BONUS) {
-            points *= CONFIG.BONUS_MULTIPLIER;
-            this.streak++;
-            points += this.streak * CONFIG.STREAK_BONUS;
-        } else if (this.foodType === FoodType.SPEED) {
-            points = Math.floor(points * 1.5);
-        } else {
-            this.streak = 0;
+        const scoreResult = this.scoringEngine.registerFoodEat(this.foodType);
+        this.score = this.scoringEngine.score;
+        if (this.scoringEngine.highScore > this.highScore) {
+            this.highScore = this.scoringEngine.highScore;
         }
-
-        // Double points power-up
-        if (this.powerUps.isActive(PowerUpType.DOUBLE_POINTS)) {
-            points *= 2;
-        }
-
-        points *= this.level;
-        this.score += points;
         this.foodEaten++;
 
         const fx = this.food.x * this.tileSize + this.tileSize / 2;
@@ -1812,6 +1874,9 @@ class SnakeGame {
         const foodColor = this.getFoodColor(this.foodType);
         this.particles.emitBurst(fx, fy, foodColor, this.foodType === FoodType.BONUS ? 25 : 15);
         this.screenShake.shake(this.foodType === FoodType.BONUS ? 6 : 3, 100);
+
+        const popupText = `+${scoreResult.pointsEarned}${scoreResult.comboCount > 1 ? ` 🔥x${scoreResult.comboCount}` : ''}`;
+        this.spawnFloatingScore(popupText, fx, fy, scoreResult.comboCount > 1);
 
         if (this.foodEaten >= CONFIG.FOOD_PER_LEVEL) {
             this.levelUp();

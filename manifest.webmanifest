@@ -1,0 +1,18 @@
+{
+  "name": "Snake Game - Modern Edition",
+  "short_name": "Snake Modern",
+  "description": "High-quality, mobile-friendly modern Snake game with leaderboards, level progression, audio, and visual effects.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0d1117",
+  "theme_color": "#0d1117",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='100' fill='%230d1117'/><path d='M100 256C100 170 170 100 256 100H320C406 100 476 170 476 256C476 342 406 412 320 412H256C170 412 100 342 100 256Z' stroke='%2358a6ff' stroke-width='32' fill='none'/><circle cx='220' cy='220' r='24' fill='%2358a6ff'/><circle cx='340' cy='220' r='24' fill='%2358a6ff'/></svg>",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>How to Play Snake Game | Complete Guide & Strategy Tips</title>
+    <meta name="description" content="Learn how to play the Modern Snake Game. Discover controls, scoring rules, combo multipliers, power-ups, and strategies to rank #1 on the global leaderboard.">
+    <meta name="keywords" content="snake game instructions, how to play snake, browser game guide, snake game controls, snake leaderboard strategy">
+    <meta name="theme-color" content="#0d1117">
+    <link rel="canonical" href="https://nikhil-nishad.github.io/pythonic/instructions.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://nikhil-nishad.github.io/pythonic/instructions.html">
+    <meta property="og:title" content="How to Play Snake Game | Complete Guide & Strategy Tips">
+    <meta property="og:description" content="Master the controls, unlock high-score combos, and dominate the leaderboard in Modern Snake Game.">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="How to Play Snake Game | Complete Guide & Strategy">
+    <meta property="twitter:description" content="Master controls, combos, and power-ups in Modern Snake Game.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- JSON-LD FAQPage Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do I control the snake on desktop and mobile?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "On desktop, use Arrow Keys (Up, Down, Left, Right) or WASD to navigate. Press Space to pause or resume. On mobile devices, use intuitive touch swipes or on-screen directional touch controls."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does the scoring system and combo multiplier work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Each food item awards base points. Eating food items in quick succession triggers a combo multiplier (up to 5x boost). Special gold foods award 3x points, while speed power-ups boost your speed and extra bonus points."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I save my high score on the leaderboard?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "When your game ends, if your score ranks in the top 10, a prompt will let you enter your name and select an avatar badge to save to the leaderboard."
+          }
+        }
+      ]
+    }
+    </script>
+</head>
+<body class="instructions-page">
+    <div class="game-container">
+        <!-- Background ambient effects -->
+        <div class="ambient-bg" aria-hidden="true">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+        </div>
+
+        <main class="instructions-card" role="main">
+            <!-- Header Nav -->
+            <nav class="instructions-nav" aria-label="Page Navigation">
+                <a href="index.html" class="nav-back-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    <span>Back to Game</span>
+                </a>
+                <span class="badge badge-primary">Version 3.0.0</span>
+            </nav>
+
+            <header class="instructions-header">
+                <h1>Snake Game Guide & Strategy</h1>
+                <p class="subtitle">Everything you need to master movement, score massive combos, and top the leaderboard.</p>
+            </header>
+
+            <!-- Guide Content Sections -->
+            <div class="instructions-grid">
+                <!-- Section 1: Controls -->
+                <section class="guide-card">
+                    <div class="guide-icon">🎮</div>
+                    <h2>Game Controls</h2>
+                    <div class="control-list">
+                        <div class="control-item">
+                            <div class="key-group">
+                                <kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd>
+                                <span class="or-separator">or</span>
+                                <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>
+                            </div>
+                            <span class="control-label">Move Snake</span>
+                        </div>
+                        <div class="control-item">
+                            <kbd>Space</kbd>
+                            <span class="control-label">Pause / Resume Game</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="touch-badge">📱 Touch Swipe</span>
+                            <span class="control-label">Swipe anywhere on touchscreens</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 2: Items & Power-ups -->
+                <section class="guide-card">
+                    <div class="guide-icon">🍎</div>
+                    <h2>Food Types & Power-ups</h2>
+                    <ul class="food-guide-list">
+                        <li class="food-guide-item">
+                            <span class="food-dot food-blue"></span>
+                            <div>
+                                <strong>Normal Apple (+10 pts)</strong>
+                                <p>Standard food item. Consuming increases length and contributes to level progress.</p>
+                            </div>
+                        </li>
+                        <li class="food-guide-item">
+                            <span class="food-dot food-gold"></span>
+                            <div>
+                                <strong>Golden Bonus (+30 pts)</strong>
+                                <p>Appears temporarily! Consuming grants 3x base multiplier points.</p>
+                            </div>
+                        </li>
+                        <li class="food-guide-item">
+                            <span class="food-dot food-red"></span>
+                            <div>
+                                <strong>Speed Boost (+15 pts)</strong>
+                                <p>Temporarily increases snake movement speed and gives bonus point boosts.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </section>
+
+                <!-- Section 3: Pro Tips & Strategy -->
+                <section class="guide-card full-width">
+                    <div class="guide-icon">💡</div>
+                    <h2>Pro Strategies for High Scores</h2>
+                    <div class="strategy-steps">
+                        <div class="step">
+                            <div class="step-num">1</div>
+                            <div>
+                                <h3>Maintain Combo Streaks</h3>
+                                <p>Eat food items rapidly to trigger the Combo Multiplier. Higher combos multiply point gain up to 5x!</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-num">2</div>
+                            <div>
+                                <h3>Control the Perimeter</h3>
+                                <p>As your snake grows longer, circle around the grid edges to avoid trapping your tail in tight spaces.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-num">3</div>
+                            <div>
+                                <h3>Use Wall Collision Settings</h3>
+                                <p>Toggle wall collisions in Settings if you want classic wrap-around boundary movement.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 4: FAQ -->
+                <section class="guide-card full-width">
+                    <div class="guide-icon">❓</div>
+                    <h2>Frequently Asked Questions</h2>
+                    <div class="faq-accordion">
+                        <details class="faq-item" open>
+                            <summary>How do I control the snake on desktop and mobile?</summary>
+                            <p>On desktop, use Arrow Keys (Up, Down, Left, Right) or WASD to navigate. Press Space to pause or resume. On mobile devices, use intuitive touch swipes or on-screen directional touch controls.</p>
+                        </details>
+                        <details class="faq-item">
+                            <summary>How does the scoring system and combo multiplier work?</summary>
+                            <p>Each food item awards base points. Eating food items in quick succession triggers a combo multiplier (up to 5x boost). Special gold foods award 3x points, while speed power-ups boost your speed and extra bonus points.</p>
+                        </details>
+                        <details class="faq-item">
+                            <summary>How do I save my high score on the leaderboard?</summary>
+                            <p>When your game ends, if your score ranks in the top 10, a prompt will let you enter your name and select an avatar badge to save to the leaderboard.</p>
+                        </details>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Footer CTA -->
+            <footer class="instructions-footer">
+                <a href="index.html" class="btn btn-primary btn-large">
+                    <span>Play Snake Game Now</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                        <polygon points="5 3 19 12 5 21"/>
+                    </svg>
+                </a>
+            </footer>
+        </main>
+    </div>
+</body>
+</html>

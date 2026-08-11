@@ -1,0 +1,26 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Run Unit Tests
+        run: npm test
+
+      - name: Validate Sitemap and Manifest
+        run: |
+          node -e "const fs = require('fs'); if(!fs.existsSync('sitemap.xml')) process.exit(1);"
+          node -e "const fs = require('fs'); JSON.parse(fs.readFileSync('manifest.webmanifest', 'utf8'));"

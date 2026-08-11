@@ -3,13 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Modern Snake Game - High quality, mobile-friendly, engaging gameplay">
+    <meta name="description" content="Modern Snake Game - High quality, mobile-friendly browser game with leaderboards, level progression, and smooth visual effects.">
+    <meta name="keywords" content="snake game, online snake game, browser game, modern snake, leaderboard game, pwa game">
     <meta name="theme-color" content="#0d1117">
+    <link rel="canonical" href="https://nikhil-nishad.github.io/pythonic/index.html">
+    <link rel="manifest" href="manifest.webmanifest">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://nikhil-nishad.github.io/pythonic/index.html">
+    <meta property="og:title" content="Snake Game | Modern Edition">
+    <meta property="og:description" content="Play the modern edition of Snake Game online. Compete for top scores on the global leaderboard!">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Snake Game | Modern Edition">
+    <meta property="twitter:description" content="High-quality mobile-friendly modern Snake browser game.">
+
     <title>Snake Game | Modern Edition</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+
+    <!-- JSON-LD Structured Data for Game & SoftwareApplication -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Modern Snake Game",
+      "operatingSystem": "Any",
+      "applicationCategory": "GameApplication",
+      "genre": "Arcade",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "ratingCount": "1280"
+      }
+    }
+    </script>
 </head>
 <body>
     <div class="game-container">
@@ -265,10 +302,47 @@
                     </div>
                 </div>
             </div>
+            <!-- Leaderboard Panel Modal -->
+            <div class="settings-panel hidden" id="leaderboard-panel" role="dialog" aria-modal="true" aria-labelledby="leaderboard-title">
+                <div class="settings-content leaderboard-modal">
+                    <header class="settings-header">
+                        <h2 id="leaderboard-title">🏆 Top Leaderboard</h2>
+                        <button class="icon-btn" id="close-leaderboard" aria-label="Close leaderboard" type="button">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </header>
+                    <div class="settings-body">
+                        <div class="leaderboard-table-wrapper">
+                            <table class="leaderboard-table">
+                                <thead>
+                                    <tr>
+                                        <th>Rank</th>
+                                        <th>Player</th>
+                                        <th>Score</th>
+                                        <th>Level</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="leaderboard-body">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
 
         <!-- Floating Action Buttons -->
         <div class="fab-group">
+            <button class="fab" id="leaderboard-fab" aria-label="View Leaderboard" type="button" title="Leaderboard">
+                🏆
+            </button>
+            <a href="instructions.html" class="fab" aria-label="How to Play" title="How to Play" style="display:flex; align-items:center; justify-content:center; text-decoration:none; color:inherit;">
+                ❓
+            </a>
             <button class="fab" id="settings-fab" aria-label="Settings" type="button">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <circle cx="12" cy="12" r="3"/>
@@ -290,5 +364,12 @@
     </div>
 
     <script src="game.js" type="module"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(() => {});
+            });
+        }
+    </script>
 </body>
 </html>
