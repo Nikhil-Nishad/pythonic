@@ -1,5 +1,7 @@
 {
   "cleanUrls": false,
-  "trailingSlash": false,
-  "directoryListing": false
+  "rewrites": [
+    { "source": "/instructions", "destination": "/instructions.html" },
+    { "source": "/blog", "destination": "/blog.html" }
+  ]
 }
