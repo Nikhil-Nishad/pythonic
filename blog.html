@@ -66,100 +66,129 @@
 
             <header class="instructions-header">
                 <h1>Snake Game Articles & Strategy Guides</h1>
-                <p class="subtitle">Deep dives into browser game design, retro gaming history, Web Audio API, and high-score tactics.</p>
+                <p class="subtitle">Click any article card below to read the complete in-depth guide.</p>
             </header>
 
             <!-- Blog Articles Section -->
             <div class="instructions-grid">
                 <!-- Article 1 -->
-                <article class="guide-card full-width">
+                <article class="guide-card full-width blog-card" data-article="1" tabindex="0">
                     <div class="guide-icon">🕹️</div>
                     <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">History & Design</span>
                     <h2>The Evolution of Snake: From Nokia 6110 to Modern PWA Web Games</h2>
                     <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 12px;">Published on August 11, 2026 • 5 min read</p>
-                    <div style="line-height: 1.6; color: var(--fg-secondary); font-size: 0.95rem;">
-                        <p>First introduced in 1976 as the arcade game <em>Blockade</em>, the Snake game mechanics achieved worldwide pop-culture icon status when it came pre-installed on the Nokia 6110 mobile phone in 1997. Designed by Taneli Armanto, it introduced millions to mobile gaming.</p>
-                        <p style="margin-top: 10px;">Fast forward to today: modern web standards like HTML5 Canvas 2D Context, Web Audio API, and Service Worker PWAs allow us to recreate the addictive snake gameplay loop with hardware-accelerated 60FPS fluid animations, dynamic particle lighting, responsive touch controls, and cross-device persistent leaderboards right inside any browser!</p>
+                    <p style="line-height: 1.6; color: var(--fg-secondary); font-size: 0.95rem;">
+                        First introduced in 1976 as the arcade game <em>Blockade</em>, the Snake game mechanics achieved worldwide pop-culture icon status when it came pre-installed on the Nokia 6110 mobile phone in 1997...
+                    </p>
+                    <div style="margin-top: 14px; font-weight: 600; color: var(--accent-primary); display: flex; align-items: center; gap: 6px;">
+                        <span>Read Full Article</span>
+                        <span>→</span>
                     </div>
                 </article>
 
                 <!-- Article 2 -->
-                <article class="guide-card">
+                <article class="guide-card blog-card" data-article="2" tabindex="0">
                     <div class="guide-icon">🏆</div>
                     <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">Pro Strategy</span>
                     <h2>Top 5 High-Score Tactics for Master Players</h2>
                     <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 12px;">Published on August 11, 2026 • 4 min read</p>
-                    <ul style="padding-left: 20px; color: var(--fg-secondary); font-size: 0.9rem; line-height: 1.6;">
-                        <li><strong>Coil Pattern Strategy:</strong> Snake in a serpentine S-shape to maximize space utilization.</li>
-                        <li><strong>Edge Hugging:</strong> Keep the snake body wrapped around the outer perimeter during early expansion.</li>
-                        <li><strong>Golden Apple Timing:</strong> Save speed boosts for open spaces to claim bonus 3x multipliers safely.</li>
-                    </ul>
+                    <p style="color: var(--fg-secondary); font-size: 0.9rem; line-height: 1.6;">
+                        Learn coiling patterns, perimeter wrapping, speed-boost timing, and edge navigation techniques to claim the #1 spot on global leaderboards.
+                    </p>
+                    <div style="margin-top: 14px; font-weight: 600; color: var(--accent-primary); display: flex; align-items: center; gap: 6px;">
+                        <span>Read Full Article</span>
+                        <span>→</span>
+                    </div>
                 </article>
 
                 <!-- Article 3 -->
-                <article class="guide-card">
+                <article class="guide-card blog-card" data-article="3" tabindex="0">
                     <div class="guide-icon">⚡</div>
                     <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">Engineering</span>
                     <h2>Building 60FPS Canvas Games with Zero Dependencies</h2>
                     <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 12px;">Published on August 11, 2026 • 6 min read</p>
                     <p style="color: var(--fg-secondary); font-size: 0.9rem; line-height: 1.6;">
-                        Discover how modern Vanilla JavaScript ES Modules, `requestAnimationFrame` loop batching, and Web Audio API synthesis allow developers to ship ultra-fast, zero-dependency browser games with instant page load times and offline PWA support.
+                        How Vanilla JS ES Modules, `requestAnimationFrame` delta loops, and pure Web Audio API oscillators deliver 60FPS performance without bulky frameworks.
                     </p>
+                    <div style="margin-top: 14px; font-weight: 600; color: var(--accent-primary); display: flex; align-items: center; gap: 6px;">
+                        <span>Read Full Article</span>
+                        <span>→</span>
+                    </div>
                 </article>
 
                 <!-- Article 4 -->
-                <article class="guide-card">
+                <article class="guide-card blog-card" data-article="4" tabindex="0">
                     <div class="guide-icon">🔥</div>
                     <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">Gameplay Mechanics</span>
                     <h2>Mastering Combo Multipliers & Power-up Synergies</h2>
                     <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 12px;">Published on August 11, 2026 • 5 min read</p>
                     <p style="color: var(--fg-secondary); font-size: 0.9rem; line-height: 1.6;">
-                        Score scaling in Modern Snake rewards rapid, aggressive gameplay. Learn how pairing the <strong>Double Points</strong> power-up with rapid food consumption activates 5x combo multipliers that catapult your score past 300+ points on the global leaderboard!
+                        Discover how combining Double Points with Rapid Food collection triggers 5x combo multipliers that supercharge your scoring rate.
                     </p>
+                    <div style="margin-top: 14px; font-weight: 600; color: var(--accent-primary); display: flex; align-items: center; gap: 6px;">
+                        <span>Read Full Article</span>
+                        <span>→</span>
+                    </div>
                 </article>
 
                 <!-- Article 5 -->
-                <article class="guide-card">
+                <article class="guide-card blog-card" data-article="5" tabindex="0">
                     <div class="guide-icon">🎹</div>
                     <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">Web Audio API</span>
                     <h2>How Zero-Asset Sound Synthesizers Work</h2>
                     <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 12px;">Published on August 11, 2026 • 6 min read</p>
                     <p style="color: var(--fg-secondary); font-size: 0.9rem; line-height: 1.6;">
-                        Instead of downloading heavy MP3/WAV files over the network, modern browser games use `OscillatorNode` and `GainNode` envelopes to synthesize 8-bit sound effects and retro arpeggios procedurally with 0ms network latency and 0-byte asset sizes.
+                        Synthesizing 8-bit chiptune sound effects and musical chords in real-time with zero external audio assets using `OscillatorNode` and gain envelopes.
                     </p>
+                    <div style="margin-top: 14px; font-weight: 600; color: var(--accent-primary); display: flex; align-items: center; gap: 6px;">
+                        <span>Read Full Article</span>
+                        <span>→</span>
+                    </div>
                 </article>
 
                 <!-- Article 6 -->
-                <article class="guide-card">
+                <article class="guide-card blog-card" data-article="6" tabindex="0">
                     <div class="guide-icon">📱</div>
                     <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">UI / UX Design</span>
                     <h2>Designing Mobile-First Touch Controls for Retro Games</h2>
                     <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 12px;">Published on August 11, 2026 • 4 min read</p>
                     <p style="color: var(--fg-secondary); font-size: 0.9rem; line-height: 1.6;">
-                        Designing touchscreen interfaces for arcade games requires balancing directional swipe gestures with virtual D-Pad buttons. Discover how haptic feedback (`navigator.vibrate`) improves touch responsiveness and player immersion.
+                        Balancing directional swipe gestures with virtual D-Pad buttons and haptic feedback (`navigator.vibrate`) for optimal mobile ergonomics.
                     </p>
+                    <div style="margin-top: 14px; font-weight: 600; color: var(--accent-primary); display: flex; align-items: center; gap: 6px;">
+                        <span>Read Full Article</span>
+                        <span>→</span>
+                    </div>
                 </article>
 
                 <!-- Article 7 -->
-                <article class="guide-card">
+                <article class="guide-card blog-card" data-article="7" tabindex="0">
                     <div class="guide-icon">🔍</div>
                     <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">SEO & Analytics</span>
                     <h2>SEO Strategies for Web Games: Driving Organic Traffic</h2>
                     <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 12px;">Published on August 11, 2026 • 5 min read</p>
                     <p style="color: var(--fg-secondary); font-size: 0.9rem; line-height: 1.6;">
-                        Integrating structured JSON-LD data (`SoftwareApplication`, `Game`, `FAQPage`, `BlogPosting`), canonical tags, Open Graph meta images, and semantic HTML allows web games to rank #1 on Google Search and trigger rich snippet cards.
+                        Leveraging structured JSON-LD data, canonical tags, Open Graph meta images, and semantic HTML for search engine dominance.
                     </p>
+                    <div style="margin-top: 14px; font-weight: 600; color: var(--accent-primary); display: flex; align-items: center; gap: 6px;">
+                        <span>Read Full Article</span>
+                        <span>→</span>
+                    </div>
                 </article>
 
                 <!-- Article 8 -->
-                <article class="guide-card">
+                <article class="guide-card blog-card" data-article="8" tabindex="0">
                     <div class="guide-icon">🤖</div>
                     <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">AI & Pathfinding</span>
                     <h2>Single-Player AI Bots: Implementing A* Pathfinding</h2>
                     <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 12px;">Published on August 11, 2026 • 7 min read</p>
                     <p style="color: var(--fg-secondary); font-size: 0.9rem; line-height: 1.6;">
-                        How does the AI Rival Snake navigate towards food while avoiding self-entrapment and dynamic wall obstacles? We break down the A* grid algorithm, Manhattan distance heuristics, and fallback safety loops in JavaScript.
+                        Understanding grid pathfinding heuristic equations, priority queue updates, and safety loops in single-player AI rival bots.
                     </p>
+                    <div style="margin-top: 14px; font-weight: 600; color: var(--accent-primary); display: flex; align-items: center; gap: 6px;">
+                        <span>Read Full Article</span>
+                        <span>→</span>
+                    </div>
                 </article>
             </div>
 
@@ -174,5 +203,171 @@
             </footer>
         </main>
     </div>
+
+    <!-- Article Reader Modal -->
+    <div class="settings-panel hidden" id="article-modal" role="dialog" aria-modal="true" aria-labelledby="modal-article-title">
+        <div class="settings-content" style="max-width: 760px; max-height: 85vh;">
+            <header class="settings-header">
+                <span class="badge badge-primary" id="modal-article-category">Category</span>
+                <button class="icon-btn" id="close-article-modal" aria-label="Close article" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </header>
+            <div class="settings-body" style="display: flex; flex-direction: column; gap: 16px; overflow-y: auto; padding: 24px;">
+                <h1 id="modal-article-title" style="font-size: 1.6rem; font-weight: 700; color: var(--fg-primary); line-height: 1.3;">Article Title</h1>
+                <p id="modal-article-meta" style="font-size: 0.85rem; color: var(--fg-muted);">Published on August 11, 2026 • 5 min read</p>
+                <hr style="border: 0; border-top: 1px solid var(--border-primary); margin: 4px 0;">
+                <div id="modal-article-content" style="color: var(--fg-secondary); line-height: 1.7; font-size: 1rem; display: flex; flex-direction: column; gap: 16px;">
+                    <!-- Filled dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const articles = {
+            1: {
+                title: "The Evolution of Snake: From Nokia 6110 to Modern PWA Web Games",
+                category: "History & Design",
+                meta: "Published on August 11, 2026 • 5 min read",
+                content: `
+                    <p>First introduced in 1976 as the arcade game <em>Blockade</em>, the Snake game mechanics achieved worldwide pop-culture icon status when it came pre-installed on the Nokia 6110 mobile phone in 1997. Designed by Taneli Armanto, it introduced millions of users globally to mobile gaming for the very first time.</p>
+                    <h3>The Golden Age of Mobile Gaming</h3>
+                    <p>On monochrome green LCD screens with 84x48 pixel resolution, players spent endless hours using number keys '2', '4', '6', and '8' to steer a blocky line towards flickering dots. The simplicity of its loop—eat, grow longer, avoid collisions—was pure design genius.</p>
+                    <h3>Transition to Modern Web Standards</h3>
+                    <p>Today, web technologies like HTML5 Canvas 2D Context, CSS Grid layout, Web Audio API sound synthesis, and PWA Service Workers allow developers to build ultra-responsive 60FPS Snake games directly inside any web browser with zero plugin installations or binary downloads.</p>
+                    <div style="background: var(--bg-tertiary); padding: 16px; border-left: 4px solid var(--accent-primary); border-radius: var(--radius-sm);">
+                        <strong>Key Takeaway:</strong> Simple, intuitive core mechanics combined with fast, responsive controls outlast high-end graphical trends every time.
+                    </div>
+                `
+            },
+            2: {
+                title: "Top 5 High-Score Tactics for Master Players",
+                category: "Pro Strategy",
+                meta: "Published on August 11, 2026 • 4 min read",
+                content: `
+                    <p>Achieving a top ranking on global leaderboards requires more than quick reflexes—it demands spatial awareness and deliberate strategy.</p>
+                    <h3>1. The Serpentine Coiling Pattern</h3>
+                    <p>Instead of making erratic turns in open space, guide your snake in tight horizontal or vertical 'S' loops. This keeps your tail structured behind you and frees up maximum grid surface area.</p>
+                    <h3>2. Perimeter Hugging Early On</h3>
+                    <p>During early level expansion, wrap around the grid edges. This leaves the center tile matrix open for newly spawning bonus apples and power-ups.</p>
+                    <h3>3. Safe Speed Boost Activation</h3>
+                    <p>Save speed-boosting power-ups for open terrain. Never activate speed boosts when your snake length exceeds 50% of total grid tiles unless coiling space is clear.</p>
+                `
+            },
+            3: {
+                title: "Building 60FPS Canvas Games with Zero Dependencies",
+                category: "Engineering",
+                meta: "Published on August 11, 2026 • 6 min read",
+                content: `
+                    <p>Heavy web frameworks add unnecessary bundle overhead and DOM render latency. By leveraging pure Vanilla JavaScript ES Modules and HTML5 Canvas, you can build arcade games that load in under 100 milliseconds.</p>
+                    <h3>Delta Frame Accumulator Loop</h3>
+                    <p>Using <code>requestAnimationFrame</code> with a time delta accumulator ensures consistent 60FPS game physics updates across high-refresh-rate display monitors (120Hz/144Hz) without physics speed distortion.</p>
+                    <pre style="background: var(--bg-primary); padding: 14px; border-radius: 6px; font-family: var(--font-mono); font-size: 0.85rem; overflow-x: auto;">
+function gameLoop(timestamp) {
+    const delta = timestamp - lastTime;
+    accumulator += delta;
+    while (accumulator >= targetFrameTime) {
+        updatePhysics();
+        accumulator -= targetFrameTime;
+    }
+    render();
+    requestAnimationFrame(gameLoop);
+}</pre>
+                `
+            },
+            4: {
+                title: "Mastering Combo Multipliers & Power-up Synergies",
+                category: "Gameplay Mechanics",
+                meta: "Published on August 11, 2026 • 5 min read",
+                content: `
+                    <p>Score scaling in Modern Snake rewards rapid, aggressive playstyles. The game features an integrated combo engine that increases your score multiplier each time food is consumed within a 3-second streak window.</p>
+                    <h3>Power-Up Synergies</h3>
+                    <p>Collecting a <strong>Double Points</strong> item while maintaining a 5x combo multiplier multiplies base food values by 10x! Combining this with <strong>Ghost Mode</strong> allows you to cut straight through your own snake tail to reach golden apples risk-free.</p>
+                `
+            },
+            5: {
+                title: "How Zero-Asset Sound Synthesizers Work",
+                category: "Web Audio API",
+                meta: "Published on August 11, 2026 • 6 min read",
+                content: `
+                    <p>Traditional browser games load static MP3 or WAV audio files over HTTP requests, introducing network delay and asset loading overhead. Modern Web Audio API allows pure procedural sound synthesis.</p>
+                    <h3>Web Audio Oscillator Nodes</h3>
+                    <p>By initializing an <code>AudioContext</code>, creating an <code>OscillatorNode</code> (sine, square, or sawtooth wave), and ramping the <code>GainNode</code> exponential decay, authentic 8-bit retro sound FX are generated dynamically on demand in 0ms.</p>
+                `
+            },
+            6: {
+                title: "Designing Mobile-First Touch Controls for Retro Games",
+                category: "UI / UX Design",
+                meta: "Published on August 11, 2026 • 4 min read",
+                content: `
+                    <p>Designing mobile-friendly arcade controls requires balancing directional swipe gestures with virtual D-Pad buttons.</p>
+                    <h3>Ergonomic Layouts & Haptics</h3>
+                    <p>By placing touch directional controls at the bottom thumb zone and connecting button presses to <code>navigator.vibrate(15)</code>, mobile players receive physical tactile confirmation when executing split-second turns.</p>
+                `
+            },
+            7: {
+                title: "SEO Strategies for Web Games: Driving Organic Traffic",
+                category: "SEO & Analytics",
+                meta: "Published on August 11, 2026 • 5 min read",
+                content: `
+                    <p>Web games often suffer from poor search engine visibility when built as single empty Canvas containers. Implementing Google-level SEO turns browser games into search traffic powerhouses.</p>
+                    <h3>Structured JSON-LD Schema</h3>
+                    <p>Embedding <code>SoftwareApplication</code>, <code>Game</code>, <code>FAQPage</code>, and <code>BlogPosting</code> JSON-LD schema markup enables Google Search to index game metadata, FAQ accordions, and rich snippet result cards directly in search results.</p>
+                `
+            },
+            8: {
+                title: "Single-Player AI Bots: Implementing A* Pathfinding",
+                category: "AI & Pathfinding",
+                meta: "Published on August 11, 2026 • 7 min read",
+                content: `
+                    <p>How does the AI Rival Snake steer towards food on the same grid while safely avoiding player collisions, dynamic obstacles, and wall borders?</p>
+                    <h3>A* Grid Algorithm Heuristics</h3>
+                    <p>The <code>AStarPathfinder</code> calculates Manhattan distance scores <code>f(n) = g(n) + h(n)</code> for neighboring grid tiles, selecting the optimal safe path. If a path to food becomes blocked, a fallback safety loop chooses the longest open movement corridor to prevent self-entrapment.</p>
+                `
+            }
+        };
+
+        const modal = document.getElementById('article-modal');
+        const modalCategory = document.getElementById('modal-article-category');
+        const modalTitle = document.getElementById('modal-article-title');
+        const modalMeta = document.getElementById('modal-article-meta');
+        const modalContent = document.getElementById('modal-article-content');
+        const closeBtn = document.getElementById('close-article-modal');
+
+        document.querySelectorAll('.blog-card').forEach(card => {
+            const articleId = card.getAttribute('data-article');
+            const openArticle = () => {
+                const article = articles[articleId];
+                if (article) {
+                    modalCategory.textContent = article.category;
+                    modalTitle.textContent = article.title;
+                    modalMeta.textContent = article.meta;
+                    modalContent.innerHTML = article.content;
+                    modal.classList.remove('hidden');
+                }
+            };
+            card.addEventListener('click', openArticle);
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openArticle();
+                }
+            });
+        });
+
+        closeBtn.addEventListener('click', () => {
+            modal.classList.add('hidden');
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.add('hidden');
+            }
+        });
+    </script>
 </body>
 </html>
