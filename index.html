@@ -27,26 +27,50 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 
-    <!-- JSON-LD Structured Data for Game & SoftwareApplication -->
+    <!-- JSON-LD Structured Data for Game, SoftwareApplication & Breadcrumbs -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "Modern Snake Game",
-      "operatingSystem": "Any",
-      "applicationCategory": "GameApplication",
-      "genre": "Arcade",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Modern Snake Game",
+        "operatingSystem": "Any Browser",
+        "applicationCategory": "GameApplication",
+        "genre": "Arcade",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.9",
+          "ratingCount": "1280"
+        }
       },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "1280"
+      {
+        "@context": "https://schema.org",
+        "@type": "VideoGame",
+        "name": "Modern Snake Game",
+        "gamePlatform": "Web Browser",
+        "genre": "Arcade",
+        "playMode": "SinglePlayer",
+        "applicationCategory": "Game",
+        "url": "https://nikhil-nishad.github.io/pythonic/index.html"
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://nikhil-nishad.github.io/pythonic/index.html"
+          }
+        ]
       }
-    }
+    ]
     </script>
 </head>
 <body>
@@ -143,11 +167,22 @@
                             </div>
                             <div class="final-stat">
                                 <span class="final-stat-value" id="final-level">1</span>
-                                <span class="final-stat-label">Level Reached</span>
+                                <span class="final-stat-label">Level</span>
                             </div>
                             <div class="final-stat">
                                 <span class="final-stat-value" id="final-length">3</span>
                                 <span class="final-stat-label">Length</span>
+                            </div>
+                        </div>
+                        <!-- AI Rival Difficulty display (shown only in VS Bot mode) -->
+                        <div class="final-bot-difficulty hidden" id="final-bot-difficulty" aria-label="AI rival difficulty reached">
+                            <span id="final-bot-label">🤖 AI Reached: <strong id="final-difficulty-name">Easy</strong></span>
+                        </div>
+                        <!-- Skills Used this game -->
+                        <div class="final-skills-section" id="final-skills-section" aria-label="Skills used this round">
+                            <p class="final-skills-title">Skills Used</p>
+                            <div class="final-skills-list" id="final-skills-list" aria-live="polite">
+                                <span class="final-no-skills">No skills used — collect power-ups on the board!</span>
                             </div>
                         </div>
                         <div class="new-record hidden" id="new-record" aria-live="assertive">
@@ -179,6 +214,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="canvas-overlay hidden" id="level-up-overlay" role="status" aria-live="polite" aria-label="Level up notification">
                     <div class="level-up-content">
                         <div class="level-up-badge">

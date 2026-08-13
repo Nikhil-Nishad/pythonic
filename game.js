@@ -93,13 +93,16 @@ const FoodType = {
     SPEED: 'speed'
 };
 
-// Power-up Types
+// Power-up Types (Skills)
 const PowerUpType = {
     SLOW_MO: 'slow_mo',
     GHOST: 'ghost',
     DOUBLE_POINTS: 'double_points',
     SHRINK: 'shrink',
-    SHIELD: 'shield'
+    SHIELD: 'shield',
+    MAGNET: 'magnet',
+    FREEZE_BOT: 'freeze_bot',
+    SCORE_FRENZY: 'score_frenzy'
 };
 
 // Game Modes
@@ -276,11 +279,14 @@ class AudioEngine {
     // Power-up sounds
     playPowerUp(type) {
         const sounds = {
-            [PowerUpType.SLOW_MO]: () => this.playChord([440, 554, 659], 0.4, 'sine', 0.2),
-            [PowerUpType.GHOST]: () => this.playChord([523, 784, 1047], 0.3, 'triangle', 0.25),
+            [PowerUpType.SLOW_MO]:       () => this.playChord([440, 554, 659], 0.4, 'sine', 0.2),
+            [PowerUpType.GHOST]:         () => this.playChord([523, 784, 1047], 0.3, 'triangle', 0.25),
             [PowerUpType.DOUBLE_POINTS]: () => this.playChord([659, 880, 1319], 0.4, 'square', 0.2),
-            [PowerUpType.SHRINK]: () => this.playTone(880, 0.2, 'sawtooth', 0.2),
-            [PowerUpType.SHIELD]: () => this.playChord([392, 523, 659], 0.5, 'sine', 0.25)
+            [PowerUpType.SHRINK]:        () => this.playTone(880, 0.2, 'sawtooth', 0.2),
+            [PowerUpType.SHIELD]:        () => this.playChord([392, 523, 659], 0.5, 'sine', 0.25),
+            [PowerUpType.MAGNET]:        () => this.playChord([330, 494, 622], 0.4, 'sine', 0.2),
+            [PowerUpType.FREEZE_BOT]:    () => this.playChord([349, 440, 587], 0.4, 'triangle', 0.25),
+            [PowerUpType.SCORE_FRENZY]:  () => this.playChord([784, 988, 1319], 0.5, 'square', 0.15)
         };
         if (sounds[type]) sounds[type]();
     }
@@ -576,11 +582,14 @@ class PowerUpSystem {
     constructor() {
         this.activePowerUps = new Map();
         this.powerUpConfig = {
-            [PowerUpType.SLOW_MO]: { duration: 5000, color: '#3fb950', icon: '⏱' },
-            [PowerUpType.GHOST]: { duration: 4000, color: '#a371f7', icon: '👻' },
-            [PowerUpType.DOUBLE_POINTS]: { duration: 6000, color: '#d29922', icon: '2×' },
-            [PowerUpType.SHRINK]: { duration: 5000, color: '#f85149', icon: '🔻' },
-            [PowerUpType.SHIELD]: { duration: 8000, color: '#58a6ff', icon: '🛡' }
+            [PowerUpType.SLOW_MO]:       { duration: 5000, color: '#3fb950', icon: '⏱', name: 'Slow Time',     desc: 'Slows the game speed for 5 seconds' },
+            [PowerUpType.GHOST]:         { duration: 4000, color: '#a371f7', icon: '👻', name: 'Ghost Mode',    desc: 'Pass through walls for 4 seconds' },
+            [PowerUpType.DOUBLE_POINTS]: { duration: 6000, color: '#d29922', icon: '2×', name: 'Double Points', desc: 'All food worth 2× points for 6 seconds' },
+            [PowerUpType.SHRINK]:        { duration: 0,    color: '#f85149', icon: '🔻', name: 'Shrink',        desc: 'Instantly removes 3 tail segments' },
+            [PowerUpType.SHIELD]:        { duration: 8000, color: '#58a6ff', icon: '🛡', name: 'Shield',        desc: 'Absorbs one fatal collision (8s)' },
+            [PowerUpType.MAGNET]:        { duration: 5000, color: '#f0883e', icon: '🧲', name: 'Food Magnet',   desc: 'Food spawns closer to your head for 5 seconds' },
+            [PowerUpType.FREEZE_BOT]:    { duration: 4000, color: '#79c0ff', icon: '❄️', name: 'Freeze Bot',   desc: 'Freezes the AI rival snake for 4 seconds' },
+            [PowerUpType.SCORE_FRENZY]:  { duration: 6000, color: '#ff7b72', icon: '🔥', name: 'Score Frenzy', desc: 'Triple points on every food for 6 seconds' }
         };
     }
 
@@ -1603,6 +1612,9 @@ class SnakeGame {
             { x: center - 2, y: center }
         ];
 
+        // Reset skills tracking
+        this.skillsUsedThisGame = new Set();
+
         // Clear power-ups & obstacles
         this.powerUps.clear();
         this.activePowerUp = null;
@@ -1724,6 +1736,45 @@ class SnakeGame {
         this.finalScoreEl.textContent = this.score;
         this.finalLevelEl.textContent = this.level;
         this.finalLengthEl.textContent = this.snake.length;
+
+        // Render Bot Difficulty reached if VS Bot mode
+        const botDiffEl = document.getElementById('final-bot-difficulty');
+        const diffNameEl = document.getElementById('final-difficulty-name');
+        if (botDiffEl && diffNameEl) {
+            if (this.gameMode === GameMode.VS_BOT || this.botController) {
+                const diff = this.botController ? this.botController.currentDifficulty : null;
+                diffNameEl.textContent = diff ? diff.label : 'Easy';
+                botDiffEl.classList.remove('hidden');
+            } else {
+                botDiffEl.classList.add('hidden');
+            }
+        }
+
+        // Render Skills Used
+        const skillsListEl = document.getElementById('final-skills-list');
+        if (skillsListEl) {
+            skillsListEl.innerHTML = '';
+            if (this.skillsUsedThisGame && this.skillsUsedThisGame.size > 0) {
+                this.skillsUsedThisGame.forEach(skillType => {
+                    const cfg = this.powerUps.powerUpConfig[skillType];
+                    if (cfg) {
+                        const badge = document.createElement('div');
+                        badge.className = 'final-skill-badge';
+                        badge.style.borderColor = cfg.color;
+                        badge.innerHTML = `
+                            <span class="skill-icon">${cfg.icon}</span>
+                            <div class="skill-info">
+                                <span class="skill-name" style="color: ${cfg.color}">${cfg.name}</span>
+                                <span class="skill-desc">${cfg.desc}</span>
+                            </div>
+                        `;
+                        skillsListEl.appendChild(badge);
+                    }
+                });
+            } else {
+                skillsListEl.innerHTML = '<span class="final-no-skills">No skills activated — grab glowing items to power up!</span>';
+            }
+        }
 
         // Check achievements
         const newAchievements = this.achievements.checkAchievements({
@@ -1932,11 +1983,14 @@ class SnakeGame {
     }
 
     update() {
-        // AI Rival step
+        // AI Rival step (pass current playerScore for adaptive difficulty)
         if (this.botController) {
-            const botRes = this.botController.move(this.food, this.obstacles, this.snake);
-            if (botRes.ateFood) {
-                this.spawnFood();
+            const botFrozen = this.powerUps.isActive(PowerUpType.FREEZE_BOT);
+            if (!botFrozen) {
+                const botRes = this.botController.move(this.food, this.obstacles, this.snake, this.score);
+                if (botRes.ateFood) {
+                    this.spawnFood();
+                }
             }
         }
 
@@ -2054,6 +2108,16 @@ class SnakeGame {
         if (this.hapticEnabled) this.vibrate(this.foodType === FoodType.BONUS ? 30 : 15);
 
         const scoreResult = this.scoringEngine.registerFoodEat(this.foodType);
+
+        // Apply active skill multipliers
+        let bonusMultiplier = 1;
+        if (this.powerUps.isActive(PowerUpType.SCORE_FRENZY)) bonusMultiplier *= 3;
+        if (this.powerUps.isActive(PowerUpType.DOUBLE_POINTS)) bonusMultiplier *= 2;
+        if (bonusMultiplier > 1) {
+            const extra = scoreResult.pointsEarned * (bonusMultiplier - 1);
+            this.scoringEngine.score += extra;
+        }
+
         this.score = this.scoringEngine.score;
         if (this.scoringEngine.highScore > this.highScore) {
             this.highScore = this.scoringEngine.highScore;
@@ -2075,8 +2139,10 @@ class SnakeGame {
         this.particles.emitBurst(fx, fy, foodColor, this.foodType === FoodType.BONUS ? 25 : 15);
         this.screenShake.shake(this.foodType === FoodType.BONUS ? 6 : 3, 100);
 
-        const popupText = `+${scoreResult.pointsEarned}${scoreResult.comboCount > 1 ? ` 🔥x${scoreResult.comboCount}` : ''}`;
-        this.spawnFloatingScore(popupText, fx, fy, scoreResult.comboCount > 1);
+        const earnedTotal = scoreResult.pointsEarned * bonusMultiplier;
+        const bonusSuffix = bonusMultiplier > 1 ? ` (${bonusMultiplier}× skill!)` : '';
+        const popupText = `+${earnedTotal}${scoreResult.comboCount > 1 ? ` 🔥x${scoreResult.comboCount}` : ''}${bonusSuffix}`;
+        this.spawnFloatingScore(popupText, fx, fy, scoreResult.comboCount > 1 || bonusMultiplier > 1);
 
         if (this.foodEaten >= CONFIG.FOOD_PER_LEVEL) {
             this.levelUp();
@@ -2086,6 +2152,7 @@ class SnakeGame {
 
         this.updateStats();
     }
+
 
     collectPowerUp() {
         const type = this.activePowerUp;
@@ -2111,45 +2178,70 @@ class SnakeGame {
     }
 
     onPowerUpActivate(type) {
+        const config = this.powerUps.powerUpConfig[type];
+        const name = config ? config.name : type;
         switch (type) {
             case PowerUpType.GHOST:
                 this.ghostMode = true;
-                this.announce('Ghost mode activated');
+                this.announce(`${name} activated! Pass through walls.`);
                 break;
             case PowerUpType.SHIELD:
                 this.shieldActive = true;
-                this.announce('Shield activated');
+                this.announce(`${name} activated! Absorbs 1 collision.`);
                 break;
             case PowerUpType.SLOW_MO:
-                this.announce('Slow motion activated');
+                this.announce(`${name} activated! Time slows.`);
                 break;
             case PowerUpType.DOUBLE_POINTS:
-                this.announce('Double points activated');
+                this.announce(`${name} activated! 2× points for ${config.duration / 1000}s.`);
                 break;
             case PowerUpType.SHRINK:
                 if (this.snake.length > 3) {
                     this.snake = this.snake.slice(0, Math.max(3, this.snake.length - 3));
                 }
-                this.announce('Snake shrunk');
+                this.announce(`${name}! Lost 3 tail segments.`);
+                break;
+            case PowerUpType.MAGNET:
+                this.announce(`${name} activated! Food spawns closer.`);
+                break;
+            case PowerUpType.FREEZE_BOT:
+                this.announce(`${name} activated! AI rival frozen for ${config.duration / 1000}s.`);
+                break;
+            case PowerUpType.SCORE_FRENZY:
+                this.announce(`${name} activated! 3× points for ${config.duration / 1000}s.`);
                 break;
         }
+        // Track skills used for game-over screen
+        if (!this.skillsUsedThisGame) this.skillsUsedThisGame = new Set();
+        this.skillsUsedThisGame.add(type);
     }
 
     onPowerUpExpire(type) {
+        const config = this.powerUps.powerUpConfig[type];
+        const name = config ? config.name : type;
         switch (type) {
             case PowerUpType.GHOST:
                 this.ghostMode = false;
-                this.announce('Ghost mode expired');
+                this.announce(`${name} expired`);
                 break;
             case PowerUpType.SHIELD:
                 this.shieldActive = false;
-                this.announce('Shield expired');
+                this.announce(`${name} expired`);
                 break;
             case PowerUpType.SLOW_MO:
-                this.announce('Slow motion expired');
+                this.announce('Speed restored');
                 break;
             case PowerUpType.DOUBLE_POINTS:
-                this.announce('Double points expired');
+                this.announce(`${name} expired`);
+                break;
+            case PowerUpType.MAGNET:
+                this.announce(`${name} expired`);
+                break;
+            case PowerUpType.FREEZE_BOT:
+                this.announce('AI rival is back!');
+                break;
+            case PowerUpType.SCORE_FRENZY:
+                this.announce(`${name} expired`);
                 break;
         }
         this.audio.playPowerUpExpire();
@@ -2203,7 +2295,7 @@ class SnakeGame {
         this.drawObstacles();
 
         // Food
-        this.drawFood();
+        if (this.food) this.drawFood();
 
         // Snake
         this.drawSnake();

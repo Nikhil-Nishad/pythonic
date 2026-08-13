@@ -2,10 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Snake Game Blog & Developer Articles | Strategy, Architecture & Engineering</title>
-    <meta name="description" content="Explore deep-dive articles on Snake game history, high-score tactics, Web Audio synthesis, A* pathfinding bot AI, mobile touch design, and web game SEO.">
-    <meta name="keywords" content="snake game blog, arcade game strategy, web development game blog, html5 canvas 60fps, web audio api synth, astar pathfinding snake">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game Blog &amp; Articles | Strategy, Engineering &amp; Game Rankings</title>
+    <meta name="description" content="Explore in-depth articles on Snake game tactics, web architecture, 60FPS canvas engineering, A* AI pathfinding, game rankings, and retro game history.">
+    <meta name="keywords" content="snake game blog, arcade game strategy, web development game blog, html5 canvas 60fps, best snake games, google snake alternative, astar pathfinding snake, PWA game architecture">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Modern Snake Game">
     <meta name="theme-color" content="#0d1117">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📰</text></svg>">
     <link rel="canonical" href="https://nikhil-nishad.github.io/pythonic/blog.html">
@@ -13,522 +15,434 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://nikhil-nishad.github.io/pythonic/blog.html">
-    <meta property="og:title" content="Snake Game Blog & Developer Articles">
-    <meta property="og:description" content="Read expert articles on arcade game tactics, Nokia Snake nostalgia, and modern browser game engineering.">
+    <meta property="og:title" content="Snake Game Blog &amp; Articles | Strategy &amp; Engineering">
+    <meta property="og:description" content="Read expert articles on arcade game tactics, Nokia Snake history, modern web game engineering, and top snake game rankings.">
+    <meta property="og:site_name" content="Modern Snake Game">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:title" content="Snake Game Blog & Strategy Insights">
+    <meta property="twitter:title" content="Snake Game Blog &amp; Strategy Insights">
     <meta property="twitter:description" content="Deep dives into Snake game history, high-score tactics, and PWA game design.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 
-    <!-- JSON-LD Blog Schema -->
+    <!-- JSON-LD Blog & BreadcrumbList Schemas -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Blog",
-      "name": "Snake Game Developer & Strategy Blog",
-      "description": "Engineering articles, high-score tactics, and architectural deep-dives for modern browser gaming.",
-      "publisher": {
-        "@type": "Organization",
-        "name": "Modern Snake Game"
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "name": "Snake Game Developer & Strategy Blog",
+        "description": "In-depth engineering articles, high-score tactics, and web architecture deep-dives for modern browser gaming.",
+        "publisher": {
+          "@type": "Organization",
+          "name": "Modern Snake Game"
+        }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://nikhil-nishad.github.io/pythonic/index.html"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Developer Blog",
+            "item": "https://nikhil-nishad.github.io/pythonic/blog.html"
+          }
+        ]
       }
-    }
+    ]
     </script>
 </head>
-<body class="instructions-page">
-    <div class="game-container">
-        <!-- Background ambient lighting -->
-        <div class="ambient-bg" aria-hidden="true">
-            <div class="orb orb-1"></div>
-            <div class="orb orb-2"></div>
-            <div class="orb orb-3"></div>
-        </div>
+<body class="site-page">
 
-        <main class="instructions-card" role="main">
-            <!-- Header Nav -->
-            <nav class="instructions-nav" aria-label="Page Navigation">
-                <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-                    <a href="index.html" class="nav-back-btn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-                            <path d="M19 12H5M12 19l-7-7 7-7"/>
-                        </svg>
-                        <span>Play Game</span>
-                    </a>
-                    <a href="instructions.html" class="nav-back-btn" style="color: var(--fg-secondary);">
-                        <span>How to Play</span>
-                    </a>
-                </div>
-                <div class="nav-actions">
-                    <button class="theme-toggle-btn" id="theme-toggle" aria-label="Toggle light or dark theme" title="Toggle Theme">
-                        🌙
-                    </button>
-                    <span class="badge badge-primary">Developer Blog</span>
-                </div>
+    <!-- Sticky Site Navbar Header -->
+    <header class="site-header" role="banner">
+        <div class="header-container">
+            <a href="index.html" class="site-logo">
+                <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                    <path d="M4 16C4 10.477 8.477 6 14 6H18C23.523 6 28 10.477 28 16C28 21.523 23.523 26 18 26H14C8.477 26 4 21.523 4 16Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Modern Snake</span>
+            </a>
+
+            <nav class="site-nav" aria-label="Main Navigation">
+                <a href="index.html" class="site-nav-link">Play Game</a>
+                <a href="instructions.html" class="site-nav-link">How to Play</a>
+                <a href="blog.html" class="site-nav-link active">Developer Blog</a>
             </nav>
 
-            <header class="instructions-header">
-                <h1>Developer Articles & Strategy Guides</h1>
-                <p class="subtitle">In-depth technical articles, game design principles, and high-score tactics. Search or filter below.</p>
-            </header>
-
-            <!-- Search & Category Filter Section -->
-            <div class="search-filter-bar">
-                <div class="search-input-wrapper">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"/>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                    </svg>
-                    <input type="text" class="search-input" id="blog-search" placeholder="Search articles by title, keyword, or technology (e.g. A*, Web Audio, 60FPS, Nokia)...">
-                </div>
-
-                <div class="category-chips" id="category-chips">
-                    <button type="button" class="category-chip active" data-cat="All">All Articles</button>
-                    <button type="button" class="category-chip" data-cat="History & Design">History & Design</button>
-                    <button type="button" class="category-chip" data-cat="Pro Strategy">Pro Strategy</button>
-                    <button type="button" class="category-chip" data-cat="Engineering">Engineering</button>
-                    <button type="button" class="category-chip" data-cat="Gameplay Mechanics">Gameplay Mechanics</button>
-                    <button type="button" class="category-chip" data-cat="Web Audio API">Web Audio API</button>
-                    <button type="button" class="category-chip" data-cat="UI / UX Design">UI / UX Design</button>
-                    <button type="button" class="category-chip" data-cat="SEO & Analytics">SEO & Analytics</button>
-                    <button type="button" class="category-chip" data-cat="AI & Pathfinding">AI & Pathfinding</button>
-                </div>
-            </div>
-
-            <!-- Blog Articles Grid -->
-            <div class="instructions-grid" id="blog-grid">
-                
-                <!-- Article 1 -->
-                <article class="guide-card full-width blog-card" data-article="1" data-category="History & Design" tabindex="0">
-                    <button class="bookmark-btn" data-bm="1" title="Save Article" aria-label="Save Article">🖤</button>
-                    <div class="guide-icon">🕹️</div>
-                    <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">History & Design</span>
-                    <h2>1. The Evolution of Snake: From Nokia 6110 to Modern PWA Web Games</h2>
-                    <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 12px;">Published on August 11, 2026 • 8 min read • By Hardware & Game History Desk</p>
-                    <p style="line-height: 1.6; color: var(--fg-secondary); font-size: 0.95rem;">
-                        First introduced in 1976 as the dual-player arcade cabinet <em>Blockade</em>, the Snake core loop achieved global pop-culture iconic status when pre-installed on Nokia mobile handsets in 1997. Discover how hardware limitations birthed timeless game mechanics, and how modern PWAs revive retro arcade culture...
-                    </p>
-                    <div style="margin-top: 14px; font-weight: 600; color: var(--accent-primary); display: flex; align-items: center; gap: 6px;">
-                        <span>Read Full Guide</span>
-                        <span>→</span>
-                    </div>
-                </article>
-
-                <!-- Article 2 -->
-                <article class="guide-card blog-card" data-article="2" data-category="Pro Strategy" tabindex="0">
-                    <button class="bookmark-btn" data-bm="2" title="Save Article" aria-label="Save Article">🖤</button>
-                    <div class="guide-icon">🏆</div>
-                    <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">Pro Strategy</span>
-                    <h2>2. Top 10 High-Score Tactics: Spatial Coiling & Space Partitioning</h2>
-                    <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 12px;">Published on August 11, 2026 • 7 min read • By Competitive Gaming Analysis</p>
-                    <p style="color: var(--fg-secondary); font-size: 0.9rem; line-height: 1.6;">
-                        Master serpentine coiling, edge-wrapping, combo streak maintenance, and tail-tracking formulas to consistently score over 5,000 points and rank #1 on global leaderboards.
-                    </p>
-                    <div style="margin-top: 14px; font-weight: 600; color: var(--accent-primary); display: flex; align-items: center; gap: 6px;">
-                        <span>Read Full Guide</span>
-                        <span>→</span>
-                    </div>
-                </article>
-
-                <!-- Article 3 -->
-                <article class="guide-card blog-card" data-article="3" data-category="Engineering" tabindex="0">
-                    <button class="bookmark-btn" data-bm="3" title="Save Article" aria-label="Save Article">🖤</button>
-                    <div class="guide-icon">⚡</div>
-                    <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">Engineering</span>
-                    <h2>3. Building 60FPS Canvas Arcade Games with Zero Dependencies</h2>
-                    <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 12px;">Published on August 11, 2026 • 10 min read • By Web Architecture Team</p>
-                    <p style="color: var(--fg-secondary); font-size: 0.9rem; line-height: 1.6;">
-                        Learn how Vanilla JS ES Modules, `requestAnimationFrame` delta frame accumulators, double-buffered rendering, and memory management deliver sub-100ms load times and locked 60FPS performance.
-                    </p>
-                    <div style="margin-top: 14px; font-weight: 600; color: var(--accent-primary); display: flex; align-items: center; gap: 6px;">
-                        <span>Read Full Guide</span>
-                        <span>→</span>
-                    </div>
-                </article>
-
-                <!-- Article 4 -->
-                <article class="guide-card blog-card" data-article="4" data-category="Gameplay Mechanics" tabindex="0">
-                    <button class="bookmark-btn" data-bm="4" title="Save Article" aria-label="Save Article">🖤</button>
-                    <div class="guide-icon">🔥</div>
-                    <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">Gameplay Mechanics</span>
-                    <h2>4. Designing Next-Gen Gameplay: Combos, Power-up Synergies & Risk</h2>
-                    <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 12px;">Published on August 11, 2026 • 8 min read • By Systems Design Lead</p>
-                    <p style="color: var(--fg-secondary); font-size: 0.9rem; line-height: 1.6;">
-                        Explore game feel engineering, combo streak decay windows, power-up stacking mathematics, and visual feedback telemetry that keep players in the elusive "flow state".
-                    </p>
-                    <div style="margin-top: 14px; font-weight: 600; color: var(--accent-primary); display: flex; align-items: center; gap: 6px;">
-                        <span>Read Full Guide</span>
-                        <span>→</span>
-                    </div>
-                </article>
-
-                <!-- Article 5 -->
-                <article class="guide-card blog-card" data-article="5" data-category="Web Audio API" tabindex="0">
-                    <button class="bookmark-btn" data-bm="5" title="Save Article" aria-label="Save Article">🖤</button>
-                    <div class="guide-icon">🎹</div>
-                    <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">Web Audio API</span>
-                    <h2>5. Procedural Audio Synthesis: Zero-Asset 8-Bit Chiptune Engine</h2>
-                    <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 12px;">Published on August 11, 2026 • 9 min read • By Audio Engineering Desk</p>
-                    <p style="color: var(--fg-secondary); font-size: 0.9rem; line-height: 1.6;">
-                        How to synthesize real-time retro 8-bit sound effects and chiptune chords using `AudioContext`, custom wave oscillators, ADSR gain envelopes, and frequency sweeps with 0ms network latency.
-                    </p>
-                    <div style="margin-top: 14px; font-weight: 600; color: var(--accent-primary); display: flex; align-items: center; gap: 6px;">
-                        <span>Read Full Guide</span>
-                        <span>→</span>
-                    </div>
-                </article>
-
-                <!-- Article 6 -->
-                <article class="guide-card blog-card" data-article="6" data-category="UI / UX Design" tabindex="0">
-                    <button class="bookmark-btn" data-bm="6" title="Save Article" aria-label="Save Article">🖤</button>
-                    <div class="guide-icon">📱</div>
-                    <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">UI / UX Design</span>
-                    <h2>6. Mobile-First Touch Controls & Haptic Telemetry for Web Games</h2>
-                    <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 12px;">Published on August 11, 2026 • 7 min read • By Mobile Ergonomics Group</p>
-                    <p style="color: var(--fg-secondary); font-size: 0.9rem; line-height: 1.6;">
-                        Balancing directional swipe gesture vector thresholds with virtual D-Pad buttons, preventing touch scroll jitter, and triggering tactile `navigator.vibrate` haptic pulses.
-                    </p>
-                    <div style="margin-top: 14px; font-weight: 600; color: var(--accent-primary); display: flex; align-items: center; gap: 6px;">
-                        <span>Read Full Guide</span>
-                        <span>→</span>
-                    </div>
-                </article>
-
-                <!-- Article 7 -->
-                <article class="guide-card blog-card" data-article="7" data-category="SEO & Analytics" tabindex="0">
-                    <button class="bookmark-btn" data-bm="7" title="Save Article" aria-label="Save Article">🖤</button>
-                    <div class="guide-icon">🔍</div>
-                    <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">SEO & Analytics</span>
-                    <h2>7. Modern Web SEO for Web Games: Indexing Canvas Applications</h2>
-                    <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 12px;">Published on August 11, 2026 • 8 min read • By Search & Analytics Team</p>
-                    <p style="color: var(--fg-secondary); font-size: 0.9rem; line-height: 1.6;">
-                        Turn single-page canvas games into search engine traffic powerhouses using structured JSON-LD schemas (`SoftwareApplication`, `FAQPage`), canonical tags, Open Graph meta images, and semantic HTML fallbacks.
-                    </p>
-                    <div style="margin-top: 14px; font-weight: 600; color: var(--accent-primary); display: flex; align-items: center; gap: 6px;">
-                        <span>Read Full Guide</span>
-                        <span>→</span>
-                    </div>
-                </article>
-
-                <!-- Article 8 -->
-                <article class="guide-card blog-card" data-article="8" data-category="AI & Pathfinding" tabindex="0">
-                    <button class="bookmark-btn" data-bm="8" title="Save Article" aria-label="Save Article">🖤</button>
-                    <div class="guide-icon">🤖</div>
-                    <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">AI & Pathfinding</span>
-                    <h2>8. Single-Player AI Rivals: Building Real-Time A* Pathfinding</h2>
-                    <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 12px;">Published on August 11, 2026 • 11 min read • By Autonomous AI Systems</p>
-                    <p style="color: var(--fg-secondary); font-size: 0.9rem; line-height: 1.6;">
-                        Understand Manhattan distance heuristic equations, priority queue updates, dynamic obstacle cost matrix evaluation, and safety tail-following fallback loops in single-player AI rival snakes.
-                    </p>
-                    <div style="margin-top: 14px; font-weight: 600; color: var(--accent-primary); display: flex; align-items: center; gap: 6px;">
-                        <span>Read Full Guide</span>
-                        <span>→</span>
-                    </div>
-                </article>
-            </div>
-
-            <!-- Footer CTA -->
-            <footer class="instructions-footer">
-                <a href="index.html" class="btn btn-primary btn-large">
-                    <span>Play Snake Game Now</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true" style="width:20px; height:20px;">
-                        <polygon points="5 3 19 12 5 21"/>
-                    </svg>
+            <div class="header-actions">
+                <button class="theme-toggle-btn" id="theme-toggle" aria-label="Toggle light or dark theme" title="Toggle Theme">
+                    🌙
+                </button>
+                <a href="index.html" class="btn btn-primary" style="padding: 8px 18px; font-size: 0.9rem; border-radius: var(--radius-full);">
+                    Play Now
                 </a>
-            </footer>
-        </main>
-    </div>
-
-    <!-- Article Reader Modal -->
-    <div class="settings-panel hidden" id="article-modal" role="dialog" aria-modal="true" aria-labelledby="modal-article-title">
-        <div class="settings-content" style="max-width: 840px; max-height: 90vh; border-radius: var(--radius-lg); position: relative; overflow: hidden;">
-            
-            <!-- Reading Progress Bar -->
-            <div class="modal-reading-bar">
-                <div class="modal-reading-progress" id="reading-progress"></div>
-            </div>
-
-            <!-- Modal Header -->
-            <header class="settings-header" style="padding: 20px 24px; border-bottom: 1px solid var(--border-primary); display: flex; justify-content: space-between; align-items: center;">
-                <div style="display: flex; gap: 12px; align-items: center;">
-                    <span class="badge badge-primary" id="modal-article-category">Category</span>
-                    <span id="modal-read-time" style="font-size: 0.8rem; color: var(--fg-muted);">5 min read</span>
-                </div>
-                
-                <div style="display: flex; gap: 8px; align-items: center;">
-                    <button class="quick-jump-pill" id="share-article-btn" title="Share Article" type="button" style="display: flex; align-items: center; gap: 6px;">
-                        <span>🔗</span> <span>Share Link</span>
-                    </button>
-                    <button class="icon-btn" id="close-article-modal" aria-label="Close article" type="button">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-                            <line x1="18" y1="6" x2="6" y2="18"/>
-                            <line x1="6" y1="6" x2="18" y2="18"/>
-                        </svg>
-                    </button>
-                </div>
-            </header>
-
-            <!-- Modal Scrollable Body -->
-            <div class="settings-body" id="modal-scroll-body" style="display: flex; flex-direction: column; gap: 16px; overflow-y: auto; padding: 28px; max-height: calc(90vh - 80px);">
-                <h1 id="modal-article-title" style="font-size: 1.8rem; font-weight: 700; color: var(--fg-primary); line-height: 1.3;">Article Title</h1>
-                <p id="modal-article-meta" style="font-size: 0.85rem; color: var(--fg-muted);">Published on August 11, 2026 • 5 min read</p>
-                <hr style="border: 0; border-top: 1px solid var(--border-primary); margin: 4px 0;">
-                
-                <div id="modal-article-content" style="color: var(--fg-secondary); line-height: 1.7; font-size: 1rem; display: flex; flex-direction: column; gap: 16px;">
-                    <!-- Filled dynamically -->
-                </div>
-
-                <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-primary); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-                    <button class="quick-jump-pill" id="prev-article-btn" type="button">← Previous Article</button>
-                    <button class="btn btn-primary" id="modal-play-btn" type="button" onclick="window.location.href='index.html'">Play Game Now</button>
-                    <button class="quick-jump-pill" id="next-article-btn" type="button">Next Article →</button>
-                </div>
+                <button class="hamburger-btn" id="hamburger-btn" aria-label="Open navigation menu" aria-expanded="false">
+                    <span></span><span></span><span></span>
+                </button>
             </div>
         </div>
+    </header>
+
+    <!-- Mobile Nav Drawer -->
+    <div class="mobile-nav-drawer" id="mobile-nav-drawer" role="dialog" aria-label="Mobile Navigation" aria-modal="true">
+        <nav class="mobile-nav-panel">
+            <a href="index.html" class="site-nav-link">🎮 Play Game</a>
+            <a href="instructions.html" class="site-nav-link">📖 How to Play</a>
+            <a href="blog.html" class="site-nav-link active">📰 Developer Blog</a>
+            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-primary);">
+                <a href="index.html" class="btn btn-primary" style="display:block; text-align:center; padding: 12px 20px; border-radius: var(--radius-full); text-decoration:none;">Play Now →</a>
+            </div>
+        </nav>
     </div>
+
+    <!-- Site Hero Section -->
+    <section class="site-hero" role="region" aria-label="Blog Banner">
+        <!-- Visible Breadcrumb -->
+        <nav class="page-breadcrumb" aria-label="Breadcrumb" style="font-size: 0.82rem; color: var(--fg-muted); margin-bottom: 16px; display: flex; justify-content: center; gap: 6px; align-items: center;">
+            <a href="index.html" style="color: var(--fg-muted); text-decoration: none;">🏠 Home</a>
+            <span aria-hidden="true">/</span>
+            <span style="color: var(--fg-primary);">Developer Blog</span>
+        </nav>
+
+        <div class="hero-badge">Engineering, Strategy &amp; Game Reviews</div>
+        <h1 class="hero-title">Developer &amp; Strategy Blog</h1>
+        <p class="hero-subtitle">Articles on game rankings, Web Audio synthesis, 60FPS canvas loops, A* AI pathfinding, casual wellness, and web game SEO.</p>
+
+        <!-- Search & Category Filter Section -->
+        <div class="search-filter-bar responsive-max-width">
+            <div class="search-input-wrapper">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <input type="text" class="search-input" id="blog-search" placeholder="Search articles by title, keyword, or topic..." aria-label="Search blog articles">
+            </div>
+
+            <div class="category-chips" id="category-chips" style="justify-content: center;">
+                <button type="button" class="category-chip active" data-cat="All">All Articles</button>
+                <button type="button" class="category-chip" data-cat="Comparisons &amp; Rankings">Comparisons &amp; Rankings</button>
+                <button type="button" class="category-chip" data-cat="Everyday Guides">Everyday Guides</button>
+                <button type="button" class="category-chip" data-cat="Everyday Focus &amp; Wellness">Focus &amp; Wellness</button>
+                <button type="button" class="category-chip" data-cat="Pro Strategy">Pro Strategy</button>
+                <button type="button" class="category-chip" data-cat="Engineering">Engineering</button>
+                <button type="button" class="category-chip" data-cat="Gameplay Mechanics">Gameplay Mechanics</button>
+                <button type="button" class="category-chip" data-cat="Web Audio API">Web Audio API</button>
+                <button type="button" class="category-chip" data-cat="UI / UX Design">UI / UX Design</button>
+                <button type="button" class="category-chip" data-cat="AI &amp; Pathfinding">AI &amp; Pathfinding</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Grid with Crawler-Indexable Links to Dedicated Article Pages -->
+    <main class="site-main" role="main">
+        <div class="instructions-grid" id="blog-grid">
+
+            <!-- Featured Article 9: Comparison & Ranking -->
+            <article class="guide-card full-width blog-card static-article" data-category="Comparisons &amp; Rankings">
+                <div class="guide-icon">🏆</div>
+                <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">Comparisons &amp; Rankings • Featured</span>
+                <h2><a href="blog/best-snake-games-compared.html" style="color: inherit; text-decoration: none;">Best Unblocked Snake Games Ranked: Modern Snake vs. Google Snake, Slither.io &amp; Paper.io</a></h2>
+                <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 14px;">Published on August 13, 2026 • 9 min read • By Competitive Gaming Analysis Desk</p>
+                
+                <div class="article-body-preview">
+                    <p>We benchmarked frame rate, input latency, privacy, ad clutter, and game depth across the top 5 browser snake games in 2026. Discover why Modern Snake claims the #1 position for zero ad distractions, instant PWA loading, procedural Web Audio, and 60FPS canvas graphics.</p>
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <a href="blog/best-snake-games-compared.html" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: var(--radius-full); text-decoration: none; font-weight: 600;">
+                        <span>Read Full Comparison Benchmark</span>
+                        <span>→</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Article 10: Nostalgia Comparison -->
+            <article class="guide-card blog-card static-article" data-category="Comparisons &amp; Rankings">
+                <div class="guide-icon">📱</div>
+                <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">Comparisons &amp; Rankings</span>
+                <h2><a href="blog/modern-snake-vs-nokia-snake-2.html" style="color: inherit; text-decoration: none;">Modern Snake vs. Nokia Snake II: How 29 Years of Hardware &amp; Web Evolution Transformed Retro Gaming</a></h2>
+                <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 14px;">Published on August 13, 2026 • 7 min read • By Hardware &amp; Gaming History Desk</p>
+                
+                <div class="article-body-preview">
+                    <p>Deep dive comparing 1999 Nokia Snake II on the 3310 handset with 2026 Modern Web Snake across display resolution, monophonic vs procedural sound synthesis, and real-time A* pathfinding AI rivals.</p>
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <a href="blog/modern-snake-vs-nokia-snake-2.html" style="font-weight: 600; color: var(--accent-primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                        <span>Read Full Article</span> <span>→</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Article 11: Cognitive Benefits & Focus -->
+            <article class="guide-card blog-card static-article" data-category="Everyday Focus &amp; Wellness">
+                <div class="guide-icon">🧠</div>
+                <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">Focus &amp; Wellness</span>
+                <h2><a href="blog/cognitive-benefits-of-playing-snake.html" style="color: inherit; text-decoration: none;">Why Playing Classic Arcade Games Like Snake Reduces Stress &amp; Enhances Cognitive Focus</a></h2>
+                <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 14px;">Published on August 13, 2026 • 6 min read • By Cognitive Psychology &amp; Wellness Group</p>
+                
+                <div class="article-body-preview">
+                    <p>Discover how brief 3-minute casual gaming breaks reset spatial working memory, relieve workplace anxiety, and trigger beneficial flow states without ad distractions.</p>
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <a href="blog/cognitive-benefits-of-playing-snake.html" style="font-weight: 600; color: var(--accent-primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                        <span>Read Full Article</span> <span>→</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Article 12: Beginner's Guide -->
+            <article class="guide-card blog-card static-article" data-category="Everyday Guides">
+                <div class="guide-icon">🍎</div>
+                <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">Everyday Guides</span>
+                <h2><a href="blog/beginners-guide-to-snake-game.html" style="color: inherit; text-decoration: none;">The Ultimate Beginner's Guide to Snake Games: Controls, Rules &amp; Fun Tricks for Everyone</a></h2>
+                <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 14px;">Published on August 13, 2026 • 5 min read • By Player Onboarding Team</p>
+                
+                <div class="article-body-preview">
+                    <p>New to Snake? Learn movement controls for keyboard and touch screens, simple scoring rules, food types, and easy perimeter tricks to survive longer rounds.</p>
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <a href="blog/beginners-guide-to-snake-game.html" style="font-weight: 600; color: var(--accent-primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                        <span>Read Full Article</span> <span>→</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Article 13: Privacy & PWA Games -->
+            <article class="guide-card blog-card static-article" data-category="Everyday Tech &amp; Privacy">
+                <div class="guide-icon">🛡️</div>
+                <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">Everyday Tech &amp; Privacy</span>
+                <h2><a href="blog/no-ad-pwa-web-games.html" style="color: inherit; text-decoration: none;">How No-Ad PWA Web Games Are Saving Mobile Browsing from Annoying App Installs &amp; Popups</a></h2>
+                <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 14px;">Published on August 13, 2026 • 7 min read • By Web Standards &amp; Privacy Group</p>
+                
+                <div class="article-body-preview">
+                    <p>Why lightweight Progressive Web Apps (PWAs) offer superior privacy, zero storage overhead (under 1MB), and ad-free gaming compared to heavy mobile app store downloads.</p>
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <a href="blog/no-ad-pwa-web-games.html" style="font-weight: 600; color: var(--accent-primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                        <span>Read Full Article</span> <span>→</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Article 1: Evolution of Snake -->
+            <article class="guide-card blog-card static-article" data-category="History &amp; Design">
+                <div class="guide-icon">🕹️</div>
+                <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">History &amp; Design</span>
+                <h2><a href="blog/evolution-of-snake.html" style="color: inherit; text-decoration: none;">The Evolution of Snake: From Nokia 6110 to Modern PWA Web Games</a></h2>
+                <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 14px;">Published on August 11, 2026 • 8 min read • By Hardware &amp; Game History Desk</p>
+                
+                <div class="article-body-preview">
+                    <p>First introduced in 1976 as arcade cabinet <em>Blockade</em>, the core Snake loop achieved global pop-culture iconic status on Nokia mobile handsets in 1997.</p>
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <a href="blog/evolution-of-snake.html" style="font-weight: 600; color: var(--accent-primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                        <span>Read Full Article</span> <span>→</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Article 2: High Score Tactics -->
+            <article class="guide-card blog-card static-article" data-category="Pro Strategy">
+                <div class="guide-icon">🏆</div>
+                <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">Pro Strategy</span>
+                <h2><a href="blog/high-score-tactics.html" style="color: inherit; text-decoration: none;">Top 10 High-Score Tactics: Spatial Coiling &amp; Space Partitioning</a></h2>
+                <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 14px;">Published on August 11, 2026 • 7 min read • By Competitive Gaming Analysis</p>
+                
+                <div class="article-body-preview">
+                    <p>Master serpentine coiling, perimeter wrapping, combo streak maintenance, and tail-tracking formulas in Modern Snake.</p>
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <a href="blog/high-score-tactics.html" style="font-weight: 600; color: var(--accent-primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                        <span>Read Full Article</span> <span>→</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Article 3: 60FPS Canvas -->
+            <article class="guide-card blog-card static-article" data-category="Engineering">
+                <div class="guide-icon">⚡</div>
+                <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">Engineering</span>
+                <h2><a href="blog/building-60fps-canvas-games.html" style="color: inherit; text-decoration: none;">Building 60FPS Canvas Arcade Games with Zero Dependencies</a></h2>
+                <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 14px;">Published on August 11, 2026 • 10 min read • By Web Architecture Team</p>
+                
+                <div class="article-body-preview">
+                    <p>How Vanilla JS ES Modules, requestAnimationFrame delta frame accumulators, and zero-allocation memory management deliver locked 60FPS performance.</p>
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <a href="blog/building-60fps-canvas-games.html" style="font-weight: 600; color: var(--accent-primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                        <span>Read Full Article</span> <span>→</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Article 4: Gameplay Mechanics & Combos -->
+            <article class="guide-card blog-card static-article" data-category="Gameplay Mechanics">
+                <div class="guide-icon">🔥</div>
+                <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">Gameplay Mechanics</span>
+                <h2><a href="blog/gameplay-mechanics-and-combos.html" style="color: inherit; text-decoration: none;">Designing Next-Gen Gameplay: Combos, Power-up Synergies &amp; Risk</a></h2>
+                <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 14px;">Published on August 11, 2026 • 8 min read • By Systems Design Lead</p>
+                
+                <div class="article-body-preview">
+                    <p>Discover how dynamic combo multipliers, temporary power-ups, and risk-reward incentives elevate classic arcade mechanics.</p>
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <a href="blog/gameplay-mechanics-and-combos.html" style="font-weight: 600; color: var(--accent-primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                        <span>Read Full Article</span> <span>→</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Article 5: Procedural Audio -->
+            <article class="guide-card blog-card static-article" data-category="Web Audio API">
+                <div class="guide-icon">🎹</div>
+                <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">Web Audio API</span>
+                <h2><a href="blog/procedural-audio-synthesis.html" style="color: inherit; text-decoration: none;">Procedural Audio Synthesis: Zero-Asset 8-Bit Chiptune Engine</a></h2>
+                <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 14px;">Published on August 11, 2026 • 9 min read • By Audio Engineering Desk</p>
+                
+                <div class="article-body-preview">
+                    <p>How Web Audio API oscillator nodes and exponential gain envelopes synthesize real-time retro sound effects with zero latency.</p>
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <a href="blog/procedural-audio-synthesis.html" style="font-weight: 600; color: var(--accent-primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                        <span>Read Full Article</span> <span>→</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Article 6: Touch Controls -->
+            <article class="guide-card blog-card static-article" data-category="UI / UX Design">
+                <div class="guide-icon">📱</div>
+                <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">UI / UX Design</span>
+                <h2><a href="blog/mobile-touch-controls-haptics.html" style="color: inherit; text-decoration: none;">Mobile-First Touch Controls &amp; Haptic Telemetry for Web Games</a></h2>
+                <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 14px;">Published on August 11, 2026 • 7 min read • By Mobile Ergonomics Group</p>
+                
+                <div class="article-body-preview">
+                    <p>Designing swipe vector calculation algorithms and haptic vibration feedback for mobile web arcade games.</p>
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <a href="blog/mobile-touch-controls-haptics.html" style="font-weight: 600; color: var(--accent-primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                        <span>Read Full Article</span> <span>→</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Article 7: Web Game SEO -->
+            <article class="guide-card blog-card static-article" data-category="SEO &amp; Analytics">
+                <div class="guide-icon">🔍</div>
+                <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">SEO &amp; Analytics</span>
+                <h2><a href="blog/web-game-seo-guide.html" style="color: inherit; text-decoration: none;">Modern Web SEO for Web Games: Indexing Canvas Applications</a></h2>
+                <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 14px;">Published on August 11, 2026 • 8 min read • By Search &amp; Analytics Team</p>
+                
+                <div class="article-body-preview">
+                    <p>Transforming empty Canvas element shells into organic search engine powerhouses using structured JSON-LD data and semantic HTML.</p>
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <a href="blog/web-game-seo-guide.html" style="font-weight: 600; color: var(--accent-primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                        <span>Read Full Article</span> <span>→</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Article 8: A* AI Pathfinding -->
+            <article class="guide-card blog-card static-article" data-category="AI &amp; Pathfinding">
+                <div class="guide-icon">🤖</div>
+                <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">AI &amp; Pathfinding</span>
+                <h2><a href="blog/astar-pathfinding-ai-rivals.html" style="color: inherit; text-decoration: none;">Single-Player AI Rivals: Building Real-Time A* Pathfinding</a></h2>
+                <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 14px;">Published on August 11, 2026 • 11 min read • By Autonomous AI Systems</p>
+                
+                <div class="article-body-preview">
+                    <p>Manhattan distance heuristics, priority queue cost evaluations, and safety tail-following fallback loops in Snake AI.</p>
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <a href="blog/astar-pathfinding-ai-rivals.html" style="font-weight: 600; color: var(--accent-primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                        <span>Read Full Article</span> <span>→</span>
+                    </a>
+                </div>
+            </article>
+
+        </div>
+    </main>
+
+    <!-- Full Site Footer -->
+    <footer class="site-footer" role="contentinfo">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <a href="index.html" class="site-logo">
+                    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                        <path d="M4 16C4 10.477 8.477 6 14 6H18C23.523 6 28 10.477 28 16C28 21.523 23.523 26 18 26H14C8.477 26 4 21.523 4 16Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Modern Snake Game</span>
+                </a>
+                <p>High-quality, mobile-friendly browser arcade game featuring smooth 60FPS canvas graphics, Web Audio API sound synthesis, A* AI rival bots, and global leaderboards.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Quick Navigation</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">Play Game</a></li>
+                    <li><a href="instructions.html">How to Play Guide</a></li>
+                    <li><a href="blog.html">Developer Articles</a></li>
+                    <li><a href="index.html#leaderboard">Leaderboards</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Top Articles</h4>
+                <ul class="footer-links">
+                    <li><a href="blog/best-snake-games-compared.html">Best Snake Games Ranked</a></li>
+                    <li><a href="blog/modern-snake-vs-nokia-snake-2.html">Modern vs. Nokia Snake II</a></li>
+                    <li><a href="blog/cognitive-benefits-of-playing-snake.html">Cognitive Focus &amp; Stress Relief</a></li>
+                    <li><a href="blog/beginners-guide-to-snake-game.html">Beginner's Guide to Snake</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Technology</h4>
+                <ul class="footer-links">
+                    <li><a href="blog/building-60fps-canvas-games.html">Vanilla JS 60FPS Canvas</a></li>
+                    <li><a href="blog/procedural-audio-synthesis.html">Web Audio Synthesizer</a></li>
+                    <li><a href="blog/astar-pathfinding-ai-rivals.html">A* Pathfinding AI Bots</a></li>
+                    <li><a href="blog/no-ad-pwa-web-games.html">PWA &amp; Zero-Install Tech</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>&copy; 2026 Modern Snake Game. All rights reserved. Open source under MIT License.</span>
+            <div style="display: flex; gap: 16px;">
+                <a href="sitemap.xml" style="color: var(--fg-muted); text-decoration: none;">XML Sitemap</a>
+                <a href="robots.txt" style="color: var(--fg-muted); text-decoration: none;">Robots.txt</a>
+            </div>
+        </div>
+    </footer>
 
     <!-- JavaScript Data & Logic -->
     <script>
-        const articles = {
-            1: {
-                title: "The Evolution of Snake: From Nokia 6110 to Modern PWA Web Games",
-                category: "History & Design",
-                readTime: "8 min read",
-                meta: "Published on August 11, 2026 • 8 min read • By Hardware & Game History Desk",
-                content: `
-                    <p>First introduced in 1976 as the dual-player arcade cabinet <em>Blockade</em>, the Snake game mechanics achieved worldwide pop-culture icon status when it came pre-installed on the Nokia 6110 mobile phone in 1997. Designed by Taneli Armanto, it introduced over 350 million users globally to mobile gaming for the very first time.</p>
-                    
-                    <h2>The Hardware Constraints of 1997</h2>
-                    <p>On monochrome green LCD screens with 84×48 pixel resolution, players spent endless hours using number keys '2', '4', '6', and '8' to steer a pixelated snake towards flickering 1-pixel dots. The extreme hardware constraints forced pure design clarity: eat, grow longer, and avoid colliding with your own tail or perimeter walls.</p>
-                    
-                    <div class="article-callout">
-                        <strong>Architectural Insight:</strong> Taneli Armanto programmed the original Nokia Snake in pure assembly language to fit within a tiny 2KB ROM binary memory limit.
-                    </div>
-
-                    <h2>The Transition to HTML5 Canvas & Web Audio API</h2>
-                    <p>Today, web standards like HTML5 Canvas 2D Context, CSS Grid layout, Web Audio API procedural sound synthesis, and Progressive Web App (PWA) Service Workers allow developers to build ultra-responsive 60FPS Snake games directly inside any browser with zero third-party framework dependencies or plugin downloads.</p>
-                    
-                    <h3>Comparison Matrix: 1997 Nokia Snake vs. 2026 Modern PWA</h3>
-                    <pre><code>+-----------------------+------------------------+-------------------------+
-| Feature               | 1997 Nokia 6110        | 2026 Modern Web PWA     |
-+-----------------------+------------------------+-------------------------+
-| Display Resolution    | 84 x 48 Monochrome     | 4K Retina / Dynamic 60 FPS|
-| Control Input         | Keypad (2, 4, 6, 8)    | Touch Swipe, WASD, D-Pad|
-| Audio Engine          | Piezoelectric Beeper   | Web Audio Synthesizer   |
-| Multi-Player / AI     | Infrared (2-player)    | A* Pathfinding AI Rivals|
-| Storage & Sync        | EEPROM Memory          | PWA Cache & LocalStorage|
-+-----------------------+------------------------+-------------------------+</code></pre>
-
-                    <h2>Why Retro Mechanics Outlast Modern Graphical Trends</h2>
-                    <p>While AAA gaming industries pursue hyper-realistic 3D graphics, minimalist arcade games endure because of their immediate accessibility and friction-free game loops. A player can launch Modern Snake in under 100ms, complete a round in 3 minutes, and experience an authentic arcade adrenaline rush anywhere.</p>
-
-                    <blockquote>
-                        "Great game design is not when there is nothing more to add, but when there is nothing left to take away."
-                    </blockquote>
-                `
-            },
-            2: {
-                title: "Top 10 High-Score Tactics: Spatial Coiling & Space Partitioning",
-                category: "Pro Strategy",
-                readTime: "7 min read",
-                meta: "Published on August 11, 2026 • 7 min read • By Competitive Gaming Analysis",
-                content: `
-                    <p>Achieving a top ranking on global leaderboards requires more than quick reflexes—it demands mathematical spatial awareness and deliberate geometric strategy.</p>
-                    
-                    <h2>1. The Serpentine Coiling Pattern</h2>
-                    <p>Instead of making erratic turns in open space, guide your snake in tight horizontal or vertical 'S' loops. This keeps your tail structured behind you and frees up maximum grid surface area for newly spawning apples.</p>
-
-                    <h2>2. Hamiltonian Cycle Space Partitioning</h2>
-                    <p>A Hamiltonian cycle is a closed loop through a graph that visits every vertex exactly once. By maintaining a continuous perimeter loop around the board matrix, a player guarantees they will never trap their own tail, regardless of snake length.</p>
-
-                    <div class="article-callout">
-                        <strong>Pro Tip:</strong> When your snake occupies more than 60% of total grid tiles, strictly follow perimeter coiling. Never cut across the center matrix unless an active Ghost Shield is active!
-                    </div>
-
-                    <h2>3. Combo Streak Window Maintenance</h2>
-                    <p>The score engine awards a 5x multiplier when items are collected within 3.5 seconds of each other. Plan your trajectory toward the next food item *before* eating the current apple to maintain continuous streak multipliers.</p>
-
-                    <h2>4. Speed Boost Activation Strategy</h2>
-                    <p>Hold the Shift key speed boost only during clear straightaways. Using speed bursts while turning in tight spaces increases crash probability by over 400%.</p>
-                `
-            },
-            3: {
-                title: "Building 60FPS Canvas Arcade Games with Zero Dependencies",
-                category: "Engineering",
-                readTime: "10 min read",
-                meta: "Published on August 11, 2026 • 10 min read • By Web Architecture Team",
-                content: `
-                    <p>Heavy web frameworks like React or Vue add unnecessary DOM reconciliation overhead and JS bundle bloat. By leveraging pure Vanilla JavaScript ES Modules and HTML5 2D Canvas, browser games achieve instant initial loads and locked 60FPS physics updates.</p>
-
-                    <h2>Delta Frame Accumulator Game Loop</h2>
-                    <p>Using standard <code>setInterval</code> for game physics creates stuttering on high-refresh-rate displays (120Hz/144Hz). Using <code>requestAnimationFrame</code> with a time delta accumulator decouples rendering from fixed-step physics logic:</p>
-
-                    <pre><code>let lastTime = 0;
-let accumulator = 0;
-const TICK_RATE = 1000 / 60; // 60 FPS physics tick
-
-function gameLoop(timestamp) {
-    if (!lastTime) lastTime = timestamp;
-    const delta = timestamp - lastTime;
-    lastTime = timestamp;
-    accumulator += delta;
-
-    while (accumulator >= TICK_RATE) {
-        updatePhysics(TICK_RATE);
-        accumulator -= TICK_RATE;
-    }
-
-    renderCanvas();
-    requestAnimationFrame(gameLoop);
-}
-requestAnimationFrame(gameLoop);</code></pre>
-
-                    <h2>Memory Allocation & Garbage Collection Optimization</h2>
-                    <p>Instantiating temporary JavaScript objects inside the main render loop forces frequent Garbage Collection (GC) pauses, causing visible frame drops. Pre-allocate coordinate objects, particle arrays, and vector buffers in memory at startup!</p>
-                `
-            },
-            4: {
-                title: "Designing Next-Gen Gameplay: Combos, Power-up Synergies & Risk",
-                category: "Gameplay Mechanics",
-                readTime: "8 min read",
-                meta: "Published on August 11, 2026 • 8 min read • By Systems Design Lead",
-                content: `
-                    <p>Game design is the art of balancing challenge, dynamic feedback, and player agency. Modern Snake elevates classic mechanics by introducing a dynamic combo system, temporary power-ups, and risk-reward incentives.</p>
-
-                    <h2>Risk-Reward Multipliers</h2>
-                    <p>Golden Apples spawn with a rapid 5-second expiration countdown ring. To claim the 30-point reward, players must weigh the risk of speeding into tight tail loops against the safety of playing conservatively.</p>
-
-                    <h2>Power-Up Stacking Synergies</h2>
-                    <p>Combining multiple active power-ups creates high-energy gameplay moments:</p>
-                    <ul>
-                        <li><strong>Ghost Shield + Speed Boost:</strong> Allows blasting at maximum velocity straight through your own tail matrix to grab golden apples risk-free.</li>
-                        <li><strong>Combo Multiplier + Golden Apple:</strong> Yields up to 150 points in a single food consumption step!</li>
-                    </ul>
-                `
-            },
-            5: {
-                title: "Procedural Audio Synthesis: Zero-Asset 8-Bit Chiptune Engine",
-                category: "Web Audio API",
-                readTime: "9 min read",
-                meta: "Published on August 11, 2026 • 9 min read • By Audio Engineering Desk",
-                content: `
-                    <p>Loading static audio assets (MP3, WAV) introduces HTTP network latency, extra bundle size, and potential decoding delays. Modern Web Audio API enables 100% procedural retro sound synthesis directly in JavaScript.</p>
-
-                    <h2>Oscillator Nodes & Gain Decay Envelopes</h2>
-                    <p>By instantiating an <code>AudioContext</code>, connecting a square-wave <code>OscillatorNode</code> to an exponential decay <code>GainNode</code>, retro chiptune sound effects are generated instantly with 0ms delay:</p>
-
-                    <pre><code>const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-function playEatSound() {
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-
-    osc.type = 'square'; // Classic retro 8-bit sound
-    osc.frequency.setValueAtTime(300, audioCtx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.08);
-
-    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
-
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-
-    osc.start();
-    osc.stop(audioCtx.currentTime + 0.08);
-}</code></pre>
-                `
-            },
-            6: {
-                title: "Mobile-First Touch Controls & Haptic Telemetry for Web Games",
-                category: "UI / UX Design",
-                readTime: "7 min read",
-                meta: "Published on August 11, 2026 • 7 min read • By Mobile Ergonomics Group",
-                content: `
-                    <p>Designing mobile touch controls for fast-paced arcade games requires preventing accidental page scrolling while delivering immediate physical tactile feedback.</p>
-
-                    <h2>Swipe Vector Threshold Calculation</h2>
-                    <p>Listening to <code>touchstart</code> and <code>touchend</code> coordinates allows calculating movement vectors. Setting a minimum 30px distance threshold prevents unintentional direction triggers when tapping:</p>
-
-                    <pre><code>let startX = 0, startY = 0;
-
-window.addEventListener('touchstart', e => {
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-}, { passive: false });
-
-window.addEventListener('touchend', e => {
-    const dx = e.changedTouches[0].clientX - startX;
-    const dy = e.changedTouches[0].clientY - startY;
-
-    if (Math.hypot(dx, dy) > 30) { // Minimum threshold
-        if (Math.abs(dx) > Math.abs(dy)) {
-            setDirection(dx > 0 ? 'RIGHT' : 'LEFT');
-        } else {
-            setDirection(dy > 0 ? 'DOWN' : 'UP');
-        }
-        if (navigator.vibrate) navigator.vibrate(15); // Physical Haptic Feedback
-    }
-}, { passive: false });</code></pre>
-                `
-            },
-            7: {
-                title: "Modern Web SEO for Web Games: Indexing Canvas Applications",
-                category: "SEO & Analytics",
-                readTime: "8 min read",
-                meta: "Published on August 11, 2026 • 8 min read • By Search & Analytics Team",
-                content: `
-                    <p>Web games often suffer from poor search engine visibility when built as empty Canvas element shells. Implementing semantic HTML wrappers, structured JSON-LD data, and comprehensive meta tags transforms browser games into organic search engine powerhouses.</p>
-
-                    <h2>Structured JSON-LD Schema Integration</h2>
-                    <p>Embedding <code>SoftwareApplication</code> and <code>FAQPage</code> schemas enables search engines like Google to display rich search snippet result cards:</p>
-
-                    <pre><code>&lt;script type="application/ld+json"&gt;
-{
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "Modern Snake Game",
-  "operatingSystem": "Any Browser",
-  "applicationCategory": "GameApplication",
-  "genre": "Arcade",
-  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
-}
-&lt;/script&gt;</code></pre>
-                `
-            },
-            8: {
-                title: "Single-Player AI Rivals: Building Real-Time A* Pathfinding",
-                category: "AI & Pathfinding",
-                readTime: "11 min read",
-                meta: "Published on August 11, 2026 • 11 min read • By Autonomous AI Systems",
-                content: `
-                    <p>How does the AI Rival Snake navigate towards food items while safely avoiding player collisions, dynamic obstacles, and wall boundaries in real-time?</p>
-
-                    <h2>A* Grid Pathfinding Heuristics</h2>
-                    <p>The <code>AStarPathfinder</code> calculates Manhattan distance costs <code>f(n) = g(n) + h(n)</code> for neighboring grid tiles, selecting the optimal safe path towards target food coordinates:</p>
-
-                    <pre><code>function manhattanDistance(posA, posB) {
-    return Math.abs(posA.x - posB.x) + Math.abs(posA.y - posB.y);
-}
-
-// Safety Fallback Loop
-if (path.length === 0) {
-    // If food is unreachable, pick the longest safe corridor
-    return getLongestSafeNeighbor(botHead, gridBounds);
-}</code></pre>
-
-                    <h2>Safety Tail-Tracking Loop</h2>
-                    <p>If a direct path to food becomes blocked, a fallback algorithm forces the AI bot to follow its own tail tip, ensuring it survives until space opens up on the grid matrix.</p>
-                `
-            }
-        };
-
-        // -------------------------------------------------------------
         // Theme Persistence & Toggle
-        // -------------------------------------------------------------
         const themeBtn = document.getElementById('theme-toggle');
         const applyTheme = (theme) => {
             if (theme === 'light') {
@@ -549,43 +463,7 @@ if (path.length === 0) {
             applyTheme(newTheme);
         });
 
-        // -------------------------------------------------------------
-        // Article Bookmarks (LocalStorage)
-        // -------------------------------------------------------------
-        let bookmarks = JSON.parse(localStorage.getItem('snake_blog_bookmarks') || '[]');
-
-        function updateBookmarkIcons() {
-            document.querySelectorAll('.bookmark-btn').forEach(btn => {
-                const id = btn.getAttribute('data-bm');
-                if (bookmarks.includes(id)) {
-                    btn.classList.add('active');
-                    btn.textContent = '❤️';
-                } else {
-                    btn.classList.remove('active');
-                    btn.textContent = '🖤';
-                }
-            });
-        }
-
-        document.querySelectorAll('.bookmark-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const id = btn.getAttribute('data-bm');
-                if (bookmarks.includes(id)) {
-                    bookmarks = bookmarks.filter(b => b !== id);
-                } else {
-                    bookmarks.push(id);
-                }
-                localStorage.setItem('snake_blog_bookmarks', JSON.stringify(bookmarks));
-                updateBookmarkIcons();
-            });
-        });
-
-        updateBookmarkIcons();
-
-        // -------------------------------------------------------------
-        // Search & Category Filtering
-        // -------------------------------------------------------------
+        // Search & Category Filtering for Article Cards
         const searchInput = document.getElementById('blog-search');
         const categoryChips = document.querySelectorAll('.category-chip');
         const blogCards = document.querySelectorAll('.blog-card');
@@ -597,7 +475,7 @@ if (path.length === 0) {
             blogCards.forEach(card => {
                 const cat = card.getAttribute('data-category');
                 const text = card.textContent.toLowerCase();
-                const matchesCat = (currentCategory === 'All' || cat === currentCategory);
+                const matchesCat = (currentCategory === 'All' || cat.includes(currentCategory) || currentCategory.includes(cat));
                 const matchesQuery = (currentQuery === '' || text.includes(currentQuery));
 
                 if (matchesCat && matchesQuery) {
@@ -622,112 +500,21 @@ if (path.length === 0) {
             });
         });
 
-        // -------------------------------------------------------------
-        // Modal Reader, Deep Linking & Share
-        // -------------------------------------------------------------
-        const modal = document.getElementById('article-modal');
-        const modalCategory = document.getElementById('modal-article-category');
-        const modalReadTime = document.getElementById('modal-read-time');
-        const modalTitle = document.getElementById('modal-article-title');
-        const modalMeta = document.getElementById('modal-article-meta');
-        const modalContent = document.getElementById('modal-article-content');
-        const modalScrollBody = document.getElementById('modal-scroll-body');
-        const readingProgress = document.getElementById('reading-progress');
-        const closeBtn = document.getElementById('close-article-modal');
-        const shareBtn = document.getElementById('share-article-btn');
-        const prevBtn = document.getElementById('prev-article-btn');
-        const nextBtn = document.getElementById('next-article-btn');
+        // Hamburger Menu Toggle
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const mobileNavDrawer = document.getElementById('mobile-nav-drawer');
 
-        let currentArticleId = 1;
-
-        function openArticle(id) {
-            const article = articles[id];
-            if (article) {
-                currentArticleId = parseInt(id, 10);
-                modalCategory.textContent = article.category;
-                modalReadTime.textContent = article.readTime || '5 min read';
-                modalTitle.textContent = article.title;
-                modalMeta.textContent = article.meta;
-                modalContent.innerHTML = article.content;
-                modal.classList.remove('hidden');
-                modalScrollBody.scrollTop = 0;
-                readingProgress.style.width = '0%';
-
-                // Update URL parameter for deep linking without page reload
-                history.replaceState(null, '', `?article=${currentArticleId}`);
-            }
-        }
-
-        function closeArticle() {
-            modal.classList.add('hidden');
-            history.replaceState(null, '', window.location.pathname);
-        }
-
-        blogCards.forEach(card => {
-            const id = card.getAttribute('data-article');
-            card.addEventListener('click', () => openArticle(id));
-            card.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    openArticle(id);
-                }
-            });
+        hamburgerBtn.addEventListener('click', () => {
+            const isOpen = mobileNavDrawer.classList.toggle('open');
+            hamburgerBtn.classList.toggle('open', isOpen);
+            hamburgerBtn.setAttribute('aria-expanded', isOpen);
         });
 
-        closeBtn.addEventListener('click', closeArticle);
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeArticle();
-        });
-
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
-                closeArticle();
-            }
-        });
-
-        prevBtn.addEventListener('click', () => {
-            const prevId = currentArticleId > 1 ? currentArticleId - 1 : 8;
-            openArticle(prevId);
-        });
-
-        nextBtn.addEventListener('click', () => {
-            const nextId = currentArticleId < 8 ? currentArticleId + 1 : 1;
-            openArticle(nextId);
-        });
-
-        // Modal Reading Progress Bar
-        modalScrollBody.addEventListener('scroll', () => {
-            const total = modalScrollBody.scrollHeight - modalScrollBody.clientHeight;
-            if (total > 0) {
-                const pct = (modalScrollBody.scrollTop / total) * 100;
-                readingProgress.style.width = `${Math.min(100, Math.max(0, pct))}%`;
-            }
-        });
-
-        // Toast notification for Share Link
-        function showToast(msg) {
-            const toast = document.createElement('div');
-            toast.className = 'toast-notification';
-            toast.innerHTML = `<span>✅</span> <span>${msg}</span>`;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 2500);
-        }
-
-        shareBtn.addEventListener('click', () => {
-            const shareUrl = `${window.location.origin}${window.location.pathname}?article=${currentArticleId}`;
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(shareUrl).then(() => showToast('Article link copied to clipboard!'));
-            } else {
-                showToast('Article URL: ' + shareUrl);
-            }
-        });
-
-        // Check deep link parameter on load
-        window.addEventListener('DOMContentLoaded', () => {
-            const params = new URLSearchParams(window.location.search);
-            const articleParam = params.get('article') || window.location.hash.replace('#article-', '');
-            if (articleParam && articles[articleParam]) {
-                openArticle(articleParam);
+        mobileNavDrawer.addEventListener('click', (e) => {
+            if (e.target === mobileNavDrawer) {
+                mobileNavDrawer.classList.remove('open');
+                hamburgerBtn.classList.remove('open');
+                hamburgerBtn.setAttribute('aria-expanded', 'false');
             }
         });
     </script>

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'snake-game-v4.1.0';
+const CACHE_NAME = 'snake-game-v5.0.0';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -6,7 +6,20 @@ const ASSETS_TO_CACHE = [
     './blog.html',
     './styles.css',
     './game.js',
-    './manifest.webmanifest'
+    './manifest.webmanifest',
+    './blog/best-snake-games-compared.html',
+    './blog/modern-snake-vs-nokia-snake-2.html',
+    './blog/cognitive-benefits-of-playing-snake.html',
+    './blog/beginners-guide-to-snake-game.html',
+    './blog/no-ad-pwa-web-games.html',
+    './blog/evolution-of-snake.html',
+    './blog/high-score-tactics.html',
+    './blog/building-60fps-canvas-games.html',
+    './blog/gameplay-mechanics-and-combos.html',
+    './blog/procedural-audio-synthesis.html',
+    './blog/mobile-touch-controls-haptics.html',
+    './blog/web-game-seo-guide.html',
+    './blog/astar-pathfinding-ai-rivals.html'
 ];
 
 self.addEventListener('install', (event) => {
@@ -45,6 +58,12 @@ self.addEventListener('fetch', (event) => {
         event.respondWith(
             fetch(event.request)
                 .then((networkResponse) => {
+                    // Handle 304 Not Modified: return cached version instead
+                    if (networkResponse && networkResponse.status === 304) {
+                        return caches.match(event.request).then((cached) => {
+                            return cached || networkResponse;
+                        });
+                    }
                     if (networkResponse && networkResponse.status === 200) {
                         const responseClone = networkResponse.clone();
                         caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
