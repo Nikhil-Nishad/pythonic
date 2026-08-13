@@ -1,6 +1,6 @@
 {
   "name": "modern-snake-game",
-  "version": "3.0.0",
+  "version": "5.0.0",
   "description": "A Google-level SEO optimized, modern interactive Snake browser game with Leaderboards, PWA, smooth animations, and audio.",
   "main": "game.js",
   "type": "module",

@@ -52,7 +52,7 @@ export class ScoreExporter {
         // Footer Branding
         ctx.fillStyle = '#8b949e';
         ctx.font = '14px "Space Grotesk", sans-serif';
-        ctx.fillText('Play online at nikhil-nishad.github.io/pythonic', width / 2, 355);
+        ctx.fillText('Play online at pythonics.vercel.app', width / 2, 355);
 
         return canvas.toDataURL('image/png');
     }
