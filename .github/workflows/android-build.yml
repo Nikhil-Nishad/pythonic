@@ -115,24 +115,40 @@ jobs:
         run: chmod +x gradlew
 
       # ────────────────────────────────────────────────
-      # 10. Build Debug APK (always, for testing)
+      # 10. Check if keystore secret is present
+      # (secrets context cannot be used in if: expressions,
+      #  so we resolve it once here and use the output below)
+      # ────────────────────────────────────────────────
+      - name: Check keystore availability
+        id: check-keystore
+        env:
+          _KS: ${{ secrets.KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$_KS" ]; then
+            echo "has_keystore=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_keystore=false" >> $GITHUB_OUTPUT
+          fi
+
+      # ────────────────────────────────────────────────
+      # 11. Build Debug APK (always, for testing)
       # ────────────────────────────────────────────────
       - name: Build Debug APK
         working-directory: snake-app/android
         run: ./gradlew assembleDebug --no-daemon --stacktrace
 
       # ────────────────────────────────────────────────
-      # 11. Build Release AAB (signed, for Play Store)
+      # 12. Build Release AAB (signed, for Play Store)
       # ────────────────────────────────────────────────
       - name: Decode Keystore from Secret
-        if: ${{ env.KEYSTORE_BASE64 != '' }}
+        if: steps.check-keystore.outputs.has_keystore == 'true'
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
         run: |
           echo "$KEYSTORE_BASE64" | base64 --decode > snake-app/android/app/release-key.jks
 
       - name: Build Release AAB (signed)
-        if: ${{ secrets.KEYSTORE_BASE64 != '' }}
+        if: steps.check-keystore.outputs.has_keystore == 'true'
         working-directory: snake-app/android
         env:
           KEYSTORE_PATH: ${{ github.workspace }}/snake-app/android/app/release-key.jks
@@ -148,7 +164,7 @@ jobs:
             --no-daemon
 
       - name: Build Unsigned Release APK (fallback when no keystore)
-        if: ${{ secrets.KEYSTORE_BASE64 == '' }}
+        if: steps.check-keystore.outputs.has_keystore == 'false'
         working-directory: snake-app/android
         run: ./gradlew assembleRelease --no-daemon
 
@@ -163,7 +179,7 @@ jobs:
           if-no-files-found: error
 
       - name: Upload Release AAB
-        if: ${{ secrets.KEYSTORE_BASE64 != '' }}
+        if: steps.check-keystore.outputs.has_keystore == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: modern-snake-release-aab
@@ -171,7 +187,7 @@ jobs:
           if-no-files-found: warn
 
       - name: Upload Release APK (unsigned)
-        if: ${{ secrets.KEYSTORE_BASE64 == '' }}
+        if: steps.check-keystore.outputs.has_keystore == 'false'
         uses: actions/upload-artifact@v4
         with:
           name: modern-snake-release-unsigned-apk
