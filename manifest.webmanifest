@@ -2,7 +2,7 @@
   "name": "Snake Game - Modern Edition",
   "short_name": "Snake Modern",
   "description": "High-quality, mobile-friendly modern Snake game with leaderboards, level progression, audio, and visual effects.",
-  "start_url": "./index.html",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#0d1117",
   "theme_color": "#0d1117",
