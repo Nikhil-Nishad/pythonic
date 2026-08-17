@@ -849,6 +849,11 @@ class SnakeGame {
         this.gameOverOverlay = document.getElementById('game-over-overlay');
         this.levelUpOverlay = document.getElementById('level-up-overlay');
         this.levelUpNumber = document.getElementById('level-up-number');
+        this.levelUpCountdown = document.getElementById('level-up-countdown');
+        this.tutorialOverlay = document.getElementById('tutorial-overlay');
+        this.tutorialStartBtn = document.getElementById('tutorial-start-btn');
+        this.tutorialCountdownNum = document.getElementById('tutorial-countdown-num');
+        this.tutorialTimerFill = document.getElementById('tutorial-timer-fill');
 
         // Stats
         this.scoreEl = document.getElementById('score');
@@ -860,6 +865,12 @@ class SnakeGame {
         this.finalLevelEl = document.getElementById('final-level');
         this.finalLengthEl = document.getElementById('final-length');
         this.newRecordEl = document.getElementById('new-record');
+
+        // High score & record session tracking
+        this.isNewRecord = false;
+        this.sessionInitialHighScore = 0;
+        this.tutorialTimer = null;
+        this.levelUpTimer = null;
 
         // Buttons
         this.startBtn = document.getElementById('start-btn');
@@ -1194,10 +1205,21 @@ class SnakeGame {
         document.addEventListener('keydown', (e) => this.handleKeydown(e));
 
         // Buttons
-        this.startBtn.addEventListener('click', () => this.startGame());
+        this.startBtn.addEventListener('click', () => this.requestStartGame());
         this.resumeBtn.addEventListener('click', () => this.resumeGame());
-        this.restartBtn.addEventListener('click', () => this.startGame());
+        this.restartBtn.addEventListener('click', () => this.requestStartGame());
         this.menuBtn.addEventListener('click', () => this.showMenu());
+
+        if (this.tutorialStartBtn) {
+            this.tutorialStartBtn.addEventListener('click', () => this.skipTutorialAndPlay());
+        }
+        if (this.tutorialOverlay) {
+            this.tutorialOverlay.addEventListener('click', (e) => {
+                if (e.target === this.tutorialOverlay || e.target.closest('.btn-tutorial-start')) {
+                    this.skipTutorialAndPlay();
+                }
+            });
+        }
 
         // Settings
         this.settingsFab.addEventListener('click', () => this.toggleSettings());
@@ -1492,7 +1514,7 @@ class SnakeGame {
         }
         if (e.key === 'r' || e.key === 'R') {
             if (this.state === GameState.GAME_OVER || this.state === GameState.MENU) {
-                this.startGame();
+                this.requestStartGame();
                 return;
             }
         }
@@ -1518,7 +1540,11 @@ class SnakeGame {
     handleSpace() {
         switch (this.state) {
             case GameState.MENU:
-                this.startGame();
+                if (this.tutorialOverlay && !this.tutorialOverlay.classList.contains('hidden')) {
+                    this.skipTutorialAndPlay();
+                } else {
+                    this.requestStartGame();
+                }
                 break;
             case GameState.PLAYING:
                 this.pauseGame();
@@ -1527,14 +1553,20 @@ class SnakeGame {
                 this.resumeGame();
                 break;
             case GameState.GAME_OVER:
-                this.startGame();
+                this.requestStartGame();
                 break;
         }
     }
 
     handleCanvasClick() {
-        if (this.state === GameState.MENU || this.state === GameState.GAME_OVER) {
-            this.startGame();
+        if (this.state === GameState.MENU) {
+            if (this.tutorialOverlay && !this.tutorialOverlay.classList.contains('hidden')) {
+                this.skipTutorialAndPlay();
+            } else {
+                this.requestStartGame();
+            }
+        } else if (this.state === GameState.GAME_OVER) {
+            this.requestStartGame();
         } else if (this.state === GameState.PAUSED) {
             this.resumeGame();
         }
@@ -1583,7 +1615,55 @@ class SnakeGame {
     // ============================================
     // Game State Management
     // ============================================
+    requestStartGame() {
+        // Show tutorial modal for 3 seconds, then start playing!
+        this.hideAllOverlays();
+        if (this.tutorialOverlay) {
+            this.tutorialOverlay.classList.remove('hidden');
+            let remainingSeconds = 3;
+            if (this.tutorialCountdownNum) this.tutorialCountdownNum.textContent = remainingSeconds;
+            if (this.tutorialTimerFill) {
+                this.tutorialTimerFill.style.transition = 'none';
+                this.tutorialTimerFill.style.width = '100%';
+                requestAnimationFrame(() => {
+                    this.tutorialTimerFill.style.transition = 'width 3s linear';
+                    this.tutorialTimerFill.style.width = '0%';
+                });
+            }
+
+            if (this.tutorialTimer) clearInterval(this.tutorialTimer);
+            this.tutorialTimer = setInterval(() => {
+                remainingSeconds--;
+                if (this.tutorialCountdownNum) this.tutorialCountdownNum.textContent = Math.max(1, remainingSeconds);
+                if (remainingSeconds <= 0) {
+                    clearInterval(this.tutorialTimer);
+                    this.tutorialTimer = null;
+                    this.startGame();
+                }
+            }, 1000);
+        } else {
+            this.startGame();
+        }
+    }
+
+    skipTutorialAndPlay() {
+        if (this.tutorialTimer) {
+            clearInterval(this.tutorialTimer);
+            this.tutorialTimer = null;
+        }
+        this.startGame();
+    }
+
     startGame() {
+        if (this.tutorialTimer) {
+            clearInterval(this.tutorialTimer);
+            this.tutorialTimer = null;
+        }
+        if (this.levelUpTimer) {
+            clearInterval(this.levelUpTimer);
+            this.levelUpTimer = null;
+        }
+
         this.audio.resume();
         this.audio.playClick();
         this.audio.startMusic();
@@ -1603,6 +1683,12 @@ class SnakeGame {
         this.maxLength = 3;
         this.sessionStartTime = performance.now();
         this.statistics.startSession();
+
+        // High score & record session tracking
+        this.loadHighScore();
+        this.sessionInitialHighScore = this.highScore;
+        this.isNewRecord = false;
+        if (this.newRecordEl) this.newRecordEl.classList.add('hidden');
 
         // Initialize snake in center
         const center = Math.floor(this.gridSize / 2);
@@ -1657,34 +1743,56 @@ class SnakeGame {
     levelUp() {
         this.level++;
         this.foodEaten = 0;
+        this.streak = 0;
         this.speed = Math.max(CONFIG.MIN_SPEED, CONFIG.INITIAL_SPEED - (this.level - 1) * CONFIG.SPEED_INCREMENT);
 
-        // Pause snake movement for 2 seconds (2000ms) on level up
+        // Pause/freeze snake movement for 3 seconds on level up
         this.state = GameState.LEVEL_UP;
         this.audio.playLevelUp();
+        this.audio.startAmbientSounds(this.level);
         this.screenShake.shake(10, 400);
 
-        if (this.levelUpOverlay && this.levelUpNumber) {
-            this.levelUpNumber.textContent = this.level;
-            this.levelUpOverlay.classList.remove('hidden');
+        if (this.food) {
+            this.particles.emitBurst(
+                this.food.x * this.tileSize + this.tileSize / 2,
+                this.food.y * this.tileSize + this.tileSize / 2,
+                CONFIG.COLORS.particle[0],
+                30
+            );
         }
 
-        this.spawnObstacles();
+        if (this.levelUpNumber) this.levelUpNumber.textContent = this.level;
+        if (this.levelUpOverlay) this.levelUpOverlay.classList.remove('hidden');
         this.announce(`Level Up! Level ${this.level}`);
 
-        // 2-second pause timer before resuming gameplay loop
-        setTimeout(() => {
-            if (this.levelUpOverlay) {
-                this.levelUpOverlay.classList.add('hidden');
+        this.spawnObstacles();
+        this.spawnFood();
+
+        // 3-second pause countdown timer before resuming gameplay
+        let countdown = 3;
+        const cdEl = document.getElementById('level-up-countdown');
+        if (cdEl) cdEl.textContent = `Resuming in ${countdown}s...`;
+
+        if (this.levelUpTimer) clearInterval(this.levelUpTimer);
+        this.levelUpTimer = setInterval(() => {
+            countdown--;
+            if (cdEl && countdown > 0) {
+                cdEl.textContent = `Resuming in ${countdown}s...`;
             }
-            if (this.state === GameState.LEVEL_UP) {
-                this.state = GameState.PLAYING;
-                this.lastMoveTime = performance.now();
-                this.lastFrameTime = performance.now();
-                this.spawnFood();
-                this.gameLoop();
+            if (countdown <= 0) {
+                clearInterval(this.levelUpTimer);
+                this.levelUpTimer = null;
+                if (this.levelUpOverlay) {
+                    this.levelUpOverlay.classList.add('hidden');
+                }
+                if (this.state === GameState.LEVEL_UP) {
+                    this.state = GameState.PLAYING;
+                    this.lastMoveTime = performance.now();
+                    this.lastFrameTime = performance.now();
+                    this.gameLoop();
+                }
             }
-        }, 2000);
+        }, 1000);
     }
 
     spawnObstacles() {
@@ -1709,6 +1817,15 @@ class SnakeGame {
     }
 
     gameOver() {
+        if (this.levelUpTimer) {
+            clearInterval(this.levelUpTimer);
+            this.levelUpTimer = null;
+        }
+        if (this.tutorialTimer) {
+            clearInterval(this.tutorialTimer);
+            this.tutorialTimer = null;
+        }
+
         this.state = GameState.GAME_OVER;
         this.audio.stopMusic();
         this.audio.stopAmbientSounds();
@@ -1719,13 +1836,15 @@ class SnakeGame {
         if (this.hapticEnabled) this.vibrate([50, 30, 50, 30, 100]);
 
         // Check high score & leaderboard
-        const isNewRecord = this.score > this.highScore;
-        if (isNewRecord) {
+        const beatPreviousHighScore = this.isNewRecord || (this.score > this.sessionInitialHighScore && this.score > 0);
+        if (beatPreviousHighScore) {
             this.highScore = this.score;
             this.saveHighScore();
             this.updateHighScoreDisplay();
-            this.newRecordEl.classList.remove('hidden');
+            if (this.newRecordEl) this.newRecordEl.classList.remove('hidden');
             this.announce('New high score!');
+        } else {
+            if (this.newRecordEl) this.newRecordEl.classList.add('hidden');
         }
 
         if (this.leaderboardService && this.leaderboardService.isHighScore(this.score)) {
@@ -1803,6 +1922,14 @@ class SnakeGame {
     }
 
     showMenu() {
+        if (this.tutorialTimer) {
+            clearInterval(this.tutorialTimer);
+            this.tutorialTimer = null;
+        }
+        if (this.levelUpTimer) {
+            clearInterval(this.levelUpTimer);
+            this.levelUpTimer = null;
+        }
         this.state = GameState.MENU;
         this.audio.stopMusic();
         this.audio.stopAmbientSounds();
@@ -1815,41 +1942,12 @@ class SnakeGame {
     }
 
     hideAllOverlays() {
-        this.startOverlay.classList.add('hidden');
-        this.pauseOverlay.classList.add('hidden');
-        this.gameOverOverlay.classList.add('hidden');
-        this.levelUpOverlay.classList.add('hidden');
-    }
-
-    levelUp() {
-        this.level++;
-        this.speed = Math.max(CONFIG.MIN_SPEED, this.speed - CONFIG.SPEED_INCREMENT);
-        this.foodEaten = 0;
-        this.streak = 0;
-
-        this.state = GameState.LEVEL_UP;
-        this.audio.playLevelUp();
-        this.audio.startAmbientSounds(this.level);
-        this.particles.emitBurst(
-            this.food.x * this.tileSize + this.tileSize / 2,
-            this.food.y * this.tileSize + this.tileSize / 2,
-            CONFIG.COLORS.particle[0],
-            30
-        );
-
-        this.levelUpNumber.textContent = this.level;
-        this.levelUpOverlay.classList.remove('hidden');
-        this.announce(`Level up! Now at level ${this.level}`);
-
-        // Auto-resume after animation
-        setTimeout(() => {
-            if (this.state === GameState.LEVEL_UP) {
-                this.state = GameState.PLAYING;
-                this.levelUpOverlay.classList.add('hidden');
-                this.lastMoveTime = performance.now();
-                this.gameLoop();
-            }
-        }, 1500);
+        if (this.startOverlay) this.startOverlay.classList.add('hidden');
+        if (this.pauseOverlay) this.pauseOverlay.classList.add('hidden');
+        if (this.gameOverOverlay) this.gameOverOverlay.classList.add('hidden');
+        if (this.levelUpOverlay) this.levelUpOverlay.classList.add('hidden');
+        if (this.tutorialOverlay) this.tutorialOverlay.classList.add('hidden');
+        if (this.newRecordEl) this.newRecordEl.classList.add('hidden');
     }
 
     resetSnakeVisual() {
@@ -1898,6 +1996,25 @@ class SnakeGame {
         }, 3000);
     }
 
+    showPowerUpBanner(type) {
+        const config = this.powerUps.powerUpConfig[type];
+        if (!config) return;
+
+        const existing = document.querySelector('.powerup-hud-banner');
+        if (existing) existing.remove();
+
+        const banner = document.createElement('div');
+        banner.className = 'powerup-hud-banner';
+        banner.setAttribute('role', 'status');
+        banner.innerHTML = `<span style="font-size: 1.2rem;">${config.icon}</span> <strong>${config.name}</strong> <span>Activated!</span>`;
+
+        const wrapper = document.querySelector('.game-canvas-wrapper');
+        if (wrapper) {
+            wrapper.appendChild(banner);
+            setTimeout(() => banner.remove(), 3000);
+        }
+    }
+
     // ============================================
     // Game Logic
     // ============================================
@@ -1913,17 +2030,21 @@ class SnakeGame {
 
         if (this.frameAccumulator >= this.targetFrameTime) {
             this.performance.update();
-            this.powerUps.update();
-            this.handlePowerUpSpawning(now);
-            this.updatePowerUpEffects();
+            if (this.state === GameState.PLAYING) {
+                this.powerUps.update();
+                this.handlePowerUpSpawning(now);
+                this.updatePowerUpEffects();
+            }
             this.frameAccumulator = 0;
         }
 
-        const dt = now - this.lastMoveTime;
-
-        if (dt >= this.getEffectiveSpeed()) {
-            this.update();
-            this.lastMoveTime = now;
+        // Only update snake physics/movement when actually PLAYING (frozen during LEVEL_UP)
+        if (this.state === GameState.PLAYING) {
+            const dt = now - this.lastMoveTime;
+            if (dt >= this.getEffectiveSpeed()) {
+                this.update();
+                this.lastMoveTime = now;
+            }
         }
 
         this.render();
@@ -2211,6 +2332,9 @@ class SnakeGame {
                 this.announce(`${name} activated! 3× points for ${config.duration / 1000}s.`);
                 break;
         }
+        // Show non-intrusive floating power-up HUD banner
+        this.showPowerUpBanner(type);
+
         // Track skills used for game-over screen
         if (!this.skillsUsedThisGame) this.skillsUsedThisGame = new Set();
         this.skillsUsedThisGame.add(type);
@@ -2267,6 +2391,9 @@ class SnakeGame {
         }
 
         if (this.score > this.highScore) {
+            if (this.score > this.sessionInitialHighScore) {
+                this.isNewRecord = true;
+            }
             this.highScore = this.score;
             this.saveHighScore();
             this.updateHighScoreDisplay();

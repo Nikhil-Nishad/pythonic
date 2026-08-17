@@ -221,6 +221,46 @@
                     </div>
                 </div>
 
+                <!-- Tutorial Overlay (shows for 3s countdown on start, then auto-starts game) -->
+                <div class="canvas-overlay hidden" id="tutorial-overlay" role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
+                    <div class="overlay-content tutorial-content">
+                        <div class="tutorial-badge">🎮 QUICK GUIDE</div>
+                        <h2 id="tutorial-title">How to Play</h2>
+                        
+                        <div class="tutorial-grid">
+                            <div class="tutorial-card">
+                                <div class="tutorial-icon">👆📱</div>
+                                <div class="tutorial-info">
+                                    <strong>Swipe to Move</strong>
+                                    <span>Swipe anywhere on screen</span>
+                                </div>
+                            </div>
+                            <div class="tutorial-card">
+                                <div class="tutorial-icon">🍎⚡</div>
+                                <div class="tutorial-info">
+                                    <strong>Collect Food & Skills</strong>
+                                    <span>Shield, Ghost, Slow-Mo & 2×</span>
+                                </div>
+                            </div>
+                            <div class="tutorial-card">
+                                <div class="tutorial-icon">⚠️🛡️</div>
+                                <div class="tutorial-info">
+                                    <strong>Survive & Grow</strong>
+                                    <span>Avoid walls, tail & AI rival</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tutorial-timer-bar">
+                            <div class="tutorial-timer-fill" id="tutorial-timer-fill"></div>
+                        </div>
+
+                        <button class="btn btn-primary btn-tutorial-start" id="tutorial-start-btn" type="button">
+                            <span>Starting in <span id="tutorial-countdown-num">3</span>s... Tap to Play</span>
+                        </button>
+                    </div>
+                </div>
+
                 <!-- Level Up Overlay -->
                 <div class="canvas-overlay hidden" id="level-up-overlay" role="status" aria-live="polite" aria-label="Level up notification">
                     <div class="level-up-content">
@@ -231,6 +271,7 @@
                             <span>Level <span id="level-up-number">2</span></span>
                         </div>
                         <p>Speed Increased!</p>
+                        <div class="level-up-countdown" id="level-up-countdown">Resuming in 3s...</div>
                     </div>
                 </div>
             </div>

@@ -24,7 +24,7 @@ export class ScoringEngine {
 
     loadHighScore() {
         try {
-            return parseInt(localStorage.getItem('snake_high_score') || '0', 10);
+            return parseInt(localStorage.getItem('snake_highscore') || '0', 10);
         } catch (e) {
             return 0;
         }
@@ -32,7 +32,7 @@ export class ScoringEngine {
 
     saveHighScore() {
         try {
-            localStorage.setItem('snake_high_score', this.highScore.toString());
+            localStorage.setItem('snake_highscore', this.highScore.toString());
         } catch (e) {
             // Ignore storage quota or disabled storage errors
         }
