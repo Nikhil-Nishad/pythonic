@@ -1,0 +1,14 @@
+# Capacitor Android App — Git Ignore Rules
+node_modules/
+ios/
+dist/
+.DS_Store
+*.jks
+keystore_base64.txt
+release-key.jks
+*.keystore
+.gradle/
+build/
+.idea/
+*.iml
+local.properties

@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Android safe-area + no user-scaling for game feel -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#0d1117">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Modern Snake Game — 60FPS Android Edition with AI rivals, neon skins, and procedural audio.">
+    <title>Modern Snake | Android</title>
+
+    <!-- Capacitor Runtime (injected by Capacitor's native bridge) -->
+    <!-- IMPORTANT: this script tag is required for Capacitor plugins to be available -->
+    <!-- capacitor.js is auto-injected by Capacitor during cap sync -->
+
+    <!-- Google Fonts (bundled for offline via Capacitor) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- App Styles: mobile-first overrides added -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="app-mobile.css">
+
+    <!-- App Icon (inline SVG emoji fallback) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐍</text></svg>">
+</head>
+<body class="android-app">
+
+    <!-- ──────────────────────────────────────────
+         SPLASH OVERLAY (shown before Capacitor SplashScreen)
+         Fades out after canvas is ready
+    ─────────────────────────────────────────── -->
+    <div class="app-splash-overlay" id="app-splash-overlay" aria-hidden="true">
+        <div class="splash-content">
+            <div class="splash-snake-icon">
+                <svg viewBox="0 0 80 80" fill="none" aria-hidden="true">
+                    <path d="M10 40C10 24.536 22.536 12 38 12H42C57.464 12 70 24.536 70 40C70 55.464 57.464 68 42 68H38C22.536 68 10 55.464 10 40Z"
+                          stroke="#58a6ff" stroke-width="3" fill="none"/>
+                    <circle cx="32" cy="35" r="4" fill="#58a6ff"/>
+                    <circle cx="48" cy="35" r="4" fill="#58a6ff"/>
+                    <circle cx="34" cy="33" r="1.5" fill="#0d1117"/>
+                    <circle cx="50" cy="33" r="1.5" fill="#0d1117"/>
+                </svg>
+            </div>
+            <h1 class="splash-title">Modern Snake</h1>
+            <div class="splash-loading-bar">
+                <div class="splash-loading-fill" id="splash-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ──────────────────────────────────────────
+         ANDROID EXIT DIALOG (shown on back button)
+    ─────────────────────────────────────────── -->
+    <div class="android-exit-dialog hidden" id="android-exit-dialog" role="dialog" aria-modal="true" aria-labelledby="exit-dialog-title">
+        <div class="exit-dialog-card">
+            <div class="exit-dialog-icon">👋</div>
+            <h3 id="exit-dialog-title">Exit Game?</h3>
+            <p>Your progress will be saved. Want to leave?</p>
+            <div class="exit-dialog-buttons">
+                <button class="btn btn-ghost" id="exit-cancel-btn" type="button">Stay</button>
+                <button class="btn btn-primary" id="exit-confirm-btn" type="button">Exit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ──────────────────────────────────────────
+         MAIN GAME CONTAINER (unchanged from web)
+    ─────────────────────────────────────────── -->
+    <div class="game-container">
+        <!-- Ambient background -->
+        <div class="ambient-bg" aria-hidden="true">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+        </div>
+
+        <!-- Particle canvas for effects -->
+        <canvas id="particle-canvas" class="particle-canvas" aria-hidden="true"></canvas>
+
+        <!-- Main game card -->
+        <main class="game-card" role="main" aria-label="Snake Game">
+            <!-- Header -->
+            <header class="game-header">
+                <div class="game-title">
+                    <svg class="snake-icon" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                        <path d="M4 16C4 10.477 8.477 6 14 6H18C23.523 6 28 10.477 28 16C28 21.523 23.523 26 18 26H14C8.477 26 4 21.523 4 16Z"
+                              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 14C12 13.4477 12.4477 13 13 13C13.5523 13 14 13.4477 14 14C14 14.5523 13.5523 15 13 15C12.4477 15 12 14.5523 12 14Z" fill="currentColor"/>
+                        <path d="M20 14C20 13.4477 20.4477 13 21 13C21.5523 13 22 13.4477 22 14C22 14.5523 21.5523 15 21 15C20.4477 15 20 14.5523 20 14Z" fill="currentColor"/>
+                    </svg>
+                    <h1>Snake</h1>
+                </div>
+
+                <div class="game-stats" aria-live="polite" aria-label="Game statistics">
+                    <div class="stat">
+                        <span class="stat-label">Score</span>
+                        <span class="stat-value" id="score">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Best</span>
+                        <span class="stat-value" id="high-score">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Level</span>
+                        <span class="stat-value" id="level">1</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Game Canvas Area -->
+            <div class="game-canvas-wrapper">
+                <canvas id="game-canvas" class="game-canvas" aria-label="Game board" role="application"></canvas>
+
+                <!-- Start Overlay -->
+                <div class="canvas-overlay" id="start-overlay" role="dialog" aria-modal="true" aria-labelledby="overlay-title">
+                    <div class="overlay-content">
+                        <h2 id="overlay-title">Snake</h2>
+                        <p class="overlay-subtitle">Classic reimagined</p>
+
+                        <!-- Mobile Swipe Hint -->
+                        <div class="controls-preview mobile-swipe-hint" aria-label="Swipe to control">
+                            <div class="swipe-arrows">
+                                <div class="swipe-arrow swipe-up">↑</div>
+                                <div class="swipe-row">
+                                    <div class="swipe-arrow swipe-left">←</div>
+                                    <div class="swipe-center">👆</div>
+                                    <div class="swipe-arrow swipe-right">→</div>
+                                </div>
+                                <div class="swipe-arrow swipe-down">↓</div>
+                            </div>
+                            <span class="control-desc">Swipe to move</span>
+                        </div>
+
+                        <button class="btn btn-primary btn-large-tap" id="start-btn" type="button">
+                            <span class="btn-text">Tap to Start</span>
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                                <polygon points="5 3 19 12 5 21"/>
+                            </svg>
+                        </button>
+                        <p class="overlay-hint">Tap anywhere or swipe to start</p>
+                    </div>
+                </div>
+
+                <!-- Pause Overlay -->
+                <div class="canvas-overlay hidden" id="pause-overlay" role="dialog" aria-modal="true" aria-labelledby="pause-title">
+                    <div class="overlay-content">
+                        <h2 id="pause-title">Paused</h2>
+                        <button class="btn btn-secondary" id="resume-btn" type="button">
+                            <span class="btn-text">Resume</span>
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                                <rect x="6" y="4" width="4" height="16"/>
+                                <rect x="14" y="4" width="4" height="16"/>
+                            </svg>
+                        </button>
+                        <p class="overlay-hint">Tap to continue</p>
+                    </div>
+                </div>
+
+                <!-- Game Over Overlay -->
+                <div class="canvas-overlay hidden" id="game-over-overlay" role="dialog" aria-modal="true" aria-labelledby="gameover-title">
+                    <div class="overlay-content game-over-content">
+                        <h2 id="gameover-title">Game Over</h2>
+                        <div class="final-stats" aria-label="Final game statistics">
+                            <div class="final-stat">
+                                <span class="final-stat-value" id="final-score">0</span>
+                                <span class="final-stat-label">Final Score</span>
+                            </div>
+                            <div class="final-stat">
+                                <span class="final-stat-value" id="final-level">1</span>
+                                <span class="final-stat-label">Level</span>
+                            </div>
+                            <div class="final-stat">
+                                <span class="final-stat-value" id="final-length">3</span>
+                                <span class="final-stat-label">Length</span>
+                            </div>
+                        </div>
+
+                        <div class="final-bot-difficulty hidden" id="final-bot-difficulty" aria-label="AI rival difficulty reached">
+                            <span id="final-bot-label">🤖 AI Reached: <strong id="final-difficulty-name">Easy</strong></span>
+                        </div>
+
+                        <div class="final-skills-section" id="final-skills-section" aria-label="Skills used this round">
+                            <p class="final-skills-title">Skills Used</p>
+                            <div class="final-skills-list" id="final-skills-list" aria-live="polite">
+                                <span class="final-no-skills">No skills used — collect power-ups on the board!</span>
+                            </div>
+                        </div>
+
+                        <div class="new-record hidden" id="new-record" aria-live="assertive">
+                            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <span>New High Score!</span>
+                        </div>
+
+                        <div class="btn-group">
+                            <button class="btn btn-primary" id="restart-btn" type="button">
+                                <span class="btn-text">Play Again</span>
+                                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                                    <path d="M3 3v5h5"/>
+                                </svg>
+                            </button>
+                            <button class="btn btn-secondary" id="share-btn" type="button">
+                                <span class="btn-text">Share Score</span>
+                                <span>📸</span>
+                            </button>
+                            <button class="btn btn-ghost" id="menu-btn" type="button">
+                                <span class="btn-text">Main Menu</span>
+                                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                                    <line x1="3" y1="12" x2="21" y2="12"/>
+                                    <line x1="3" y1="6" x2="21" y2="6"/>
+                                    <line x1="3" y1="18" x2="21" y2="18"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Level Up Overlay -->
+                <div class="canvas-overlay hidden" id="level-up-overlay" role="status" aria-live="polite" aria-label="Level up notification">
+                    <div class="level-up-content">
+                        <div class="level-up-badge">
+                            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <span>Level <span id="level-up-number">2</span></span>
+                        </div>
+                        <p>Speed Increased!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Touch Controls (D-Pad) -->
+            <div class="touch-controls" id="touch-controls" role="navigation" aria-label="Touch controls">
+                <button class="touch-btn" data-dir="up" aria-label="Move up" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                        <path d="M18 15l-6-6-6 6"/>
+                    </svg>
+                </button>
+                <div class="touch-row">
+                    <button class="touch-btn" data-dir="left" aria-label="Move left" type="button">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                            <path d="M15 18l-6-6 6-6"/>
+                        </svg>
+                    </button>
+                    <button class="touch-btn" data-dir="down" aria-label="Move down" type="button">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                            <path d="M6 9l6 6 6-6"/>
+                        </svg>
+                    </button>
+                    <button class="touch-btn" data-dir="right" aria-label="Move right" type="button">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                            <path d="M9 18l6-6-6-6"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Settings Panel -->
+            <div class="settings-panel hidden" id="settings-panel" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+                <div class="settings-content">
+                    <header class="settings-header">
+                        <h2 id="settings-title">Settings</h2>
+                        <button class="icon-btn" id="close-settings" aria-label="Close settings" type="button">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </header>
+                    <div class="settings-body">
+                        <fieldset class="setting-group">
+                            <legend>Audio</legend>
+                            <label class="toggle">
+                                <input type="checkbox" id="sound-toggle" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Sound Effects</span>
+                            </label>
+                            <label class="toggle">
+                                <input type="checkbox" id="music-toggle" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Ambient Music</span>
+                            </label>
+                        </fieldset>
+                        <fieldset class="setting-group">
+                            <legend>Visuals</legend>
+                            <label class="toggle">
+                                <input type="checkbox" id="particles-toggle" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Particle Effects</span>
+                            </label>
+                            <label class="toggle">
+                                <input type="checkbox" id="glow-toggle" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Glow Effects</span>
+                            </label>
+                            <label class="toggle">
+                                <input type="checkbox" id="grid-toggle" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Grid Lines</span>
+                            </label>
+                            <label class="toggle">
+                                <input type="checkbox" id="theme-toggle" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Dark Mode</span>
+                            </label>
+                        </fieldset>
+                        <fieldset class="setting-group">
+                            <legend>Audio Levels</legend>
+                            <div class="slider-setting">
+                                <label for="master-volume" class="slider-label">
+                                    <span class="slider-name">Master Volume</span>
+                                    <span class="slider-value" id="master-volume-value">30%</span>
+                                </label>
+                                <input type="range" id="master-volume" min="0" max="100" value="30" class="slider" aria-label="Master volume">
+                            </div>
+                            <div class="slider-setting">
+                                <label for="sfx-volume" class="slider-label">
+                                    <span class="slider-name">Sound Effects</span>
+                                    <span class="slider-value" id="sfx-volume-value">40%</span>
+                                </label>
+                                <input type="range" id="sfx-volume" min="0" max="100" value="40" class="slider" aria-label="Sound effects volume">
+                            </div>
+                        </fieldset>
+                        <fieldset class="setting-group">
+                            <legend>Gameplay</legend>
+                            <label class="toggle">
+                                <input type="checkbox" id="walls-toggle" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Wall Collision</span>
+                            </label>
+                            <label class="toggle">
+                                <input type="checkbox" id="haptic-toggle" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Haptic Feedback</span>
+                            </label>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leaderboard Modal -->
+            <div class="settings-panel hidden" id="leaderboard-panel" role="dialog" aria-modal="true" aria-labelledby="leaderboard-title">
+                <div class="settings-content leaderboard-modal">
+                    <header class="settings-header">
+                        <h2 id="leaderboard-title">🏆 Top Leaderboard</h2>
+                        <button class="icon-btn" id="close-leaderboard" aria-label="Close leaderboard" type="button">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </header>
+                    <div class="settings-body">
+                        <div class="leaderboard-table-wrapper">
+                            <table class="leaderboard-table">
+                                <thead>
+                                    <tr>
+                                        <th>Rank</th>
+                                        <th>Player</th>
+                                        <th>Score</th>
+                                        <th>Level</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="leaderboard-body">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skin Selector Modal -->
+            <div class="settings-panel hidden" id="skin-panel" role="dialog" aria-modal="true" aria-labelledby="skin-title">
+                <div class="settings-content leaderboard-modal">
+                    <header class="settings-header">
+                        <h2 id="skin-title">🎨 Select Snake Skin</h2>
+                        <button class="icon-btn" id="close-skins" aria-label="Close skins" type="button">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </header>
+                    <div class="settings-body">
+                        <div class="skin-grid" id="skin-grid">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daily Quests Modal -->
+            <div class="settings-panel hidden" id="quests-panel" role="dialog" aria-modal="true" aria-labelledby="quests-title">
+                <div class="settings-content leaderboard-modal">
+                    <header class="settings-header">
+                        <h2 id="quests-title">📜 Daily Quests</h2>
+                        <button class="icon-btn" id="close-quests" aria-label="Close quests" type="button">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </header>
+                    <div class="settings-body">
+                        <div class="quests-list" id="quests-list">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Floating Action Buttons -->
+        <div class="fab-group">
+            <button class="fab" id="skins-fab" aria-label="Skins Shop" type="button" title="Skins Shop">🎨</button>
+            <button class="fab" id="quests-fab" aria-label="Daily Quests" type="button" title="Daily Quests">📜</button>
+            <button class="fab" id="leaderboard-fab" aria-label="View Leaderboard" type="button" title="Leaderboard">🏆</button>
+            <button class="fab" id="settings-fab" aria-label="Settings" type="button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+            </button>
+            <button class="fab" id="sound-fab" aria-label="Toggle sound" type="button">
+                <svg class="sound-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                </svg>
+                <svg class="sound-off hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                    <line x1="23" y1="9" x2="17" y2="15"/>
+                    <line x1="17" y1="9" x2="23" y2="15"/>
+                </svg>
+            </button>
+        </div>
+    </div><!-- .game-container -->
+
+    <!-- ──────────────────────────────────────────
+         SCRIPTS
+    ─────────────────────────────────────────── -->
+    <!-- NativeBridge must load before game.js -->
+    <script type="module">
+        // Import NativeBridge and initialize native Android features
+        import { NativeBridge } from './src/native/bridge.js';
+
+        // Init native features (SplashScreen hide, StatusBar, ScreenOrientation lock)
+        await NativeBridge.init();
+
+        // Attach to window so game.js can access it synchronously after this module runs
+        window._NativeBridge = NativeBridge;
+
+        // Android Back Button — smart routing
+        NativeBridge.setupBackButton(({ canGoBack }) => {
+            const activePanel = document.querySelector('.settings-panel:not(.hidden)');
+            if (activePanel) {
+                activePanel.classList.add('hidden');
+                return;
+            }
+            const exitDialog = document.getElementById('android-exit-dialog');
+            if (exitDialog) {
+                exitDialog.classList.toggle('hidden');
+            }
+        });
+
+        // App State — auto-pause when app goes to background
+        NativeBridge.onAppStateChange((isActive) => {
+            if (!isActive && window._gameController) {
+                window._gameController.pauseGame?.();
+            }
+            if (isActive && window._gameController) {
+                // Resume audio context (iOS/Android requirement)
+                window._gameController.resumeAudio?.();
+            }
+        });
+
+        // Exit dialog buttons
+        const exitDlg = document.getElementById('android-exit-dialog');
+        const cancelBtn = document.getElementById('exit-cancel-btn');
+        const confirmBtn = document.getElementById('exit-confirm-btn');
+
+        cancelBtn?.addEventListener('click', () => {
+            exitDlg?.classList.add('hidden');
+        });
+
+        confirmBtn?.addEventListener('click', () => {
+            // Close the Capacitor app gracefully
+            if (window.Capacitor?.Plugins?.App) {
+                window.Capacitor.Plugins.App.exitApp();
+            } else {
+                window.close?.();
+            }
+        });
+
+        // Dismiss splash overlay once the DOM is ready
+        const splashOverlay = document.getElementById('app-splash-overlay');
+        const splashFill = document.getElementById('splash-fill');
+
+        if (splashFill) {
+            splashFill.style.width = '100%';
+        }
+        setTimeout(() => {
+            splashOverlay?.classList.add('fade-out');
+            setTimeout(() => splashOverlay?.remove(), 600);
+        }, 1200);
+    </script>
+
+    <!-- Core game engine -->
+    <script src="game.js" type="module"></script>
+
+    <!-- Theme persistence -->
+    <script>
+        const savedTheme = localStorage.getItem('snake_theme');
+        if (savedTheme === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,578 @@
+/* ============================================================
+   app-mobile.css — Android/Capacitor Mobile-First Overrides
+   Extends styles.css with safe-area, touch, and native feel
+   ============================================================ */
+
+/* ──────────────────────────────────────────────────────────
+   1. ANDROID SAFE-AREA & FULLSCREEN
+   ────────────────────────────────────────────────────────── */
+:root {
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+
+    /* App touch target minimum (WCAG 44x44px) */
+    --touch-target: 48px;
+
+    /* Capacitor chrome colors */
+    --app-bg: #0d1117;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    position: fixed; /* Prevent rubber-band scroll on Android */
+    touch-action: none; /* Disable default gestures, game handles all touch */
+}
+
+body.android-app {
+    padding-top: var(--safe-top);
+    padding-bottom: var(--safe-bottom);
+    padding-left: var(--safe-left);
+    padding-right: var(--safe-right);
+    background: var(--app-bg);
+    overscroll-behavior: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* ──────────────────────────────────────────────────────────
+   2. SPLASH SCREEN OVERLAY
+   ────────────────────────────────────────────────────────── */
+.app-splash-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #0d1117;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    transition: opacity 0.6s ease;
+}
+
+.app-splash-overlay.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.splash-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.splash-snake-icon {
+    width: 80px;
+    height: 80px;
+    animation: splash-pulse 1.2s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px rgba(88, 166, 255, 0.6));
+}
+
+@keyframes splash-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.9; }
+    50% { transform: scale(1.08); opacity: 1; }
+}
+
+.splash-title {
+    font-family: var(--font-ui);
+    font-size: 2rem;
+    font-weight: 700;
+    color: #f0f6fc;
+    letter-spacing: 0.04em;
+}
+
+.splash-loading-bar {
+    width: 160px;
+    height: 4px;
+    background: rgba(88, 166, 255, 0.15);
+    border-radius: 9999px;
+    overflow: hidden;
+}
+
+.splash-loading-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #58a6ff, #a371f7);
+    border-radius: 9999px;
+    transition: width 1s ease;
+}
+
+/* ──────────────────────────────────────────────────────────
+   3. GAME CONTAINER — FULL BLEED MOBILE
+   ────────────────────────────────────────────────────────── */
+.game-container {
+    height: 100%;
+    max-height: 100dvh; /* Dynamic viewport height */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+}
+
+.game-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 0; /* Full-bleed on mobile */
+    border: none;
+    max-width: 100%;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* ──────────────────────────────────────────────────────────
+   4. GAME HEADER — COMPACT MOBILE
+   ────────────────────────────────────────────────────────── */
+.game-header {
+    padding: 8px 16px;
+    min-height: 52px;
+    gap: 8px;
+}
+
+.game-title h1 {
+    font-size: 1.3rem;
+}
+
+.game-stats {
+    gap: 12px;
+}
+
+.stat {
+    padding: 4px 10px;
+    min-width: 52px;
+}
+
+.stat-label {
+    font-size: 0.6rem;
+}
+
+.stat-value {
+    font-size: 1rem;
+}
+
+/* ──────────────────────────────────────────────────────────
+   5. CANVAS — SQUARE, FILLS AVAILABLE SPACE
+   ────────────────────────────────────────────────────────── */
+.game-canvas-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 4px;
+    min-height: 0; /* allow shrinking */
+}
+
+.game-canvas {
+    width: min(
+        calc(100vw - 8px),
+        calc(100dvh - 52px - 120px - var(--safe-top) - var(--safe-bottom))
+    );
+    height: min(
+        calc(100vw - 8px),
+        calc(100dvh - 52px - 120px - var(--safe-top) - var(--safe-bottom))
+    );
+    max-width: 100%;
+    border-radius: var(--radius-md);
+    touch-action: none;
+    image-rendering: pixelated;
+}
+
+/* ──────────────────────────────────────────────────────────
+   6. TOUCH D-PAD CONTROLS
+   ────────────────────────────────────────────────────────── */
+.touch-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 16px calc(6px + var(--safe-bottom));
+    background: rgba(13, 17, 23, 0.7);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid rgba(48, 54, 61, 0.5);
+}
+
+.touch-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.touch-btn {
+    width: var(--touch-target);
+    height: var(--touch-target);
+    background: rgba(88, 166, 255, 0.08);
+    border: 1.5px solid rgba(88, 166, 255, 0.2);
+    border-radius: var(--radius-md);
+    color: var(--fg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    touch-action: none;
+}
+
+.touch-btn svg {
+    width: 22px;
+    height: 22px;
+}
+
+.touch-btn:active,
+.touch-btn.pressed {
+    background: rgba(88, 166, 255, 0.22);
+    border-color: rgba(88, 166, 255, 0.55);
+    transform: scale(0.92);
+    color: var(--accent-primary);
+}
+
+/* ──────────────────────────────────────────────────────────
+   7. FLOATING ACTION BUTTONS — REPOSITIONED FOR MOBILE
+   ────────────────────────────────────────────────────────── */
+.fab-group {
+    position: fixed;
+    top: calc(var(--safe-top) + 60px);
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: var(--z-overlay);
+}
+
+.fab {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(22, 27, 34, 0.92);
+    border: 1px solid rgba(48, 54, 61, 0.8);
+    color: var(--fg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1rem;
+    -webkit-tap-highlight-color: transparent;
+    transition: all var(--transition-fast);
+    backdrop-filter: blur(8px);
+}
+
+.fab svg {
+    width: 18px;
+    height: 18px;
+}
+
+.fab:active {
+    transform: scale(0.88);
+    background: rgba(88, 166, 255, 0.15);
+    border-color: rgba(88, 166, 255, 0.4);
+}
+
+/* ──────────────────────────────────────────────────────────
+   8. SWIPE CONTROLS HINT ON START SCREEN
+   ────────────────────────────────────────────────────────── */
+.mobile-swipe-hint {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    background: rgba(88, 166, 255, 0.06);
+    border: 1px solid rgba(88, 166, 255, 0.15);
+    border-radius: var(--radius-lg);
+}
+
+.swipe-arrows {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.swipe-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.swipe-arrow {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: var(--accent-primary);
+    opacity: 0.7;
+}
+
+.swipe-center {
+    font-size: 1.4rem;
+    animation: bounce 1.5s ease infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+.control-desc {
+    font-size: 0.75rem;
+    color: var(--fg-secondary);
+    font-weight: 500;
+}
+
+/* Hide keyboard controls preview on mobile */
+.controls-preview:not(.mobile-swipe-hint) {
+    display: none;
+}
+
+/* ──────────────────────────────────────────────────────────
+   9. OVERLAY STYLES — LARGER TAP AREAS
+   ────────────────────────────────────────────────────────── */
+.btn-large-tap {
+    min-height: 52px;
+    padding: 14px 32px;
+    font-size: 1.05rem;
+}
+
+.btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 280px;
+}
+
+.btn-group .btn {
+    min-height: 48px;
+    justify-content: center;
+}
+
+.overlay-content {
+    gap: 16px;
+    padding: 20px 16px;
+}
+
+.overlay-hint {
+    font-size: 0.75rem;
+    color: var(--fg-muted);
+    text-align: center;
+}
+
+/* ──────────────────────────────────────────────────────────
+   10. SETTINGS PANEL — BOTTOM SHEET ON MOBILE
+   ────────────────────────────────────────────────────────── */
+.settings-panel {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal);
+    display: flex;
+    align-items: flex-end; /* Slide from bottom */
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+}
+
+.settings-panel.hidden {
+    display: none;
+}
+
+.settings-content {
+    width: 100%;
+    max-height: 88dvh;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    border: 1px solid var(--border-primary);
+    border-bottom: none;
+    padding-bottom: var(--safe-bottom);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    animation: slide-up 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slide-up {
+    from { transform: translateY(100%); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+}
+
+/* Larger touch targets for toggles */
+.toggle {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+}
+
+.setting-group {
+    gap: 0;
+}
+
+/* ──────────────────────────────────────────────────────────
+   11. ANDROID EXIT DIALOG
+   ────────────────────────────────────────────────────────── */
+.android-exit-dialog {
+    position: fixed;
+    inset: 0;
+    z-index: calc(var(--z-modal) + 10);
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+    animation: fade-in 0.2s ease;
+}
+
+.android-exit-dialog.hidden {
+    display: none;
+}
+
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.exit-dialog-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-xl);
+    padding: 28px 24px;
+    max-width: 300px;
+    width: calc(100% - 40px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+    box-shadow: var(--shadow-xl);
+    animation: dialog-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes dialog-pop {
+    from { transform: scale(0.85); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.exit-dialog-icon {
+    font-size: 2.5rem;
+}
+
+.exit-dialog-card h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--fg-primary);
+}
+
+.exit-dialog-card p {
+    font-size: 0.875rem;
+    color: var(--fg-secondary);
+    line-height: 1.5;
+}
+
+.exit-dialog-buttons {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    margin-top: 8px;
+}
+
+.exit-dialog-buttons .btn {
+    flex: 1;
+    min-height: 48px;
+    justify-content: center;
+}
+
+/* ──────────────────────────────────────────────────────────
+   12. LEADERBOARD MODAL — MOBILE SCROLL
+   ────────────────────────────────────────────────────────── */
+.leaderboard-modal .settings-body {
+    padding: 0;
+}
+
+.leaderboard-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.leaderboard-table td,
+.leaderboard-table th {
+    padding: 12px 10px;
+    font-size: 0.8rem;
+}
+
+/* ──────────────────────────────────────────────────────────
+   13. RESPONSIVE BREAKPOINTS
+   ────────────────────────────────────────────────────────── */
+
+/* Small phones (< 360px) */
+@media (max-width: 360px) {
+    .touch-btn {
+        width: 42px;
+        height: 42px;
+    }
+    .fab {
+        width: 36px;
+        height: 36px;
+    }
+    .stat-value {
+        font-size: 0.9rem;
+    }
+}
+
+/* Larger phones / Landscape */
+@media (orientation: landscape) and (max-height: 500px) {
+    .touch-controls {
+        display: none; /* Swipe-only in landscape to save vertical space */
+    }
+    .game-header {
+        padding: 4px 12px;
+        min-height: 40px;
+    }
+    .game-canvas {
+        width: calc(100dvh - 48px - var(--safe-top) - var(--safe-bottom));
+        height: calc(100dvh - 48px - var(--safe-top) - var(--safe-bottom));
+    }
+}
+
+/* Tablet portrait */
+@media (min-width: 600px) {
+    .game-card {
+        max-width: 500px;
+        margin: auto;
+        border-radius: var(--radius-xl);
+        border: 1px solid var(--border-primary);
+    }
+    .fab-group {
+        top: calc(var(--safe-top) + 70px);
+        right: calc(50% - 270px);
+    }
+}
+
+/* ──────────────────────────────────────────────────────────
+   14. PERFORMANCE: DISABLE ANIMATIONS ON LOW-END DEVICES
+   ────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    .app-splash-overlay,
+    .settings-content,
+    .exit-dialog-card,
+    .android-exit-dialog,
+    .splash-snake-icon,
+    .swipe-center {
+        animation: none !important;
+        transition: opacity 0.1s ease !important;
+    }
+}
+
+/* ──────────────────────────────────────────────────────────
+   15. HAPTIC TOGGLE IN SETTINGS (Android-only)
+   ────────────────────────────────────────────────────────── */
+#haptic-toggle:checked ~ .toggle-label::after {
+    content: ' 📳';
+}
