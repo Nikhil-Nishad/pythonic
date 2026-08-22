@@ -443,6 +443,31 @@
 
     <!-- JavaScript Data & Logic -->
     <script>
+        // Legacy Query Parameter Redirection for Google Search Console URL Migration
+        (function handleLegacyArticleQuery() {
+            const params = new URLSearchParams(window.location.search);
+            const articleId = params.get('article');
+            const articleMap = {
+                '1': 'blog/evolution-of-snake.html',
+                '2': 'blog/high-score-tactics.html',
+                '3': 'blog/building-60fps-canvas-games.html',
+                '4': 'blog/gameplay-mechanics-and-combos.html',
+                '5': 'blog/procedural-audio-synthesis.html',
+                '6': 'blog/mobile-touch-controls-haptics.html',
+                '7': 'blog/web-game-seo-guide.html',
+                '8': 'blog/astar-pathfinding-ai-rivals.html',
+                '9': 'blog/best-snake-games-compared.html',
+                '10': 'blog/modern-snake-vs-nokia-snake-2.html',
+                '11': 'blog/cognitive-benefits-of-playing-snake.html',
+                '12': 'blog/beginners-guide-to-snake-game.html',
+                '13': 'blog/no-ad-pwa-web-games.html'
+            };
+            if (articleId && articleMap[articleId]) {
+                window.location.replace(articleMap[articleId]);
+                return;
+            }
+        })();
+
         // Theme Persistence & Toggle
         const themeBtn = document.getElementById('theme-toggle');
         const applyTheme = (theme) => {

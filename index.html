@@ -74,7 +74,49 @@
     ]
     </script>
 </head>
-<body>
+<body class="site-page">
+    <!-- Sticky Site Navbar Header -->
+    <header class="site-header" role="banner">
+        <div class="header-container">
+            <a href="/" class="site-logo">
+                <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                    <path d="M4 16C4 10.477 8.477 6 14 6H18C23.523 6 28 10.477 28 16C28 21.523 23.523 26 18 26H14C8.477 26 4 21.523 4 16Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Modern Snake</span>
+            </a>
+
+            <nav class="site-nav" aria-label="Main Navigation">
+                <a href="/" class="site-nav-link active">Play Game</a>
+                <a href="instructions.html" class="site-nav-link">How to Play</a>
+                <a href="blog.html" class="site-nav-link">Developer Blog</a>
+            </nav>
+
+            <div class="header-actions">
+                <button class="theme-toggle-btn" id="theme-toggle" aria-label="Toggle light or dark theme" title="Toggle Theme">
+                    🌙
+                </button>
+                <a href="/" class="btn btn-primary" style="padding: 8px 18px; font-size: 0.9rem; border-radius: var(--radius-full);">
+                    Play Now
+                </a>
+                <button class="hamburger-btn" id="hamburger-btn" aria-label="Open navigation menu" aria-expanded="false">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Nav Drawer -->
+    <div class="mobile-nav-drawer" id="mobile-nav-drawer" role="dialog" aria-label="Mobile Navigation" aria-modal="true">
+        <nav class="mobile-nav-panel">
+            <a href="/" class="site-nav-link active">🎮 Play Game</a>
+            <a href="instructions.html" class="site-nav-link">📖 How to Play</a>
+            <a href="blog.html" class="site-nav-link">📰 Developer Blog</a>
+            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-primary);">
+                <a href="/" class="btn btn-primary" style="display:block; text-align:center; padding: 12px 20px; border-radius: var(--radius-full); text-decoration:none;">Play Now →</a>
+            </div>
+        </nav>
+    </div>
+
     <div class="game-container">
         <!-- Background ambient effects -->
         <div class="ambient-bg" aria-hidden="true">
@@ -491,12 +533,108 @@
         </div>
     </div>
 
+    <!-- Full SEO Site Footer & Knowledge Hub -->
+    <footer class="site-footer" role="contentinfo" style="margin-top: 32px; border-top: 1px solid var(--border-primary); background: var(--bg-secondary);">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <a href="/" class="site-logo">
+                    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                        <path d="M4 16C4 10.477 8.477 6 14 6H18C23.523 6 28 10.477 28 16C28 21.523 23.523 26 18 26H14C8.477 26 4 21.523 4 16Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Modern Snake Game</span>
+                </a>
+                <p>High-performance, mobile-friendly browser arcade game featuring locked 60FPS canvas graphics, Web Audio API procedural sound synthesis, real-time A* pathfinding AI rivals, customizable snake skins, and global leaderboards.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Quick Navigation</h4>
+                <ul class="footer-links">
+                    <li><a href="/">Play Game Online</a></li>
+                    <li><a href="instructions.html">How to Play &amp; Strategy Guide</a></li>
+                    <li><a href="blog.html">Developer &amp; Strategy Blog</a></li>
+                    <li><a href="blog/beginners-guide-to-snake-game.html">Beginner's Playbook</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Rankings &amp; Insights</h4>
+                <ul class="footer-links">
+                    <li><a href="blog/best-snake-games-compared.html">Best Snake Games Ranked 2026</a></li>
+                    <li><a href="blog/modern-snake-vs-nokia-snake-2.html">Modern Snake vs. Nokia Snake II</a></li>
+                    <li><a href="blog/cognitive-benefits-of-playing-snake.html">Cognitive Focus &amp; Stress Relief</a></li>
+                    <li><a href="blog/evolution-of-snake.html">Evolution of Snake: 1976 to 2026</a></li>
+                    <li><a href="blog/high-score-tactics.html">Pro High-Score Coiling Tactics</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Engineering Deep Dives</h4>
+                <ul class="footer-links">
+                    <li><a href="blog/building-60fps-canvas-games.html">Vanilla JS 60FPS Canvas Loop</a></li>
+                    <li><a href="blog/astar-pathfinding-ai-rivals.html">A* AI Pathfinding Bots</a></li>
+                    <li><a href="blog/procedural-audio-synthesis.html">Web Audio Chiptune Synthesizer</a></li>
+                    <li><a href="blog/gameplay-mechanics-and-combos.html">Combo Multipliers &amp; Risk Mechanics</a></li>
+                    <li><a href="blog/mobile-touch-controls-haptics.html">Mobile Touch &amp; Haptic Telemetry</a></li>
+                    <li><a href="blog/no-ad-pwa-web-games.html">Zero-Ad PWA Architecture</a></li>
+                    <li><a href="blog/web-game-seo-guide.html">Canvas Technical SEO Guide</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>&copy; 2026 Modern Snake Game. All rights reserved. Open source under MIT License.</span>
+            <div style="display: flex; gap: 16px;">
+                <a href="sitemap.xml" style="color: var(--fg-muted); text-decoration: none;">XML Sitemap</a>
+                <a href="robots.txt" style="color: var(--fg-muted); text-decoration: none;">Robots.txt</a>
+            </div>
+        </div>
+    </footer>
+
     <script src="game.js" type="module"></script>
     <script>
-        const savedTheme = localStorage.getItem('snake_theme');
-        if (savedTheme === 'light') {
-            document.documentElement.setAttribute('data-theme', 'light');
+        // Theme Persistence & Toggle
+        const themeBtn = document.getElementById('theme-toggle');
+        const applyTheme = (theme) => {
+            if (theme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                if (themeBtn) themeBtn.textContent = '☀️';
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                if (themeBtn) themeBtn.textContent = '🌙';
+            }
+        };
+        const savedTheme = localStorage.getItem('snake_theme') || 'dark';
+        applyTheme(savedTheme);
+
+        if (themeBtn) {
+            themeBtn.addEventListener('click', () => {
+                const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+                const newTheme = isLight ? 'dark' : 'light';
+                localStorage.setItem('snake_theme', newTheme);
+                applyTheme(newTheme);
+            });
         }
+
+        // Mobile Nav Drawer Toggle
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const mobileNavDrawer = document.getElementById('mobile-nav-drawer');
+        if (hamburgerBtn && mobileNavDrawer) {
+            hamburgerBtn.addEventListener('click', () => {
+                const isOpen = mobileNavDrawer.classList.toggle('open');
+                hamburgerBtn.classList.toggle('open', isOpen);
+                hamburgerBtn.setAttribute('aria-expanded', isOpen);
+            });
+
+            mobileNavDrawer.addEventListener('click', (e) => {
+                if (e.target === mobileNavDrawer) {
+                    mobileNavDrawer.classList.remove('open');
+                    hamburgerBtn.classList.remove('open');
+                    hamburgerBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+
+        // Service Worker Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js').catch(() => {});
