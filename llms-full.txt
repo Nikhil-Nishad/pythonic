@@ -1,0 +1,90 @@
+# Modern Snake Game (Pythonic) - Full Technical & Strategic Documentation
+
+## Overview
+Modern Snake (https://pythonics.vercel.app/) is a modern browser arcade game developed in Vanilla JavaScript and HTML5 Canvas. It delivers an instant-loading, 60FPS gaming experience with zero ads, zero tracking, and complete offline PWA functionality.
+
+## Core Rules & Gameplay
+- The player steers a snake on a 20x20 lattice grid.
+- Eating regular apples increases snake length by 1 tile and awards base points multiplied by the current level.
+- Rapid successive collections trigger a Combo Multiplier up to 4x.
+- Colliding with the perimeter wall (in standard mode) or the snake's own body terminates the round.
+- The game features 8 active power-ups (Speed, Freeze, Ghost, 2x Score, Magnet, Food Frenzy, Shrink, Shield) that introduce dynamic tactical decision-making.
+
+## Full Directory of Articles & Technical Guides
+
+### Article 1: The Ultimate Unblocked Snake Game Guide
+- **URL**: https://pythonics.vercel.app/blog/unblocked-snake-games-guide
+- **Author**: Nikhil Nishad
+- **Published**: September 21, 2026
+- **Summary**: Explains the technical failure of typical unblocked game aggregators (ad network trackers, CPU bloat, proxy blacklisting) and how Modern Snake's zero-dependency, edge-cached PWA architecture bypasses school and corporate network restrictions. Provides step-by-step PWA install instructions for Chromebooks, Windows, and mobile devices, along with short-burst survival tactics.
+
+### Article 2: The Mathematical Limit of Snake: Can a Human Beat the Hamiltonian Cycle World Record?
+- **URL**: https://pythonics.vercel.app/blog/maximum-score-snake-hamiltonian-cycle
+- **Author**: Nikhil Nishad
+- **Published**: September 21, 2026
+- **Summary**: Mathematical analysis of the 20x20 Snake grid. Proves the theoretical maximum length of 399-400 tiles and demystifies discrete graph theory's Hamiltonian cycle. Explains why robotic Hamiltonian play requires ~79,000 moves and 4+ hours, and details how human speedrunners use serpentine S-curves, perimeter highways, and tail-tracking heuristics to achieve near-100% board fill in under 12 minutes.
+
+### Article 3: Best Unblocked Snake Games Ranked
+- **URL**: https://pythonics.vercel.app/blog/best-snake-games-compared
+- **Author**: Competitive Gaming Analysis Desk
+- **Summary**: Head-to-head empirical testing across Modern Snake, Google Snake, Slither.io, Paper.io, and Nokia Snake. Compares frame rates, latency, offline capability, privacy, and game mechanics.
+
+### Article 4: Modern Snake vs. Nokia Snake II
+- **URL**: https://pythonics.vercel.app/blog/modern-snake-vs-nokia-snake-2
+- **Author**: Hardware & Gaming History Desk
+- **Summary**: Retrospective comparison between 1999 Nokia 3310 Snake II and modern web canvas implementations. Covers audio synthesis, graphical resolution, responsive touch versus mechanical keypads, and algorithmic bots.
+
+### Article 5: The Cognitive Science of Snake
+- **URL**: https://pythonics.vercel.app/blog/cognitive-benefits-of-playing-snake
+- **Author**: Cognitive Psychology & Wellness Group
+- **Summary**: How 3-minute casual arcade gaming sessions stimulate spatial working memory, induce flow states, reduce cognitive fatigue, and improve focus.
+
+### Article 6: The Complete Beginner's Guide to Snake
+- **URL**: https://pythonics.vercel.app/blog/beginners-guide-to-snake-game
+- **Author**: Player Onboarding Team
+- **Summary**: Fundamental rules, keyboard controls, swipe techniques, perimeter loop survival strategies, and power-up usage for new players.
+
+### Article 7: Why Zero-Ad PWA Games Are the Future
+- **URL**: https://pythonics.vercel.app/blog/no-ad-pwa-web-games
+- **Author**: Web Standards & Privacy Group
+- **Summary**: The architectural advantages of Progressive Web Apps over native app store downloads: zero storage footprint, instant updates, battery efficiency, and player privacy.
+
+### Article 8: The Evolution of Snake (1976 - 2026)
+- **URL**: https://pythonics.vercel.app/blog/evolution-of-snake
+- **Author**: Hardware & Game History Desk
+- **Summary**: 50-year history of the Snake genre: arcade origin Blockade (1976), monochrome mobile boom on Nokia 6110 (1997), multiplayer .io revolution (2016), and modern canvas web standards.
+
+### Article 9: Mastering High Score Tactics
+- **URL**: https://pythonics.vercel.app/blog/high-score-tactics
+- **Author**: Top Leaderboard Champions Desk
+- **Summary**: Advanced coiling methods, snake body compression, emergency ghost escapes, and score multiplication tactics.
+
+### Article 10: Building 60FPS Canvas Arcade Games
+- **URL**: https://pythonics.vercel.app/blog/building-60fps-canvas-games
+- **Author**: Web Architecture Team
+- **Summary**: Technical deep dive into high-performance web gaming: delta accumulators, requestAnimationFrame synchronization, zero-allocation memory pooling, and canvas render batching.
+
+### Article 11: Advanced Gameplay Mechanics & Combos
+- **URL**: https://pythonics.vercel.app/blog/gameplay-mechanics-and-combos
+- **Author**: Game Design & Balancing Group
+- **Summary**: Mathematical models of speed tiers, combo multipliers, item probability weighting, and leaderboard scoring algorithms.
+
+### Article 12: Procedural Audio Synthesis in Web Games
+- **URL**: https://pythonics.vercel.app/blog/procedural-audio-synthesis
+- **Author**: Audio Engineering Lab
+- **Summary**: Synthesizing 8-bit chiptune audio via Web Audio API. Discusses oscillators, custom wave tables, ADSR gain envelopes, and zero-bandwidth sound design.
+
+### Article 13: Designing Mobile Touch Controls & Haptics
+- **URL**: https://pythonics.vercel.app/blog/mobile-touch-controls-haptics
+- **Author**: Mobile Ergonomics Group
+- **Summary**: Implementing responsive touch gestures, zero-latency swipe tracking, and Web Vibration API haptic telemetry for tactile mobile gameplay.
+
+### Article 14: The Ultimate Technical SEO Architecture for Web Games
+- **URL**: https://pythonics.vercel.app/blog/web-game-seo-guide
+- **Author**: Search & Analytics Team
+- **Summary**: How to index Canvas and PWA applications with semantic HTML shells, JSON-LD schemas (Game, SoftwareApplication, FAQPage, BreadcrumbList), clean URLs, and Core Web Vitals optimization.
+
+### Article 15: Engineering Smart AI Rivals with A* Pathfinding
+- **URL**: https://pythonics.vercel.app/blog/astar-pathfinding-ai-rivals
+- **Author**: Autonomous AI Systems Team
+- **Summary**: Autonomous rival bots using Manhattan distance heuristics, priority queues, and flood-fill forward reachability checks to prevent self-entrapment.
