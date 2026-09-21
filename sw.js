@@ -1,12 +1,15 @@
-const CACHE_NAME = 'snake-game-v5.0.0';
+const CACHE_NAME = 'snake-game-v5.1.0';
 const ASSETS_TO_CACHE = [
-    './',
-    './index.html',
-    './instructions.html',
-    './blog.html',
+    '/',
+    '/instructions',
+    '/blog',
     './styles.css',
     './game.js',
     './manifest.webmanifest',
+    './instructions.html',
+    './blog.html',
+    './blog/unblocked-snake-games-guide.html',
+    './blog/maximum-score-snake-hamiltonian-cycle.html',
     './blog/best-snake-games-compared.html',
     './blog/modern-snake-vs-nokia-snake-2.html',
     './blog/cognitive-benefits-of-playing-snake.html',
@@ -75,7 +78,7 @@ self.addEventListener('fetch', (event) => {
                         if (cached) return cached;
                         if (url.pathname.includes('instructions')) return caches.match('./instructions.html');
                         if (url.pathname.includes('blog')) return caches.match('./blog.html');
-                        return caches.match('./index.html');
+                        return caches.match('./index.html') || caches.match('/');
                     });
                 })
         );

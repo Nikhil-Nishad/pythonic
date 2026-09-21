@@ -8,159 +8,193 @@
       "permanent": true
     },
     {
-      "source": "/blog.html",
-      "has": [
-        {
-          "type": "query",
-          "key": "article",
-          "value": "1"
-        }
-      ],
-      "destination": "/blog/evolution-of-snake.html",
+      "source": "/instructions.html",
+      "destination": "/instructions",
       "permanent": true
     },
     {
       "source": "/blog.html",
-      "has": [
-        {
-          "type": "query",
-          "key": "article",
-          "value": "2"
-        }
-      ],
-      "destination": "/blog/high-score-tactics.html",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "has": [{ "type": "query", "key": "article", "value": "1" }],
+      "destination": "/blog/evolution-of-snake",
       "permanent": true
     },
     {
       "source": "/blog.html",
-      "has": [
-        {
-          "type": "query",
-          "key": "article",
-          "value": "3"
-        }
-      ],
-      "destination": "/blog/building-60fps-canvas-games.html",
+      "has": [{ "type": "query", "key": "article", "value": "1" }],
+      "destination": "/blog/evolution-of-snake",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "has": [{ "type": "query", "key": "article", "value": "2" }],
+      "destination": "/blog/high-score-tactics",
       "permanent": true
     },
     {
       "source": "/blog.html",
-      "has": [
-        {
-          "type": "query",
-          "key": "article",
-          "value": "4"
-        }
-      ],
-      "destination": "/blog/gameplay-mechanics-and-combos.html",
+      "has": [{ "type": "query", "key": "article", "value": "2" }],
+      "destination": "/blog/high-score-tactics",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "has": [{ "type": "query", "key": "article", "value": "3" }],
+      "destination": "/blog/building-60fps-canvas-games",
       "permanent": true
     },
     {
       "source": "/blog.html",
-      "has": [
-        {
-          "type": "query",
-          "key": "article",
-          "value": "5"
-        }
-      ],
-      "destination": "/blog/procedural-audio-synthesis.html",
+      "has": [{ "type": "query", "key": "article", "value": "3" }],
+      "destination": "/blog/building-60fps-canvas-games",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "has": [{ "type": "query", "key": "article", "value": "4" }],
+      "destination": "/blog/gameplay-mechanics-and-combos",
       "permanent": true
     },
     {
       "source": "/blog.html",
-      "has": [
-        {
-          "type": "query",
-          "key": "article",
-          "value": "6"
-        }
-      ],
-      "destination": "/blog/mobile-touch-controls-haptics.html",
+      "has": [{ "type": "query", "key": "article", "value": "4" }],
+      "destination": "/blog/gameplay-mechanics-and-combos",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "has": [{ "type": "query", "key": "article", "value": "5" }],
+      "destination": "/blog/procedural-audio-synthesis",
       "permanent": true
     },
     {
       "source": "/blog.html",
-      "has": [
-        {
-          "type": "query",
-          "key": "article",
-          "value": "7"
-        }
-      ],
-      "destination": "/blog/web-game-seo-guide.html",
+      "has": [{ "type": "query", "key": "article", "value": "5" }],
+      "destination": "/blog/procedural-audio-synthesis",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "has": [{ "type": "query", "key": "article", "value": "6" }],
+      "destination": "/blog/mobile-touch-controls-haptics",
       "permanent": true
     },
     {
       "source": "/blog.html",
-      "has": [
-        {
-          "type": "query",
-          "key": "article",
-          "value": "8"
-        }
-      ],
-      "destination": "/blog/astar-pathfinding-ai-rivals.html",
+      "has": [{ "type": "query", "key": "article", "value": "6" }],
+      "destination": "/blog/mobile-touch-controls-haptics",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "has": [{ "type": "query", "key": "article", "value": "7" }],
+      "destination": "/blog/web-game-seo-guide",
       "permanent": true
     },
     {
       "source": "/blog.html",
-      "has": [
-        {
-          "type": "query",
-          "key": "article",
-          "value": "9"
-        }
-      ],
-      "destination": "/blog/best-snake-games-compared.html",
+      "has": [{ "type": "query", "key": "article", "value": "7" }],
+      "destination": "/blog/web-game-seo-guide",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "has": [{ "type": "query", "key": "article", "value": "8" }],
+      "destination": "/blog/astar-pathfinding-ai-rivals",
       "permanent": true
     },
     {
       "source": "/blog.html",
-      "has": [
-        {
-          "type": "query",
-          "key": "article",
-          "value": "10"
-        }
-      ],
-      "destination": "/blog/modern-snake-vs-nokia-snake-2.html",
+      "has": [{ "type": "query", "key": "article", "value": "8" }],
+      "destination": "/blog/astar-pathfinding-ai-rivals",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "has": [{ "type": "query", "key": "article", "value": "9" }],
+      "destination": "/blog/best-snake-games-compared",
       "permanent": true
     },
     {
       "source": "/blog.html",
-      "has": [
-        {
-          "type": "query",
-          "key": "article",
-          "value": "11"
-        }
-      ],
-      "destination": "/blog/cognitive-benefits-of-playing-snake.html",
+      "has": [{ "type": "query", "key": "article", "value": "9" }],
+      "destination": "/blog/best-snake-games-compared",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "has": [{ "type": "query", "key": "article", "value": "10" }],
+      "destination": "/blog/modern-snake-vs-nokia-snake-2",
       "permanent": true
     },
     {
       "source": "/blog.html",
-      "has": [
-        {
-          "type": "query",
-          "key": "article",
-          "value": "12"
-        }
-      ],
-      "destination": "/blog/beginners-guide-to-snake-game.html",
+      "has": [{ "type": "query", "key": "article", "value": "10" }],
+      "destination": "/blog/modern-snake-vs-nokia-snake-2",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "has": [{ "type": "query", "key": "article", "value": "11" }],
+      "destination": "/blog/cognitive-benefits-of-playing-snake",
       "permanent": true
     },
     {
       "source": "/blog.html",
-      "has": [
-        {
-          "type": "query",
-          "key": "article",
-          "value": "13"
-        }
-      ],
-      "destination": "/blog/no-ad-pwa-web-games.html",
+      "has": [{ "type": "query", "key": "article", "value": "11" }],
+      "destination": "/blog/cognitive-benefits-of-playing-snake",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "has": [{ "type": "query", "key": "article", "value": "12" }],
+      "destination": "/blog/beginners-guide-to-snake-game",
+      "permanent": true
+    },
+    {
+      "source": "/blog.html",
+      "has": [{ "type": "query", "key": "article", "value": "12" }],
+      "destination": "/blog/beginners-guide-to-snake-game",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "has": [{ "type": "query", "key": "article", "value": "13" }],
+      "destination": "/blog/no-ad-pwa-web-games",
+      "permanent": true
+    },
+    {
+      "source": "/blog.html",
+      "has": [{ "type": "query", "key": "article", "value": "13" }],
+      "destination": "/blog/no-ad-pwa-web-games",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "has": [{ "type": "query", "key": "article", "value": "14" }],
+      "destination": "/blog/unblocked-snake-games-guide",
+      "permanent": true
+    },
+    {
+      "source": "/blog.html",
+      "has": [{ "type": "query", "key": "article", "value": "14" }],
+      "destination": "/blog/unblocked-snake-games-guide",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "has": [{ "type": "query", "key": "article", "value": "15" }],
+      "destination": "/blog/maximum-score-snake-hamiltonian-cycle",
+      "permanent": true
+    },
+    {
+      "source": "/blog.html",
+      "has": [{ "type": "query", "key": "article", "value": "15" }],
+      "destination": "/blog/maximum-score-snake-hamiltonian-cycle",
       "permanent": true
     }
   ],
