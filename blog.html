@@ -133,15 +133,17 @@
 
             <div class="category-chips" id="category-chips" style="justify-content: center;">
                 <button type="button" class="category-chip active" data-cat="All">All Articles</button>
+                <button type="button" class="category-chip" data-cat="Python &amp; Pygame">Python &amp; Pygame</button>
+                <button type="button" class="category-chip" data-cat="Data Structures &amp; CS">Data Structures &amp; CS</button>
+                <button type="button" class="category-chip" data-cat="Engineering">Engineering</button>
+                <button type="button" class="category-chip" data-cat="AI &amp; Pathfinding">AI &amp; Pathfinding</button>
                 <button type="button" class="category-chip" data-cat="Comparisons &amp; Rankings">Comparisons &amp; Rankings</button>
                 <button type="button" class="category-chip" data-cat="Everyday Guides">Everyday Guides</button>
                 <button type="button" class="category-chip" data-cat="Everyday Focus &amp; Wellness">Focus &amp; Wellness</button>
                 <button type="button" class="category-chip" data-cat="Pro Strategy">Pro Strategy</button>
-                <button type="button" class="category-chip" data-cat="Engineering">Engineering</button>
                 <button type="button" class="category-chip" data-cat="Gameplay Mechanics">Gameplay Mechanics</button>
                 <button type="button" class="category-chip" data-cat="Web Audio API">Web Audio API</button>
                 <button type="button" class="category-chip" data-cat="UI / UX Design">UI / UX Design</button>
-                <button type="button" class="category-chip" data-cat="AI &amp; Pathfinding">AI &amp; Pathfinding</button>
             </div>
         </div>
     </section>
@@ -149,6 +151,103 @@
     <!-- Main Content Grid with Crawler-Indexable Links to Dedicated Article Pages -->
     <main class="site-main" role="main">
         <div class="instructions-grid" id="blog-grid">
+            <!-- Article 16: Python Pygame Snake Tutorial -->
+            <article class="guide-card full-width blog-card static-article" data-category="Python &amp; Pygame Engineering">
+                <div class="guide-icon">🐍</div>
+                <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">Python Tutorial • Featured</span>
+                <h2><a href="/blog/python-snake-game-pygame-tutorial" style="color: inherit; text-decoration: none;">Building a Complete Snake Game in Python with Pygame: From Empty Window to 60 FPS</a></h2>
+                <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 14px;">Published on October 29, 2026 • 15 min read • By Nikhil Nishad</p>
+                <div class="article-body-preview">
+                    <p>Build a production-ready 2D Snake game from scratch using Python and Pygame-CE. Learn game loops, event polling, grid math, collision detection, and procedural state management.</p>
+                </div>
+                <div style="margin-top: 16px;">
+                    <a href="/blog/python-snake-game-pygame-tutorial" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: var(--radius-full); text-decoration: none; font-weight: 600;">
+                        <span>Read Full Pygame Tutorial</span>
+                        <span>→</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Article 17: Python Deque vs List -->
+            <article class="guide-card blog-card static-article" data-category="Data Structures &amp; CS Engineering">
+                <div class="guide-icon">⚡</div>
+                <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">Data Structures &amp; CS</span>
+                <h2><a href="/blog/python-data-structures-snake-game-deque" style="color: inherit; text-decoration: none;">Why Python collections.deque Beats List for Snake Game Coordinates: O(1) vs O(N) Explained</a></h2>
+                <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 14px;">Published on October 29, 2026 • 12 min read • By Nikhil Nishad</p>
+                <div class="article-body-preview">
+                    <p>Deep-dive into Python memory models: compare dynamic array resizing in list vs doubly-linked blocks in collections.deque with CPython source code analysis and time complexity benchmarks.</p>
+                </div>
+                <div style="margin-top: 16px;">
+                    <a href="/blog/python-data-structures-snake-game-deque" style="font-weight: 600; color: var(--accent-primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                        <span>Read Benchmark Analysis</span> <span>→</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Article 18: What is Pythonic Code -->
+            <article class="guide-card blog-card static-article" data-category="Python &amp; Pygame Engineering">
+                <div class="guide-icon">💎</div>
+                <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">Pythonic Patterns &amp; Architecture</span>
+                <h2><a href="/blog/what-is-pythonic-code-idiomatic-patterns" style="color: inherit; text-decoration: none;">What is 'Pythonic' Code? 9 Idiomatic Patterns Every Developer Should Master</a></h2>
+                <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 14px;">Published on October 29, 2026 • 13 min read • By Nikhil Nishad</p>
+                <div class="article-body-preview">
+                    <p>Transform clumsy C-style scripts into elegant, idiomatic Python. Master EAFP over LBYL, list comprehensions, zip, enumerate, context managers, and the Zen of Python.</p>
+                </div>
+                <div style="margin-top: 16px;">
+                    <a href="/blog/what-is-pythonic-code-idiomatic-patterns" style="font-weight: 600; color: var(--accent-primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                        <span>Read Idiomatic Guide</span> <span>→</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Article 19: Grid Pathfinding in Python -->
+            <article class="guide-card blog-card static-article" data-category="Data Structures &amp; CS AI &amp; Pathfinding Engineering">
+                <div class="guide-icon">🗺️</div>
+                <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">Algorithms &amp; AI</span>
+                <h2><a href="/blog/python-grid-pathfinding-bfs-dijkstra-astar" style="color: inherit; text-decoration: none;">Grid Pathfinding in Python: BFS, Dijkstra, and A* Algorithms Visualized</a></h2>
+                <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 14px;">Published on October 29, 2026 • 15 min read • By Nikhil Nishad</p>
+                <div class="article-body-preview">
+                    <p>Compare unweighted Breadth-First Search, weighted Dijkstra's, and heuristic A* search on 2D grids. Complete Python implementations with heapq and Manhattan distance heuristics.</p>
+                </div>
+                <div style="margin-top: 16px;">
+                    <a href="/blog/python-grid-pathfinding-bfs-dijkstra-astar" style="font-weight: 600; color: var(--accent-primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                        <span>Read Pathfinding Guide</span> <span>→</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Article 20: Python OOP Refactoring -->
+            <article class="guide-card blog-card static-article" data-category="Python &amp; Pygame Engineering">
+                <div class="guide-icon">🏗️</div>
+                <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">OOP &amp; Clean Architecture</span>
+                <h2><a href="/blog/python-oop-refactoring-game-classes" style="color: inherit; text-decoration: none;">Mastering Python OOP: Refactoring a Procedural Game into Clean, Modular Classes</a></h2>
+                <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 14px;">Published on October 29, 2026 • 14 min read • By Nikhil Nishad</p>
+                <div class="article-body-preview">
+                    <p>Refactor messy procedural scripts into clean, decoupled classes. Learn the Single Responsibility Principle, dataclasses, composition over inheritance, and type annotations.</p>
+                </div>
+                <div style="margin-top: 16px;">
+                    <a href="/blog/python-oop-refactoring-game-classes" style="font-weight: 600; color: var(--accent-primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                        <span>Read OOP Refactoring Guide</span> <span>→</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Article 21: Debugging Python Game Loop Bugs -->
+            <article class="guide-card blog-card static-article" data-category="Python &amp; Pygame Engineering">
+                <div class="guide-icon">🐛</div>
+                <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">Diagnostics &amp; Debugging</span>
+                <h2><a href="/blog/debugging-common-python-game-loop-bugs" style="color: inherit; text-decoration: none;">Debugging 8 Common Python Game Loop Bugs: From Mutable Defaults to Key-Stacking Desync</a></h2>
+                <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 14px;">Published on October 29, 2026 • 14 min read • By Nikhil Nishad</p>
+                <div class="article-body-preview">
+                    <p>Fix the 8 most frustrating bugs in Python game development: mutable default args, delta time drift, grid coordinate inversion, rapid input suicide, and event queue starvation.</p>
+                </div>
+                <div style="margin-top: 16px;">
+                    <a href="/blog/debugging-common-python-game-loop-bugs" style="font-weight: 600; color: var(--accent-primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                        <span>Read Debugging Guide</span> <span>→</span>
+                    </a>
+                </div>
+            </article>
+
 
             <!-- Article 14: Unblocked Snake Game Guide -->
             <article class="guide-card full-width blog-card static-article" data-category="Comparisons &amp; Rankings Everyday Guides">
@@ -486,19 +585,27 @@
             const params = new URLSearchParams(window.location.search);
             const articleId = params.get('article');
             const articleMap = {
-                '1': 'blog/evolution-of-snake.html',
-                '2': 'blog/high-score-tactics.html',
-                '3': 'blog/building-60fps-canvas-games.html',
-                '4': 'blog/gameplay-mechanics-and-combos.html',
-                '5': 'blog/procedural-audio-synthesis.html',
-                '6': 'blog/mobile-touch-controls-haptics.html',
-                '7': 'blog/web-game-seo-guide.html',
-                '8': 'blog/astar-pathfinding-ai-rivals.html',
-                '9': 'blog/best-snake-games-compared.html',
-                '10': 'blog/modern-snake-vs-nokia-snake-2.html',
-                '11': 'blog/cognitive-benefits-of-playing-snake.html',
-                '12': 'blog/beginners-guide-to-snake-game.html',
-                '13': 'blog/no-ad-pwa-web-games.html'
+                '1': '/blog/evolution-of-snake',
+                '2': '/blog/high-score-tactics',
+                '3': '/blog/building-60fps-canvas-games',
+                '4': '/blog/gameplay-mechanics-and-combos',
+                '5': '/blog/procedural-audio-synthesis',
+                '6': '/blog/mobile-touch-controls-haptics',
+                '7': '/blog/web-game-seo-guide',
+                '8': '/blog/astar-pathfinding-ai-rivals',
+                '9': '/blog/best-snake-games-compared',
+                '10': '/blog/modern-snake-vs-nokia-snake-2',
+                '11': '/blog/cognitive-benefits-of-playing-snake',
+                '12': '/blog/beginners-guide-to-snake-game',
+                '13': '/blog/no-ad-pwa-web-games',
+                '14': '/blog/unblocked-snake-games-guide',
+                '15': '/blog/maximum-score-snake-hamiltonian-cycle',
+                '16': '/blog/python-snake-game-pygame-tutorial',
+                '17': '/blog/python-data-structures-snake-game-deque',
+                '18': '/blog/what-is-pythonic-code-idiomatic-patterns',
+                '19': '/blog/python-grid-pathfinding-bfs-dijkstra-astar',
+                '20': '/blog/python-oop-refactoring-game-classes',
+                '21': '/blog/debugging-common-python-game-loop-bugs'
             };
             if (articleId && articleMap[articleId]) {
                 window.location.replace(articleMap[articleId]);

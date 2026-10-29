@@ -107,3 +107,33 @@
 - **URL**: https://pythonics.vercel.app/blog/astar-pathfinding-ai-rivals
 - **Description**: Engineering smart autonomous rival bots in 2D grid games using Manhattan distance heuristics, priority queues, and flood-fill survival checks.
 - **Key Topics**: A* search algorithm, Manhattan heuristics, space partitioning, flood fill safety verification, real-time AI performance.
+
+### 16. Building a Complete Snake Game in Python with Pygame
+- **URL**: https://pythonics.vercel.app/blog/python-snake-game-pygame-tutorial
+- **Description**: A comprehensive, step-by-step tutorial building a complete 2D grid Snake game from scratch using Python and Pygame-CE. Covers game loop architecture, delta time pacing, grid coordinate math, state management, and collision detection.
+- **Key Topics**: Python game development, Pygame-CE tutorial, 60FPS game loop, event polling, grid coordinates, snake movement vectors, apple collision, high score persistence.
+
+### 17. Why Python collections.deque Beats List for Snake Coordinates: O(1) vs O(N) Explained
+- **URL**: https://pythonics.vercel.app/blog/python-data-structures-snake-game-deque
+- **Description**: Deep-dive algorithmic comparison of Python list vs collections.deque for FIFO sliding coordinate queues. Analyzes CPython memory layouts (PyListObject dynamic array vs doubly-linked block chunks) and demonstrates why deque avoids catastrophic O(N) memory reallocation on long snakes.
+- **Key Topics**: Python data structures, collections.deque, list vs deque, time complexity, O(1) vs O(N), CPython internals, memory reallocation, game performance benchmarking.
+
+### 18. What is 'Pythonic' Code? 9 Idiomatic Patterns Every Developer Should Master
+- **URL**: https://pythonics.vercel.app/blog/what-is-pythonic-code-idiomatic-patterns
+- **Description**: Architectural and stylistic guide to writing idiomatic Python. Explains the Zen of Python (PEP 20) with before-and-after refactorings for EAFP over LBYL, list comprehensions, zip, enumerate, context managers, and type annotations.
+- **Key Topics**: Pythonic idioms, Zen of Python, PEP 8, EAFP vs LBYL, list comprehensions, zip and enumerate, context managers, structural pattern matching, clean code.
+
+### 19. Grid Pathfinding in Python: BFS, Dijkstra, and A* Algorithms Visualized
+- **URL**: https://pythonics.vercel.app/blog/python-grid-pathfinding-bfs-dijkstra-astar
+- **Description**: Educational guide to 2D grid search algorithms in Python. Explains and compares unweighted Breadth-First Search (BFS), weighted Dijkstra's algorithm, and heuristic A* search with complete, runnable code examples using heapq and Manhattan distance heuristics.
+- **Key Topics**: Python algorithms, graph search, Breadth-First Search (BFS), Dijkstra algorithm, A* pathfinding, heapq priority queue, Manhattan distance, heuristic search.
+
+### 20. Mastering Python OOP: Refactoring a Procedural Game into Clean, Modular Classes
+- **URL**: https://pythonics.vercel.app/blog/python-oop-refactoring-game-classes
+- **Description**: Step-by-step refactoring tutorial transforming messy procedural Python scripts with global variables into clean, decoupled, testable classes using dataclasses, encapsulation, composition over inheritance, and type annotations.
+- **Key Topics**: Python OOP, object-oriented programming, refactoring procedural code, Single Responsibility Principle, dataclasses, composition over inheritance, clean code architecture.
+
+### 21. Debugging 8 Common Python Game Loop Bugs: From Mutable Defaults to Key-Stacking Desync
+- **URL**: https://pythonics.vercel.app/blog/debugging-common-python-game-loop-bugs
+- **Description**: A practical field guide diagnosing and fixing the 8 most notorious game loop and logic bugs in Python: mutable default arguments, missing delta timing (dt), rapid key-turn suicide desync, coordinate inversions, OS event queue starvation, and shallow list duplication.
+- **Key Topics**: Debugging Python, game loop bugs, mutable default argument trap, delta time, key stacking input queue, event pump starvation, shallow copy vs deep copy, off-by-one errors.

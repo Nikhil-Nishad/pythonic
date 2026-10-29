@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="google-site-verification" content="C5c5IPd-5aYbr9D3gmDY3KMXmtFjQ8MJgE35lwcDiU4" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Python OOP: Refactoring a Procedural Game into Clean, Modular Classes</title>
+    <meta name="description" content="Learn Object-Oriented Programming (OOP) in Python by refactoring a messy procedural game into clean, testable classes. Master dataclasses, encapsulation, and type hints.">
+    <meta name="keywords" content="python oop tutorial for beginners, refactor procedural to oop python, python classes and objects game example, clean code python oop, python dataclass game development">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Nikhil Nishad &amp; Software Architecture Group">
+    <meta name="theme-color" content="#0d1117">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏗️</text></svg>">
+    <link rel="canonical" href="https://pythonics.vercel.app/blog/python-oop-refactoring-game-classes">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://pythonics.vercel.app/blog/python-oop-refactoring-game-classes">
+    <meta property="og:title" content="Mastering Python OOP: Refactoring a Procedural Game into Clean, Modular Classes">
+    <meta property="og:description" content="Tired of global variable spaghetti? Step-by-step tutorial refactoring a Python game into clean, maintainable classes with dataclasses and encapsulation.">
+    <meta property="og:image" content="https://pythonics.vercel.app/assets/images/python-oop-game-classes.webp">
+    <meta property="og:site_name" content="Modern Snake Game">
+    <meta property="article:published_time" content="2026-10-29T00:00:00Z">
+    <meta property="article:modified_time" content="2026-10-29T00:00:00Z">
+    <meta property="article:author" content="Nikhil Nishad">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Refactoring Procedural Python to Clean OOP Classes">
+    <meta property="twitter:description" content="A practical guide to Object-Oriented Programming in Python through game entity design and decoupling.">
+    <meta property="twitter:image" content="https://pythonics.vercel.app/assets/images/python-oop-game-classes.webp">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+
+    <!-- JSON-LD Structured Data: BlogPosting, BreadcrumbList, FAQPage -->
+    <script type="application/ld+json">
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Mastering Python OOP: Refactoring a Procedural Game into Clean, Modular Classes",
+        "datePublished": "2026-10-29T00:00:00Z",
+        "dateModified": "2026-10-29T00:00:00Z",
+        "author": {
+          "@type": "Person",
+          "name": "Nikhil Nishad"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Modern Snake Game",
+          "url": "https://pythonics.vercel.app/"
+        },
+        "description": "A hands-on architectural refactoring guide transforming global procedural Python scripts into modular, testable, object-oriented software systems using dataclasses, type annotations, and clean design patterns.",
+        "image": "https://pythonics.vercel.app/assets/images/python-oop-game-classes.webp",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://pythonics.vercel.app/blog/python-oop-refactoring-game-classes"
+        }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://pythonics.vercel.app/" },
+          { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://pythonics.vercel.app/blog" },
+          { "@type": "ListItem", "position": 3, "name": "Python OOP Refactoring", "item": "https://pythonics.vercel.app/blog/python-oop-refactoring-game-classes" }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Why is procedural code with global variables bad for game development?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Procedural code with global variables creates tight coupling: modifying one variable can unexpectedly break another function. It makes unit testing impossible, prevents adding multiplayer entities or AI bots, and makes debugging state transitions unpredictable."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the Single Responsibility Principle (SRP) in Python OOP?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "SRP states that a class should have one, and only one, reason to change. In game design, a Snake class should only manage its own coordinates and movement—it should never know how to render pixels to a Pygame screen or calculate audio frequencies."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why use dataclasses in Python 3.7+ for game vectors?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Python dataclasses automatically generate __init__, __repr__, and __eq__ methods with zero boilerplate. By using @dataclass(frozen=True), you create immutable coordinate objects that can be safely stored in hash sets and dictionary keys."
+            }
+          }
+        ]
+      }
+    ]
+    </script>
+</head>
+<body class="site-page">
+
+    <!-- Sticky Header Navigation -->
+    <header class="site-header" role="banner">
+        <div class="header-container">
+            <a href="/" class="site-logo">
+                <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                    <path d="M4 16C4 10.477 8.477 6 14 6H18C23.523 6 28 10.477 28 16C28 21.523 23.523 26 18 26H14C8.477 26 4 21.523 4 16Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Modern Snake</span>
+            </a>
+
+            <nav class="site-nav" aria-label="Main Navigation">
+                <a href="/" class="site-nav-link">Play Game</a>
+                <a href="/instructions" class="site-nav-link">How to Play</a>
+                <a href="/blog" class="site-nav-link active">Developer Blog</a>
+            </nav>
+
+            <div class="header-actions">
+                <button class="theme-toggle-btn" id="theme-toggle" aria-label="Toggle light or dark theme" title="Toggle Theme">🌙</button>
+                <a href="/" class="btn btn-primary" style="padding: 8px 18px; font-size: 0.9rem; border-radius: var(--radius-full);">Play Now</a>
+                <button class="hamburger-btn" id="hamburger-btn" aria-label="Open navigation menu" aria-expanded="false">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Nav Drawer -->
+    <div class="mobile-nav-drawer" id="mobile-nav-drawer" role="dialog" aria-label="Mobile Navigation" aria-modal="true">
+        <nav class="mobile-nav-panel">
+            <a href="/" class="site-nav-link">🎮 Play Game</a>
+            <a href="/instructions" class="site-nav-link">📖 How to Play</a>
+            <a href="/blog" class="site-nav-link active">📰 Developer Blog</a>
+            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-primary);">
+                <a href="/" class="btn btn-primary" style="display:block; text-align:center; padding: 12px 20px; border-radius: var(--radius-full); text-decoration:none;">Play Now →</a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content Reader Container -->
+    <main class="site-main" role="main">
+        <article class="article-page-container">
+            <!-- Breadcrumbs -->
+            <nav class="page-breadcrumb" aria-label="Breadcrumb" style="font-size: 0.85rem; color: var(--fg-muted); margin-bottom: 20px;">
+                <a href="/" style="color: var(--fg-muted); text-decoration: none;">🏠 Home</a>
+                <span aria-hidden="true"> / </span>
+                <a href="/blog" style="color: var(--fg-muted); text-decoration: none;">Blog</a>
+                <span aria-hidden="true"> / </span>
+                <span style="color: var(--fg-primary);">Python OOP Refactoring</span>
+            </nav>
+
+            <header class="article-header">
+                <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">Software Architecture • Object-Oriented Python</span>
+                <h1 class="article-title-main">Mastering Python OOP: Refactoring a Procedural Game into Clean, Modular Classes</h1>
+                <p class="article-subtitle-lead">Anyone can define a Python class. Understanding <em>why</em> and <em>how</em> to separate responsibilities, encapsulate mutable state, and eliminate global variables is what transforms hobbyist scripts into production-ready software.</p>
+
+                <div class="article-meta-bar">
+                    <div class="article-author-info">
+                        <div class="article-author-avatar">NN</div>
+                        <div>
+                            <strong style="color: var(--fg-primary); display: block;">Nikhil Nishad</strong>
+                            <span>Published October 29, 2026 • 12 min read</span>
+                        </div>
+                    </div>
+                    <span>•</span>
+                    <button class="quick-jump-pill" id="share-btn" type="button" style="cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">🔗 Share Tutorial</button>
+                </div>
+            </header>
+
+            <!-- Featured Visual -->
+            <div class="article-hero-visual" style="margin: 24px 0; text-align: center;">
+                <img src="/assets/images/python-oop-game-classes.webp" alt="Object oriented architecture diagram showing Snake, Food, and GameEngine classes with methods" width="1200" height="630" loading="lazy" style="width: 100%; height: auto; border-radius: var(--radius-md); border: 1px solid var(--border-primary);">
+                <p style="font-size: 0.8rem; color: var(--fg-muted); margin-top: 8px;">Figure 1: Modular class architecture decoupling state, entities, and engine orchestration.</p>
+            </div>
+
+            <!-- Table of Contents -->
+            <nav class="article-toc" aria-label="Table of Contents">
+                <h4>Table of Contents</h4>
+                <ul>
+                    <li><a href="#the-nightmare">1. The Procedural Nightmare: Global Variable Spaghetti</a></li>
+                    <li><a href="#domain-modeling">2. Domain Modeling: Identifying Entities and Responsibilities</a></li>
+                    <li><a href="#step-1-vectors">3. Step 1: Modeling Value Objects with `@dataclass`</a></li>
+                    <li><a href="#step-2-snake">4. Step 2: Encapsulating Snake State in a `Snake` Class</a></li>
+                    <li><a href="#step-3-food">5. Step 3: Managing Collectibles with a `Food` Class</a></li>
+                    <li><a href="#step-4-engine">6. Step 4: The `GameEngine` Orchestrator</a></li>
+                    <li><a href="#benefits">7. The Huge Payoff: Testability, AI Bots &amp; Multiplayer</a></li>
+                    <li><a href="#faq">8. Frequently Asked Questions</a></li>
+                </ul>
+            </nav>
+
+            <div class="article-content">
+                <div class="article-key-takeaways">
+                    <h4>What You Will Learn</h4>
+                    <ul>
+                        <li><strong>The Global State Trap:</strong> Why <code>global snake_x, snake_y, score</code> leads to unmaintainable bugs as projects expand.</li>
+                        <li><strong>Immutable Value Objects:</strong> Using <code>@dataclass(frozen=True)</code> for coordinates that can be safely used in sets.</li>
+                        <li><strong>Encapsulation:</strong> Ensuring only the <code>Snake</code> class can modify its length or body coordinates.</li>
+                        <li><strong>Testability:</strong> How decoupled classes allow running automated tests without opening a display window.</li>
+                    </ul>
+                </div>
+
+                <h2 id="the-nightmare">1. The Procedural Nightmare: Global Variable Spaghetti</h2>
+                <p>When most programmers start building a game, they write everything in a single, top-level procedural script. It starts small:</p>
+
+                <div class="code-block-container" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: var(--radius-md); padding: 14px; margin: 16px 0; font-family: 'JetBrains Mono', monospace; font-size: 0.88rem;">
+                    <span style="color: #f85149;"># ❌ The Procedural Trap (Global State Spaghetti)</span><br>
+                    snake_x = <span style="color: #79c0ff;">10</span><br>
+                    snake_y = <span style="color: #79c0ff;">10</span><br>
+                    direction = <span style="color: #a5d6ff;">"RIGHT"</span><br>
+                    food_x = <span style="color: #79c0ff;">5</span><br>
+                    food_y = <span style="color: #79c0ff;">5</span><br>
+                    score = <span style="color: #79c0ff;">0</span><br><br>
+                    <span style="color: #ff7b72;">def</span> <span style="color: #d2a8ff;">move</span>():<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #ff7b72;">global</span> snake_x, snake_y<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #ff7b72;">if</span> direction == <span style="color: #a5d6ff;">"RIGHT"</span>: snake_x += <span style="color: #79c0ff;">1</span>
+                </div>
+
+                <p>Now imagine you want to add a second player, or an autonomous <a href="/blog/python-grid-pathfinding-bfs-dijkstra-astar">A* AI rival bot</a>. Do you duplicate <code>snake2_x, snake2_y, direction2</code>? What about unit testing your collision logic without booting Pygame? With global state, your architecture collapses.</p>
+
+                <h2 id="domain-modeling">2. Domain Modeling: Identifying Entities and Responsibilities</h2>
+                <p>To refactor this into Object-Oriented design, we apply the <strong>Single Responsibility Principle (SRP)</strong> and divide the system into clean domain boundaries:</p>
+
+                <ul>
+                    <li><strong><code>Vec2</code> (Value Object):</strong> Represents an immutable coordinate $(x, y)$ on the grid.</li>
+                    <li><strong><code>Snake</code> (Entity):</strong> Owns its body coordinates, current direction, and growth state.</li>
+                    <li><strong><code>Food</code> (Entity):</strong> Owns its position and value.</li>
+                    <li><strong><code>GameEngine</code> (Orchestrator):</strong> Glues entities together, checks collisions, and manages the main loop.</li>
+                </ul>
+
+                <h2 id="step-1-vectors">3. Step 1: Modeling Value Objects with `@dataclass`</h2>
+                <p>Coordinates should be immutable value objects. In Python 3.7+, <code>dataclasses</code> make this effortless:</p>
+
+                <div class="code-block-container" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: var(--radius-md); padding: 18px; margin: 20px 0; overflow-x: auto;">
+<pre style="margin: 0; color: #e6edf3; font-family: 'JetBrains Mono', monospace; font-size: 0.86rem; line-height: 1.45;">
+<span style="color: #ff7b72;">from</span> dataclasses <span style="color: #ff7b72;">import</span> dataclass
+
+<span style="color: #d2a8ff;">@dataclass</span>(frozen=<span style="color: #79c0ff;">True</span>)
+<span style="color: #ff7b72;">class</span> <span style="color: #d2a8ff;">Vec2</span>:
+    x: int
+    y: int
+
+    <span style="color: #ff7b72;">def</span> <span style="color: #d2a8ff;">__add__</span>(<span style="color: #79c0ff;">self</span>, other: <span style="color: #a5d6ff;">"Vec2"</span>) -&gt; <span style="color: #a5d6ff;">"Vec2"</span>:
+        <span style="color: #ff7b72;">return</span> Vec2(<span style="color: #79c0ff;">self</span>.x + other.x, <span style="color: #79c0ff;">self</span>.y + other.y)
+
+<span style="color: #8b949e;"># Standard directions defined as immutable constants</span>
+UP = Vec2(<span style="color: #79c0ff;">0</span>, -<span style="color: #79c0ff;">1</span>)
+DOWN = Vec2(<span style="color: #79c0ff;">0</span>, <span style="color: #79c0ff;">1</span>)
+LEFT = Vec2(-<span style="color: #79c0ff;">1</span>, <span style="color: #79c0ff;">0</span>)
+RIGHT = Vec2(<span style="color: #79c0ff;">1</span>, <span style="color: #79c0ff;">0</span>)
+</pre>
+                </div>
+
+                <h2 id="step-2-snake">4. Step 2: Encapsulating Snake State in a `Snake` Class</h2>
+                <p>The <code>Snake</code> class now encapsulates its own movement and body queue without any reference to Pygame, rendering, or global scores:</p>
+
+                <div class="code-block-container" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: var(--radius-md); padding: 18px; margin: 20px 0; overflow-x: auto;">
+<pre style="margin: 0; color: #e6edf3; font-family: 'JetBrains Mono', monospace; font-size: 0.86rem; line-height: 1.45;">
+<span style="color: #ff7b72;">from</span> collections <span style="color: #ff7b72;">import</span> deque
+<span style="color: #ff7b72;">from</span> typing <span style="color: #ff7b72;">import</span> Set
+
+<span style="color: #ff7b72;">class</span> <span style="color: #d2a8ff;">Snake</span>:
+    <span style="color: #ff7b72;">def</span> <span style="color: #d2a8ff;">__init__</span>(<span style="color: #79c0ff;">self</span>, start_pos: Vec2, initial_length: int = <span style="color: #79c0ff;">3</span>):
+        <span style="color: #79c0ff;">self</span>.body: deque[Vec2] = deque([
+            Vec2(start_pos.x - i, start_pos.y) <span style="color: #ff7b72;">for</span> i <span style="color: #ff7b72;">in</span> <span style="color: #79c0ff;">range</span>(initial_length)
+        ])
+        <span style="color: #79c0ff;">self</span>.direction: Vec2 = RIGHT
+        <span style="color: #79c0ff;">self</span>.next_direction: Vec2 = RIGHT
+
+    <span style="color: #d2a8ff;">@property</span>
+    <span style="color: #ff7b72;">def</span> <span style="color: #d2a8ff;">head</span>(<span style="color: #79c0ff;">self</span>) -&gt; Vec2:
+        <span style="color: #ff7b72;">return</span> <span style="color: #79c0ff;">self</span>.body[<span style="color: #79c0ff;">0</span>]
+
+    <span style="color: #ff7b72;">def</span> <span style="color: #d2a8ff;">steer</span>(<span style="color: #79c0ff;">self</span>, new_dir: Vec2) -&gt; <span style="color: #79c0ff;">None</span>:
+        <span style="color: #8b949e;"># Disallow reversing directly into itself</span>
+        <span style="color: #ff7b72;">if</span> (new_dir.x != -<span style="color: #79c0ff;">self</span>.direction.x) <span style="color: #ff7b72;">or</span> (new_dir.y != -<span style="color: #79c0ff;">self</span>.direction.y):
+            <span style="color: #79c0ff;">self</span>.next_direction = new_dir
+
+    <span style="color: #ff7b72;">def</span> <span style="color: #d2a8ff;">step</span>(<span style="color: #79c0ff;">self</span>, grow: bool = <span style="color: #79c0ff;">False</span>) -&gt; Vec2:
+        <span style="color: #79c0ff;">self</span>.direction = <span style="color: #79c0ff;">self</span>.next_direction
+        new_head = <span style="color: #79c0ff;">self</span>.head + <span style="color: #79c0ff;">self</span>.direction
+        <span style="color: #79c0ff;">self</span>.body.appendleft(new_head)
+        <span style="color: #ff7b72;">if</span> <span style="color: #ff7b72;">not</span> grow:
+            <span style="color: #79c0ff;">self</span>.body.pop()
+        <span style="color: #ff7b72;">return</span> new_head
+
+    <span style="color: #ff7b72;">def</span> <span style="color: #d2a8ff;">check_self_collision</span>(<span style="color: #79c0ff;">self</span>) -&gt; bool:
+        <span style="color: #8b949e;"># Head collides if it appears anywhere else in body</span>
+        <span style="color: #ff7b72;">return</span> <span style="color: #79c0ff;">self</span>.head <span style="color: #ff7b72;">in</span> list(<span style="color: #79c0ff;">self</span>.body)[<span style="color: #79c0ff;">1</span>:]
+</pre>
+                </div>
+
+                <h2 id="step-3-food">5. Step 3: Managing Collectibles with a `Food` Class</h2>
+                <div class="code-block-container" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: var(--radius-md); padding: 18px; margin: 20px 0; overflow-x: auto;">
+<pre style="margin: 0; color: #e6edf3; font-family: 'JetBrains Mono', monospace; font-size: 0.86rem; line-height: 1.45;">
+<span style="color: #ff7b72;">import</span> random
+<span style="color: #ff7b72;">from</span> typing <span style="color: #ff7b72;">import</span> Container
+
+<span style="color: #ff7b72;">class</span> <span style="color: #d2a8ff;">Food</span>:
+    <span style="color: #ff7b72;">def</span> <span style="color: #d2a8ff;">__init__</span>(<span style="color: #79c0ff;">self</span>, grid_w: int, grid_h: int):
+        <span style="color: #79c0ff;">self</span>.grid_w = grid_w
+        <span style="color: #79c0ff;">self</span>.grid_h = grid_h
+        <span style="color: #79c0ff;">self</span>.position = Vec2(<span style="color: #79c0ff;">0</span>, <span style="color: #79c0ff;">0</span>)
+
+    <span style="color: #ff7b72;">def</span> <span style="color: #d2a8ff;">respawn</span>(<span style="color: #79c0ff;">self</span>, occupied: Container[Vec2]) -&gt; Vec2:
+        <span style="color: #ff7b72;">while</span> <span style="color: #79c0ff;">True</span>:
+            candidate = Vec2(random.randint(<span style="color: #79c0ff;">0</span>, <span style="color: #79c0ff;">self</span>.grid_w - <span style="color: #79c0ff;">1</span>),
+                             random.randint(<span style="color: #79c0ff;">0</span>, <span style="color: #79c0ff;">self</span>.grid_h - <span style="color: #79c0ff;">1</span>))
+            <span style="color: #ff7b72;">if</span> candidate <span style="color: #ff7b72;">not in</span> occupied:
+                <span style="color: #79c0ff;">self</span>.position = candidate
+                <span style="color: #ff7b72;">return</span> <span style="color: #79c0ff;">self</span>.position
+</pre>
+                </div>
+
+                <h2 id="step-4-engine">6. Step 4: The `GameEngine` Orchestrator</h2>
+                <p>Now the main engine acts as an event coordinator rather than a messy dumping ground:</p>
+
+                <div class="code-block-container" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: var(--radius-md); padding: 18px; margin: 20px 0; overflow-x: auto;">
+<pre style="margin: 0; color: #e6edf3; font-family: 'JetBrains Mono', monospace; font-size: 0.86rem; line-height: 1.45;">
+<span style="color: #ff7b72;">class</span> <span style="color: #d2a8ff;">GameEngine</span>:
+    <span style="color: #ff7b72;">def</span> <span style="color: #d2a8ff;">__init__</span>(<span style="color: #79c0ff;">self</span>, width: int = <span style="color: #79c0ff;">30</span>, height: int = <span style="color: #79c0ff;">30</span>):
+        <span style="color: #79c0ff;">self</span>.width = width
+        <span style="color: #79c0ff;">self</span>.height = height
+        <span style="color: #79c0ff;">self</span>.snake = Snake(Vec2(width // <span style="color: #79c0ff;">2</span>, height // <span style="color: #79c0ff;">2</span>))
+        <span style="color: #79c0ff;">self</span>.food = Food(width, height)
+        <span style="color: #79c0ff;">self</span>.food.respawn(<span style="color: #79c0ff;">self</span>.snake.body)
+        <span style="color: #79c0ff;">self</span>.score = <span style="color: #79c0ff;">0</span>
+        <span style="color: #79c0ff;">self</span>.is_game_over = <span style="color: #79c0ff;">False</span>
+
+    <span style="color: #ff7b72;">def</span> <span style="color: #d2a8ff;">tick</span>(<span style="color: #79c0ff;">self</span>) -&gt; <span style="color: #79c0ff;">None</span>:
+        <span style="color: #ff7b72;">if</span> <span style="color: #79c0ff;">self</span>.is_game_over:
+            <span style="color: #ff7b72;">return</span>
+
+        will_eat = (<span style="color: #79c0ff;">self</span>.snake.head + <span style="color: #79c0ff;">self</span>.snake.next_direction) == <span style="color: #79c0ff;">self</span>.food.position
+        new_head = <span style="color: #79c0ff;">self</span>.snake.step(grow=will_eat)
+
+        <span style="color: #8b949e;"># Check wall boundary</span>
+        <span style="color: #ff7b72;">if</span> <span style="color: #ff7b72;">not</span> (<span style="color: #79c0ff;">0</span> &lt;= new_head.x &lt; <span style="color: #79c0ff;">self</span>.width <span style="color: #ff7b72;">and</span> <span style="color: #79c0ff;">0</span> &lt;= new_head.y &lt; <span style="color: #79c0ff;">self</span>.height):
+            <span style="color: #79c0ff;">self</span>.is_game_over = <span style="color: #79c0ff;">True</span>
+            <span style="color: #ff7b72;">return</span>
+
+        <span style="color: #8b949e;"># Check body self-collision</span>
+        <span style="color: #ff7b72;">if</span> <span style="color: #79c0ff;">self</span>.snake.check_self_collision():
+            <span style="color: #79c0ff;">self</span>.is_game_over = <span style="color: #79c0ff;">True</span>
+            <span style="color: #ff7b72;">return</span>
+
+        <span style="color: #ff7b72;">if</span> will_eat:
+            <span style="color: #79c0ff;">self</span>.score += <span style="color: #79c0ff;">10</span>
+            <span style="color: #79c0ff;">self</span>.food.respawn(<span style="color: #79c0ff;">self</span>.snake.body)
+</pre>
+                </div>
+
+                <h2 id="benefits">7. The Huge Payoff: Testability, AI Bots &amp; Multiplayer</h2>
+                <p>Look at what we achieved through this clean OOP refactoring:</p>
+                <ol>
+                    <li><strong>Headless Automated Unit Testing:</strong> You can test game rules in <code>pytest</code> without ever initializing a GUI window or Pygame instance.</li>
+                    <li><strong>Multiplayer &amp; Bot Injection:</strong> You can instantiate <code>bot_snake = Snake(...)</code> and have an AI steer it independently on the same grid.</li>
+                    <li><strong>Framework Agnostic:</strong> You could swap Pygame for a WebSockets server, Tkinter, or a console renderer without touching a single line of <code>Snake</code> or <code>GameEngine</code> logic.</li>
+                </ol>
+
+                <h2 id="faq">8. Frequently Asked Questions</h2>
+                <div class="faq-section">
+                    <div class="faq-item">
+                        <h3 class="faq-question">What is the advantage of `@property` on the head attribute?</h3>
+                        <div class="faq-answer">
+                            <p>Using <code>@property</code> allows callers to read <code>snake.head</code> like an attribute, while preventing external code from accidentally assigning a new value to it directly (e.g. <code>snake.head = (5, 5)</code>), maintaining encapsulation.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <h3 class="faq-question">Should I use inheritance or composition in game design?</h3>
+                        <div class="faq-answer">
+                            <p>Prefer <strong>composition over inheritance</strong>. Notice how <code>GameEngine</code> owns a <code>Snake</code> and a <code>Food</code> object rather than inheriting from them. This keeps relationships flexible and avoids rigid class hierarchies.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer CTA -->
+                <div class="article-footer-cta" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(59, 130, 246, 0.1)); border: 1px solid var(--accent-neon); border-radius: var(--radius-lg); padding: 32px; text-align: center; margin-top: 40px;">
+                    <h3 style="margin-top: 0; font-size: 1.5rem;">Solve Common Python Logic Bugs</h3>
+                    <p style="color: var(--fg-muted); max-width: 600px; margin: 0 auto 20px;">Now that your architecture is modular, master the 8 most common Python logic bugs and edge cases that cause game crashes.</p>
+                    <a href="/blog/debugging-common-python-game-loop-bugs" class="btn btn-primary" style="padding: 12px 32px; font-size: 1.1rem; border-radius: var(--radius-full); text-decoration: none; display: inline-block;">Read Common Python Bugs Guide →</a>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="article-footer-nav" style="margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border-primary); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                <a href="/blog/python-grid-pathfinding-bfs-dijkstra-astar" class="quick-jump-pill" style="text-decoration: none;">← Previous: Grid Pathfinding Algorithms</a>
+                <a href="/blog" class="quick-jump-pill" style="text-decoration: none;">📰 All Educational Articles</a>
+                <a href="/blog/debugging-common-python-game-loop-bugs" class="quick-jump-pill" style="text-decoration: none;">Next: Debugging Python Game Bugs →</a>
+            </div>
+        </article>
+    </main>
+
+    <!-- Site Footer -->
+    <footer class="site-footer" role="contentinfo">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <a href="/" class="site-logo">
+                    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                        <path d="M4 16C4 10.477 8.477 6 14 6H18C23.523 6 28 10.477 28 16C28 21.523 23.523 26 18 26H14C8.477 26 4 21.523 4 16Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Modern Snake</span>
+                </a>
+                <p>Free, fast, mobile-friendly browser arcade game and Python programming education resource. Zero ads, zero tracking, pure engineering.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Quick Navigation</h4>
+                <ul class="footer-links">
+                    <li><a href="/">Play Game</a></li>
+                    <li><a href="/instructions">How to Play Guide</a></li>
+                    <li><a href="/blog">Developer &amp; Python Blog</a></li>
+                    <li><a href="/#leaderboard">Leaderboards</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Python &amp; CS Tutorials</h4>
+                <ul class="footer-links">
+                    <li><a href="/blog/python-snake-game-pygame-tutorial">Pygame Snake Tutorial</a></li>
+                    <li><a href="/blog/python-data-structures-snake-game-deque">Python Deque Data Structures</a></li>
+                    <li><a href="/blog/what-is-pythonic-code-idiomatic-patterns">Idiomatic Pythonic Patterns</a></li>
+                    <li><a href="/blog/python-grid-pathfinding-bfs-dijkstra-astar">Grid Pathfinding: BFS to A*</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Modern Snake Game (Pythonic). Open educational resource under MIT License.</p>
+        </div>
+    </footer>
+
+    <script>
+        const themeBtn = document.getElementById('theme-toggle');
+        const applyTheme = (theme) => {
+            if (theme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                if (themeBtn) themeBtn.textContent = '☀️';
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                if (themeBtn) themeBtn.textContent = '🌙';
+            }
+        };
+        const savedTheme = localStorage.getItem('snake_theme') || 'dark';
+        applyTheme(savedTheme);
+        if (themeBtn) {
+            themeBtn.addEventListener('click', () => {
+                const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+                const newTheme = isLight ? 'dark' : 'light';
+                localStorage.setItem('snake_theme', newTheme);
+                applyTheme(newTheme);
+            });
+        }
+
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const mobileNavDrawer = document.getElementById('mobile-nav-drawer');
+        if (hamburgerBtn && mobileNavDrawer) {
+            hamburgerBtn.addEventListener('click', () => {
+                const isOpen = mobileNavDrawer.classList.toggle('open');
+                hamburgerBtn.classList.toggle('open', isOpen);
+                hamburgerBtn.setAttribute('aria-expanded', isOpen);
+            });
+            mobileNavDrawer.addEventListener('click', (e) => {
+                if (e.target === mobileNavDrawer) {
+                    mobileNavDrawer.classList.remove('open');
+                    hamburgerBtn.classList.remove('open');
+                    hamburgerBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+
+        const shareBtn = document.getElementById('share-btn');
+        if (shareBtn) {
+            shareBtn.addEventListener('click', () => {
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(window.location.href).then(() => {
+                        shareBtn.textContent = '✅ Copied Link!';
+                        setTimeout(() => { shareBtn.textContent = '🔗 Share Tutorial'; }, 2000);
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>

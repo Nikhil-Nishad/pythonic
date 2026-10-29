@@ -1,4 +1,4 @@
-const CACHE_NAME = 'snake-game-v5.1.0';
+const CACHE_NAME = 'snake-game-v5.2.0';
 const ASSETS_TO_CACHE = [
     '/',
     '/instructions',
@@ -22,7 +22,19 @@ const ASSETS_TO_CACHE = [
     './blog/procedural-audio-synthesis.html',
     './blog/mobile-touch-controls-haptics.html',
     './blog/web-game-seo-guide.html',
-    './blog/astar-pathfinding-ai-rivals.html'
+    './blog/astar-pathfinding-ai-rivals.html',
+    './blog/python-snake-game-pygame-tutorial.html',
+    './blog/python-data-structures-snake-game-deque.html',
+    './blog/what-is-pythonic-code-idiomatic-patterns.html',
+    './blog/python-grid-pathfinding-bfs-dijkstra-astar.html',
+    './blog/python-oop-refactoring-game-classes.html',
+    './blog/debugging-common-python-game-loop-bugs.html',
+    './assets/images/python-snake-pygame-tutorial.webp',
+    './assets/images/python-deque-data-structures.webp',
+    './assets/images/what-is-pythonic-patterns.webp',
+    './assets/images/python-grid-pathfinding-algorithms.webp',
+    './assets/images/python-oop-game-classes.webp',
+    './assets/images/debugging-python-game-bugs.webp'
 ];
 
 self.addEventListener('install', (event) => {

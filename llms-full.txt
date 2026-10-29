@@ -88,3 +88,33 @@ Modern Snake (https://pythonics.vercel.app/) is a modern browser arcade game dev
 - **URL**: https://pythonics.vercel.app/blog/astar-pathfinding-ai-rivals
 - **Author**: Autonomous AI Systems Team
 - **Summary**: Autonomous rival bots using Manhattan distance heuristics, priority queues, and flood-fill forward reachability checks to prevent self-entrapment.
+
+### Article 16: Building a Complete Snake Game in Python with Pygame
+- **URL**: https://pythonics.vercel.app/blog/python-snake-game-pygame-tutorial
+- **Author**: Nikhil Nishad
+- **Summary**: Comprehensive, production-grade tutorial on developing a 2D grid Snake game from scratch using Python 3 and Pygame-CE. Details initialization of the Pygame display surface, event queue polling, fixed-frequency movement ticks, vector arithmetic for 2D directions, body segment tracking, collision handling for perimeter walls and self-intersection, procedural apple generation, and game-over state transitions.
+
+### Article 17: Why Python collections.deque Beats List for Snake Game Coordinates: O(1) vs O(N) Explained
+- **URL**: https://pythonics.vercel.app/blog/python-data-structures-snake-game-deque
+- **Author**: Nikhil Nishad
+- **Summary**: Computer science analysis of CPython internal data structures. Demonstrates how Python list.pop(0) triggers an O(N) memmove operation across all contiguous memory pointers in PyListObject, causing quadratic CPU degradation as the snake grows. Proves mathematically and empirically why collections.deque achieves strictly guaranteed O(1) constant time prepending and popping via 64-element block chunks linked in a doubly-linked list.
+
+### Article 18: What is 'Pythonic' Code? 9 Idiomatic Patterns Every Developer Should Master
+- **URL**: https://pythonics.vercel.app/blog/what-is-pythonic-code-idiomatic-patterns
+- **Author**: Nikhil Nishad
+- **Summary**: Practical guide exploring the philosophy and execution of idiomatic Python according to PEP 20. Contrasts unpythonic procedural habits ported from C and Java against native Python idioms: replacing manual index counters with enumerate, paired iteration with zip, explicit bounds checks with EAFP (try/except), verbose resource cleanup with context managers (with), and complex conditional cascades with structural pattern matching.
+
+### Article 19: Grid Pathfinding in Python: BFS, Dijkstra, and A* Algorithms Visualized
+- **URL**: https://pythonics.vercel.app/blog/python-grid-pathfinding-bfs-dijkstra-astar
+- **Author**: Nikhil Nishad
+- **Summary**: Theoretical and practical tutorial comparing fundamental pathfinding algorithms on 2D grids. Breaks down queue-based Breadth-First Search (BFS) for uniform-cost shortest paths, priority-queue-driven Dijkstra's algorithm for terrain with variable movement costs, and heuristic-guided A* search using Manhattan distance. Implements complete Python functions with collections.deque and heapq, analyzing node expansions and time complexities.
+
+### Article 20: Mastering Python OOP: Refactoring a Procedural Game into Clean, Modular Classes
+- **URL**: https://pythonics.vercel.app/blog/python-oop-refactoring-game-classes
+- **Author**: Nikhil Nishad
+- **Summary**: Architectural case study refactoring a 250-line procedural Python game script plagued with global variables into an elegant object-oriented architecture. Explains the Single Responsibility Principle, defines immutable coordinate vectors with @dataclass(frozen=True), encapsulates snake and food state into distinct classes, demonstrates composition over inheritance within a master GameEngine, and adds type hints for static analysis.
+
+### Article 21: Debugging 8 Common Python Game Loop Bugs: From Mutable Defaults to Key-Stacking Desync
+- **URL**: https://pythonics.vercel.app/blog/debugging-common-python-game-loop-bugs
+- **Author**: Nikhil Nishad
+- **Summary**: Diagnostic field guide uncovering subtle runtime bugs unique to real-time interactive Python applications. Explains and resolves mutable default argument memory leaks, framerate coupling caused by absent delta time (dt), double-key input desynchronization causing instant 180-degree self-collision, inverted Y-axis Cartesian confusion, OS window freezing from event queue starvation, 2D matrix shallow list duplication, and late-game unbounded RNG respawn freezes.
