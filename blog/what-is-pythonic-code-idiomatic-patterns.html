@@ -4,7 +4,7 @@
     <meta name="google-site-verification" content="C5c5IPd-5aYbr9D3gmDY3KMXmtFjQ8MJgE35lwcDiU4" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>What Does 'Pythonic' Actually Mean? 9 Idiomatic Code Patterns Every Developer Should Know</title>
+    <title>What is Pythonic Code? 9 Idiomatic Patterns Every Developer Must Know</title>
     <meta name="description" content="Discover what makes code truly 'Pythonic'. Learn 9 essential idiomatic Python patterns with before-and-after refactorings, EAFP philosophy, and generator pipelines.">
     <meta name="keywords" content="what is pythonic code, idiomatic python patterns, python best practices, pythonic code examples, write pythonic python, zen of python idioms">
     <meta name="robots" content="index, follow">
@@ -458,6 +458,31 @@
                 }
             });
         }
-    </script>
+    
+        // Copy Code to Clipboard Feature
+        document.querySelectorAll('pre').forEach(pre => {
+            if (pre.querySelector('.copy-code-btn')) return;
+            const copyBtn = document.createElement('button');
+            copyBtn.className = 'copy-code-btn';
+            copyBtn.setAttribute('aria-label', 'Copy code to clipboard');
+            copyBtn.innerHTML = '📋 Copy';
+            copyBtn.addEventListener('click', () => {
+                const codeElem = pre.querySelector('code');
+                const textToCopy = codeElem ? codeElem.innerText : pre.innerText;
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        copyBtn.innerHTML = '✅ Copied!';
+                        copyBtn.classList.add('copied');
+                        setTimeout(() => {
+                            copyBtn.innerHTML = '📋 Copy';
+                            copyBtn.classList.remove('copied');
+                        }, 2000);
+                    });
+                }
+            });
+            pre.appendChild(copyBtn);
+        });
+</script>
 </body>
 </html>
+

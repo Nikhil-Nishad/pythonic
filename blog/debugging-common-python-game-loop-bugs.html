@@ -4,7 +4,7 @@
     <meta name="google-site-verification" content="C5c5IPd-5aYbr9D3gmDY3KMXmtFjQ8MJgE35lwcDiU4" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Debugging 8 Common Python Game Loop Bugs: From Mutable Defaults to Key-Stacking Desync</title>
+    <title>Debugging 8 Common Python Game Loop Bugs: State Leaks to Desync</title>
     <meta name="description" content="Fix the 8 most frustrating bugs in Python game development: mutable default args, delta time drift, grid coordinate inversion, rapid input suicide, and event queue starvation.">
     <meta name="keywords" content="debugging python game bugs, python game loop delta time dt, mutable default argument python bug, pygame event pump queue starvation, python snake rapid key turn bug, off by one collision grid python">
     <meta name="robots" content="index, follow">
@@ -609,6 +609,31 @@ def spawn_food(grid_width: int, grid_height: int, snake_body_set: set) -> tuple:
                 }
             });
         }
-    </script>
+    
+        // Copy Code to Clipboard Feature
+        document.querySelectorAll('pre').forEach(pre => {
+            if (pre.querySelector('.copy-code-btn')) return;
+            const copyBtn = document.createElement('button');
+            copyBtn.className = 'copy-code-btn';
+            copyBtn.setAttribute('aria-label', 'Copy code to clipboard');
+            copyBtn.innerHTML = '📋 Copy';
+            copyBtn.addEventListener('click', () => {
+                const codeElem = pre.querySelector('code');
+                const textToCopy = codeElem ? codeElem.innerText : pre.innerText;
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        copyBtn.innerHTML = '✅ Copied!';
+                        copyBtn.classList.add('copied');
+                        setTimeout(() => {
+                            copyBtn.innerHTML = '📋 Copy';
+                            copyBtn.classList.remove('copied');
+                        }, 2000);
+                    });
+                }
+            });
+            pre.appendChild(copyBtn);
+        });
+</script>
 </body>
 </html>
+

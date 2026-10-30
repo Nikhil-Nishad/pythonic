@@ -4,7 +4,7 @@
     <meta name="google-site-verification" content="C5c5IPd-5aYbr9D3gmDY3KMXmtFjQ8MJgE35lwcDiU4" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mastering Python OOP: Refactoring a Procedural Game into Clean, Modular Classes</title>
+    <title>Mastering Python OOP: Refactoring Procedural Code to Clean Classes</title>
     <meta name="description" content="Learn Object-Oriented Programming (OOP) in Python by refactoring a messy procedural game into clean, testable classes. Master dataclasses, encapsulation, and type hints.">
     <meta name="keywords" content="python oop tutorial for beginners, refactor procedural to oop python, python classes and objects game example, clean code python oop, python dataclass game development">
     <meta name="robots" content="index, follow">
@@ -483,6 +483,31 @@ RIGHT = Vec2(<span style="color: #79c0ff;">1</span>, <span style="color: #79c0ff
                 }
             });
         }
-    </script>
+    
+        // Copy Code to Clipboard Feature
+        document.querySelectorAll('pre').forEach(pre => {
+            if (pre.querySelector('.copy-code-btn')) return;
+            const copyBtn = document.createElement('button');
+            copyBtn.className = 'copy-code-btn';
+            copyBtn.setAttribute('aria-label', 'Copy code to clipboard');
+            copyBtn.innerHTML = '📋 Copy';
+            copyBtn.addEventListener('click', () => {
+                const codeElem = pre.querySelector('code');
+                const textToCopy = codeElem ? codeElem.innerText : pre.innerText;
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        copyBtn.innerHTML = '✅ Copied!';
+                        copyBtn.classList.add('copied');
+                        setTimeout(() => {
+                            copyBtn.innerHTML = '📋 Copy';
+                            copyBtn.classList.remove('copied');
+                        }, 2000);
+                    });
+                }
+            });
+            pre.appendChild(copyBtn);
+        });
+</script>
 </body>
 </html>
+

@@ -4,8 +4,8 @@
     <meta name="google-site-verification" content="C5c5IPd-5aYbr9D3gmDY3KMXmtFjQ8MJgE35lwcDiU4" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Ultimate Beginner's Guide to Snake: Controls, Scoring &amp; Survival Tactics</title>
-    <meta name="description" content="Master Modern Snake with our complete beginner's playbook. Learn keyboard & touch controls, power-up food types, combo scoring math, and perimeter survival tricks.">
+    <title>Beginner's Guide to Snake Game: Controls, Rules & Pro Tactics</title>
+    <meta name="description" content="Master Modern Snake Game from your first match. Learn movement controls, perimeter coiling, combo multipliers, and essential survival rules.">
     <meta name="keywords" content="how to play snake, snake game beginner guide, snake game controls, snake scoring tips, snake game strategy, casual browser game guide">
     <meta name="robots" content="index, follow">
     <meta name="author" content="Player Onboarding &amp; Guide Desk">
@@ -18,6 +18,9 @@
     <meta property="og:url" content="https://pythonics.vercel.app/blog/beginners-guide-to-snake-game">
     <meta property="og:title" content="The Ultimate Beginner's Guide to Snake: Controls, Scoring &amp; Tactics">
     <meta property="og:description" content="Step-by-step playbook to master Snake controls, power-ups, multiplier combos, and perimeter navigation.">
+    <meta property="og:image" content="https://pythonics.vercel.app/assets/images/beginners-guide-snake.webp">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <meta property="og:site_name" content="Modern Snake Game">
     <meta property="article:published_time" content="2026-08-13T00:00:00Z">
     <meta property="article:modified_time" content="2026-08-22T00:00:00Z">
@@ -27,6 +30,7 @@
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:title" content="Beginner's Guide to Playing Snake Game Online">
     <meta property="twitter:description" content="Everything you need to know about controls, food types, scoring formulas, and survival tactics in Modern Snake.">
+    <meta property="twitter:image" content="https://pythonics.vercel.app/assets/images/beginners-guide-snake.webp">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -126,6 +130,20 @@
             </div>
         </div>
     </header>
+                <!-- Hero Visual (1200x630 WebP) -->
+                <figure class="article-hero-figure" style="margin: 28px 0; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border-primary);">
+                    <img src="/assets/images/beginners-guide-snake.webp" 
+                         alt="Beginners guide to playing Snake game with movement controls and survival tactics" 
+                         width="1200" 
+                         height="630" 
+                         style="width: 100%; height: auto; display: block;" 
+                         loading="eager" 
+                         fetchpriority="high">
+                    <figcaption style="font-size: 0.85rem; color: var(--fg-muted); padding: 10px 16px; background: rgba(0,0,0,0.3); text-align: center;">
+                        Figure 1: Visual playbook for beginners—keyboard controls, perimeter navigation, and panic prevention.
+                    </figcaption>
+                </figure>
+
 
     <!-- Mobile Nav Drawer -->
     <div class="mobile-nav-drawer" id="mobile-nav-drawer" role="dialog" aria-label="Mobile Navigation" aria-modal="true">
@@ -427,6 +445,30 @@
                 }
             });
         }
-    </script>
+    
+        // Copy Code to Clipboard Feature
+        document.querySelectorAll('pre').forEach(pre => {
+            if (pre.querySelector('.copy-code-btn')) return;
+            const copyBtn = document.createElement('button');
+            copyBtn.className = 'copy-code-btn';
+            copyBtn.setAttribute('aria-label', 'Copy code to clipboard');
+            copyBtn.innerHTML = '📋 Copy';
+            copyBtn.addEventListener('click', () => {
+                const codeElem = pre.querySelector('code');
+                const textToCopy = codeElem ? codeElem.innerText : pre.innerText;
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        copyBtn.innerHTML = '✅ Copied!';
+                        copyBtn.classList.add('copied');
+                        setTimeout(() => {
+                            copyBtn.innerHTML = '📋 Copy';
+                            copyBtn.classList.remove('copied');
+                        }, 2000);
+                    });
+                }
+            });
+            pre.appendChild(copyBtn);
+        });
+</script>
 </body>
 </html>

@@ -4,7 +4,7 @@
     <meta name="google-site-verification" content="C5c5IPd-5aYbr9D3gmDY3KMXmtFjQ8MJgE35lwcDiU4" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Structures in Motion: Why collections.deque Powers Real-Time Snake Games</title>
+    <title>Python Deque vs List: Why collections.deque Powers Real-Time Games</title>
     <meta name="description" content="Explore why double-ended queues (collections.deque) outperform standard lists for real-time game loops in Python. Deep-dive into Big-O memory allocation and benchmarks.">
     <meta name="keywords" content="python deque practical example, data structures game development python, collections deque vs list python, snake game data structure, python memory optimization">
     <meta name="robots" content="index, follow">
@@ -438,6 +438,31 @@ deque_time = t3 - t2
                 }
             });
         }
-    </script>
+    
+        // Copy Code to Clipboard Feature
+        document.querySelectorAll('pre').forEach(pre => {
+            if (pre.querySelector('.copy-code-btn')) return;
+            const copyBtn = document.createElement('button');
+            copyBtn.className = 'copy-code-btn';
+            copyBtn.setAttribute('aria-label', 'Copy code to clipboard');
+            copyBtn.innerHTML = '📋 Copy';
+            copyBtn.addEventListener('click', () => {
+                const codeElem = pre.querySelector('code');
+                const textToCopy = codeElem ? codeElem.innerText : pre.innerText;
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        copyBtn.innerHTML = '✅ Copied!';
+                        copyBtn.classList.add('copied');
+                        setTimeout(() => {
+                            copyBtn.innerHTML = '📋 Copy';
+                            copyBtn.classList.remove('copied');
+                        }, 2000);
+                    });
+                }
+            });
+            pre.appendChild(copyBtn);
+        });
+</script>
 </body>
 </html>
+

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'snake-game-v5.2.0';
+const CACHE_NAME = 'snake-game-v5.3.0';
 const ASSETS_TO_CACHE = [
     '/',
     '/instructions',
@@ -34,7 +34,25 @@ const ASSETS_TO_CACHE = [
     './assets/images/what-is-pythonic-patterns.webp',
     './assets/images/python-grid-pathfinding-algorithms.webp',
     './assets/images/python-oop-game-classes.webp',
-    './assets/images/debugging-python-game-bugs.webp'
+    './assets/images/debugging-python-game-bugs.webp',
+    './assets/images/modern-snake-og.webp',
+    './assets/images/how-to-play-snake-guide.webp',
+    './assets/images/pythonic-dev-blog.webp',
+    './assets/images/astar-pathfinding-ai-rivals.webp',
+    './assets/images/beginners-guide-snake.webp',
+    './assets/images/best-snake-games-compared.webp',
+    './assets/images/building-60fps-canvas-games.webp',
+    './assets/images/cognitive-benefits-snake.webp',
+    './assets/images/evolution-of-snake.webp',
+    './assets/images/gameplay-mechanics-combos.webp',
+    './assets/images/high-score-tactics.webp',
+    './assets/images/snake-hamiltonian-cycle.webp',
+    './assets/images/mobile-touch-controls-haptics.webp',
+    './assets/images/modern-vs-nokia-snake.webp',
+    './assets/images/no-ad-pwa-web-games.webp',
+    './assets/images/procedural-audio-synthesis.webp',
+    './assets/images/unblocked-snake-games-guide.webp',
+    './assets/images/web-game-seo-guide.webp'
 ];
 
 self.addEventListener('install', (event) => {

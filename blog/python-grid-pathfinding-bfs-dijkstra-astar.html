@@ -4,7 +4,7 @@
     <meta name="google-site-verification" content="C5c5IPd-5aYbr9D3gmDY3KMXmtFjQ8MJgE35lwcDiU4" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pathfinding Demystified: Implementing BFS, Dijkstra, and A* on a 2D Grid in Python</title>
+    <title>Grid Pathfinding in Python: BFS, Dijkstra & A* Algorithms Visualized</title>
     <meta name="description" content="Master 2D grid pathfinding algorithms in Python. Learn the mathematical transition from Breadth-First Search (BFS) to Dijkstra and A* with runnable code and heuristic proofs.">
     <meta name="keywords" content="python pathfinding grid tutorial, bfs vs dijkstra vs a star python, grid pathfinding python code, a star algorithm python 2d grid, manhattan distance heuristic python">
     <meta name="robots" content="index, follow">
@@ -470,6 +470,31 @@
                 }
             });
         }
-    </script>
+    
+        // Copy Code to Clipboard Feature
+        document.querySelectorAll('pre').forEach(pre => {
+            if (pre.querySelector('.copy-code-btn')) return;
+            const copyBtn = document.createElement('button');
+            copyBtn.className = 'copy-code-btn';
+            copyBtn.setAttribute('aria-label', 'Copy code to clipboard');
+            copyBtn.innerHTML = '📋 Copy';
+            copyBtn.addEventListener('click', () => {
+                const codeElem = pre.querySelector('code');
+                const textToCopy = codeElem ? codeElem.innerText : pre.innerText;
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        copyBtn.innerHTML = '✅ Copied!';
+                        copyBtn.classList.add('copied');
+                        setTimeout(() => {
+                            copyBtn.innerHTML = '📋 Copy';
+                            copyBtn.classList.remove('copied');
+                        }, 2000);
+                    });
+                }
+            });
+            pre.appendChild(copyBtn);
+        });
+</script>
 </body>
 </html>
+
