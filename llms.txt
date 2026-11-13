@@ -137,3 +137,28 @@
 - **URL**: https://pythonics.vercel.app/blog/debugging-common-python-game-loop-bugs
 - **Description**: A practical field guide diagnosing and fixing the 8 most notorious game loop and logic bugs in Python: mutable default arguments, missing delta timing (dt), rapid key-turn suicide desync, coordinate inversions, OS event queue starvation, and shallow list duplication.
 - **Key Topics**: Debugging Python, game loop bugs, mutable default argument trap, delta time, key stacking input queue, event pump starvation, shallow copy vs deep copy, off-by-one errors.
+
+### 22. Deterministic Game Loops & Fixed Timestep in HTML5 Canvas
+- **URL**: https://pythonics.vercel.app/blog/deterministic-game-loops-fixed-timestep-canvas
+- **Description**: Master fixed timestep game loops in HTML5 Canvas. Learn how accumulator patterns decouple physics updates from variable refresh rates for locked 60FPS and prevent spiral of death freezes.
+- **Key Topics**: Deterministic game loop, fixed timestep canvas, requestAnimationFrame delta, accumulator pattern, 60FPS browser physics, spiral of death prevention, alpha state interpolation.
+
+### 23. Flood Fill Safety Checks: Preventing Trap Trajectories in Snake AI
+- **URL**: https://pythonics.vercel.app/blog/flood-fill-safety-check-snake-ai
+- **Description**: Learn how to combine A* pathfinding with reachable flood-fill algorithms to prevent Snake bots from trapping themselves in dead-end cul-de-sacs, including Voronoi territory partitioning.
+- **Key Topics**: Flood fill snake AI, trap detection pathfinding, connected components grid, Voronoi space partitioning, game AI trap avoidance, tail-following loops.
+
+### 24. Spatial Partitioning & 2D Grid Collision Detection in JavaScript
+- **URL**: https://pythonics.vercel.app/blog/spatial-partitioning-2d-grid-collisions
+- **Description**: Optimize 2D collision detection from O(N^2) to O(1). Explore spatial hash maps, bitboards, and flat Uint8Array grids for high-performance canvas games with zero garbage collection.
+- **Key Topics**: Spatial partitioning JavaScript, 2D grid collision detection, spatial hash map canvas, bitboard collision detection, Uint8Array flat grid, V8 memory optimization.
+
+### 25. Synthesizing Chiptune Audio with the Web Audio API: Zero-Asset Sound Design
+- **URL**: https://pythonics.vercel.app/blog/designing-chiptune-audio-web-audio-api
+- **Description**: Build authentic 8-bit retro sound effects and procedural arcade background music using the browser Web Audio API without downloading external audio files.
+- **Key Topics**: Web Audio API chiptune, procedural sound synthesis, retro arcade audio, OscillatorNode, ADSR gain envelope, white noise buffer, mobile autoplay policies.
+
+### 26. Finite State Machines in Browser Arcade Architecture
+- **URL**: https://pythonics.vercel.app/blog/state-machines-arcade-game-architecture
+- **Description**: Architect robust game state machines in modern JavaScript. Cleanly handle Menu, Tutorial, Playing, Paused, LevelUp, and GameOver without boolean bugs or race conditions.
+- **Key Topics**: Finite state machine JavaScript, game architecture FSM, arcade state management, canvas game state pattern, transition matrix, unit testing game flows.

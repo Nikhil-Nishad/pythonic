@@ -520,6 +520,126 @@
       ],
       "destination": "/blog/debugging-common-python-game-loop-bugs",
       "permanent": true
+    },
+    {
+      "source": "/blog",
+      "has": [
+        {
+          "type": "query",
+          "key": "article",
+          "value": "22"
+        }
+      ],
+      "destination": "/blog/deterministic-game-loops-fixed-timestep-canvas",
+      "permanent": true
+    },
+    {
+      "source": "/blog.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "article",
+          "value": "22"
+        }
+      ],
+      "destination": "/blog/deterministic-game-loops-fixed-timestep-canvas",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "has": [
+        {
+          "type": "query",
+          "key": "article",
+          "value": "23"
+        }
+      ],
+      "destination": "/blog/flood-fill-safety-check-snake-ai",
+      "permanent": true
+    },
+    {
+      "source": "/blog.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "article",
+          "value": "23"
+        }
+      ],
+      "destination": "/blog/flood-fill-safety-check-snake-ai",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "has": [
+        {
+          "type": "query",
+          "key": "article",
+          "value": "24"
+        }
+      ],
+      "destination": "/blog/spatial-partitioning-2d-grid-collisions",
+      "permanent": true
+    },
+    {
+      "source": "/blog.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "article",
+          "value": "24"
+        }
+      ],
+      "destination": "/blog/spatial-partitioning-2d-grid-collisions",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "has": [
+        {
+          "type": "query",
+          "key": "article",
+          "value": "25"
+        }
+      ],
+      "destination": "/blog/designing-chiptune-audio-web-audio-api",
+      "permanent": true
+    },
+    {
+      "source": "/blog.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "article",
+          "value": "25"
+        }
+      ],
+      "destination": "/blog/designing-chiptune-audio-web-audio-api",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "has": [
+        {
+          "type": "query",
+          "key": "article",
+          "value": "26"
+        }
+      ],
+      "destination": "/blog/state-machines-arcade-game-architecture",
+      "permanent": true
+    },
+    {
+      "source": "/blog.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "article",
+          "value": "26"
+        }
+      ],
+      "destination": "/blog/state-machines-arcade-game-architecture",
+      "permanent": true
     }
   ],
   "headers": [

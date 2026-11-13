@@ -118,3 +118,51 @@ Modern Snake (https://pythonics.vercel.app/) is a modern browser arcade game dev
 - **URL**: https://pythonics.vercel.app/blog/debugging-common-python-game-loop-bugs
 - **Author**: Nikhil Nishad
 - **Summary**: Diagnostic field guide uncovering subtle runtime bugs unique to real-time interactive Python applications. Explains and resolves mutable default argument memory leaks, framerate coupling caused by absent delta time (dt), double-key input desynchronization causing instant 180-degree self-collision, inverted Y-axis Cartesian confusion, OS window freezing from event queue starvation, 2D matrix shallow list duplication, and late-game unbounded RNG respawn freezes.
+
+---
+
+## ARTICLE 22: DETERMINISTIC GAME LOOPS & FIXED TIMESTEP IN HTML5 CANVAS
+- **URL**: https://pythonics.vercel.app/blog/deterministic-game-loops-fixed-timestep-canvas
+- **Published**: September 18, 2026
+- **Author**: Game Systems Engineering Group
+- **Executive Summary**: Decoupling physics logic from rendering frame rates is the prerequisite for stable 60FPS+ arcade games. Naive requestAnimationFrame deltas fail due to variable refresh rates (60Hz vs 144Hz vs 240Hz), tab backgrounding, and CPU spikes that cause collision tunneling. By accumulating frame delta time and consuming discrete, fixed slices (e.g. 16.666ms), the simulation remains 100% deterministic. Alpha interpolation smoothly renders positions between discrete physics ticks, while spiral-of-death time clamping prevents browser freezing when frames drop.
+- **Key Algorithms**:
+  - Accumulator step pattern: `accumulator += Math.min(frameTime, maxAccumulatedTime); while(accumulator >= fixedDelta) { update(fixedDelta); accumulator -= fixedDelta; }`
+  - Linear state interpolation: `renderX = prevX + (currX - prevX) * (accumulator / fixedDelta)`
+  - Spiral of death protection: Clamping maximum accumulated time to 250ms (~15 physics ticks).
+
+---
+
+## ARTICLE 23: FLOOD FILL SAFETY CHECKS: PREVENTING TRAP TRAJECTORIES IN SNAKE AI
+- **URL**: https://pythonics.vercel.app/blog/flood-fill-safety-check-snake-ai
+- **Published**: October 2, 2026
+- **Author**: Autonomous AI Systems Team
+- **Executive Summary**: While A* pathfinding computes the shortest distance to target food, in Snake the shortest path is frequently suicidal because it guides the head into tight U-turn pockets where the snake traps itself in its own tail. Integrating a Breadth-First Flood Fill safety evaluation before committing to moves guarantees that the reachable open area after eating exceeds the snake's length plus a safety buffer. If unsafe, the bot falls back to tail-following loops. In multi-agent AI Rival modes, flood fill extends into Voronoi space partitioning to claim territory and cut off human opponents.
+- **Key Invariant**: `ReachableOpenTiles(AfterEating) >= CurrentSnakeLength + SafetyMargin`
+- **Memory Optimization**: Flat `Uint8Array` visited bitmaps and circular index queues avoid heap garbage collection pauses during real-time 60FPS path evaluation.
+
+---
+
+## ARTICLE 24: SPATIAL PARTITIONING & 2D GRID COLLISION DETECTION IN JAVASCRIPT
+- **URL**: https://pythonics.vercel.app/blog/spatial-partitioning-2d-grid-collisions
+- **Published**: October 16, 2026
+- **Author**: Web Performance & Engine Guild
+- **Executive Summary**: Introductory games check collisions pairwise with nested loops (O(N^2)). As snake length, obstacles, and bot segments grow past 200 entities, this requires 19,900 pairwise comparisons per frame, causing massive frame drops on mobile devices. Dividing space into a spatial hash grid or flat continuous TypedArray bitmap reduces collision lookups to O(1) average time. Furthermore, representing 16x16 or 32x32 grids as 64-bit BigInt bitboards allows full-board collision masks in single bitwise AND operations.
+- **Benchmark**: Flat `Uint8Array` occupancy maps execute collision detection in 0.008ms per frame (105x faster than `Array.prototype.some` which took 0.84ms with continuous GC churn).
+
+---
+
+## ARTICLE 25: SYNTHESIZING CHIPTUNE AUDIO WITH THE WEB AUDIO API: ZERO-ASSET SOUND DESIGN
+- **URL**: https://pythonics.vercel.app/blog/designing-chiptune-audio-web-audio-api
+- **Published**: October 30, 2026
+- **Author**: Interactive Audio & Sound Synthesis Lab
+- **Executive Summary**: Audio files (MP3/OGG) burden mobile users with 2MB-5MB payloads and trigger audio decoding lag on mobile browsers. Pure procedural synthesis via the native browser `AudioContext` generates authentic 8-bit NES-style sound effects and arcade tunes using zero external assets. Square wave oscillators generate chirps and food bite sweeps, triangle waves produce punchy basslines, and filtered white-noise `AudioBuffer` sources recreate crash explosions.
+- **Envelope Control**: ADSR gain nodes shape instant attack and exponential decay (`gain.exponentialRampToValueAtTime`) to eliminate audible clicks. Handles mobile autoplay policy by awaiting `audioCtx.resume()` on the first user interaction.
+
+---
+
+## ARTICLE 26: FINITE STATE MACHINES IN BROWSER ARCADE ARCHITECTURE
+- **URL**: https://pythonics.vercel.app/blog/state-machines-arcade-game-architecture
+- **Published**: November 13, 2026
+- **Author**: Frontend Systems Architecture Team
+- **Executive Summary**: Games relying on independent booleans (`isPlaying`, `isPaused`, `isGameOver`, `isTutorialActive`) suffer from 'Boolean Soup' where 2^N combinations cause catastrophic race conditions, lingering timers, and broken modals. A formal Finite State Machine (FSM) guarantees that the game exists in exactly one mutually exclusive state at any given millisecond. An explicit transition matrix restricts state flows, while `onEnter` and `onExit` lifecycle hooks cleanly orchestrate timer pauses, modal visibility, and audio transitions. Separating the state machine from DOM elements enables complete Node.js headless unit testing.

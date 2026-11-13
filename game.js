@@ -106,10 +106,10 @@ const PowerUpType = {
 };
 
 // Game Modes
-const GameMode = {
+export const GameMode = {
     CLASSIC: 'classic',
-    ARCADE: 'arcade',
-    CHALLENGE: 'challenge'
+    WRAP: 'wrap',
+    RIVAL: 'rival'
 };
 
 // ============================================
@@ -903,7 +903,9 @@ class SnakeGame {
 
         // Game state
         this.state = GameState.MENU;
-        this.gameMode = GameMode.CLASSIC;
+        this.gameMode = localStorage.getItem('snake_selected_mode') || GameMode.CLASSIC;
+        this.botEnabled = this.gameMode === GameMode.RIVAL;
+        this.inputQueue = [];
         this.gridSize = CONFIG.GRID_SIZE;
         this.tileCount = 0;
         this.tileSize = 0;
@@ -1159,6 +1161,55 @@ class SnakeGame {
         }, 800);
     }
 
+    setGameMode(mode) {
+        if (!Object.values(GameMode).includes(mode)) mode = GameMode.CLASSIC;
+        this.gameMode = mode;
+        try {
+            localStorage.setItem('snake_selected_mode', mode);
+        } catch (e) {}
+
+        if (mode === GameMode.WRAP) {
+            this.wallCollision = false;
+            this.botEnabled = false;
+        } else if (mode === GameMode.RIVAL) {
+            this.wallCollision = true;
+            this.botEnabled = true;
+        } else {
+            // CLASSIC
+            this.wallCollision = true;
+            this.botEnabled = false;
+        }
+
+        // Update UI Mode selector tabs if present
+        document.querySelectorAll('.mode-tab-btn').forEach(btn => {
+            const isMatch = btn.dataset.mode === mode;
+            btn.classList.toggle('active', isMatch);
+            btn.setAttribute('aria-selected', isMatch ? 'true' : 'false');
+            btn.setAttribute('aria-checked', isMatch ? 'true' : 'false');
+        });
+
+        // Update active mode badge in HUD
+        const badge = document.getElementById('active-mode-badge');
+        if (badge) {
+            badge.textContent = mode === GameMode.WRAP ? 'Wrap-Around' : mode === GameMode.RIVAL ? 'AI Rival' : 'Classic';
+        }
+
+        // Update mode description in overlay
+        const descEl = document.getElementById('mode-desc');
+        if (descEl) {
+            if (mode === GameMode.WRAP) descEl.textContent = 'Wrap-Around rules: screen edges wrap around, survive by managing body length.';
+            else if (mode === GameMode.RIVAL) descEl.textContent = 'AI Rival Battle: compete against an autonomous A* pathfinding snake for food.';
+            else descEl.textContent = 'Classic arcade rules: walls kill, high precision navigation.';
+        }
+
+        // Update wallsToggle in settings if present
+        if (this.wallsToggle) {
+            this.wallsToggle.checked = this.wallCollision;
+        }
+
+        this.announce(`Game mode set to ${mode.toUpperCase()}`);
+    }
+
     async init() {
         // Load settings & high score
         this.loadSettings();
@@ -1295,6 +1346,19 @@ class SnakeGame {
         // Reduced motion media query listener
         const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
         reducedMotionQuery.addEventListener('change', () => this.handleReducedMotionChange());
+
+        // Game mode selector buttons
+        document.querySelectorAll('.mode-tab-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const mode = btn.dataset.mode;
+                this.setGameMode(mode);
+            });
+        });
+
+        // Initialize UI with active game mode
+        this.setGameMode(this.gameMode);
     }
 
     handleReducedMotionChange() {
@@ -2077,10 +2141,15 @@ class SnakeGame {
 
     spawnPowerUp() {
         let emptyCells = [];
+        const botBody = (this.botEnabled && this.botController && this.botController.body) ? this.botController.body : [];
+        const obsList = this.obstacles || [];
         for (let y = 0; y < this.gridSize; y++) {
             for (let x = 0; x < this.gridSize; x++) {
-                if (!this.snake.some(seg => seg.x === x && seg.y === y) &&
-                    !(this.food && this.food.x === x && this.food.y === y)) {
+                const inSnake = this.snake.some(seg => seg.x === x && seg.y === y);
+                const inBot = botBody.some(seg => seg.x === x && seg.y === y);
+                const inObs = obsList.some(obs => obs.x === x && obs.y === y);
+                const isFood = this.food && this.food.x === x && this.food.y === y;
+                if (!inSnake && !inBot && !inObs && !isFood) {
                     emptyCells.push({ x, y });
                 }
             }
@@ -2115,7 +2184,12 @@ class SnakeGame {
             }
         }
 
-        this.direction = this.nextDirection;
+        if (this.inputQueue.length > 0) {
+            this.direction = this.inputQueue.shift();
+            this.nextDirection = this.direction;
+        } else {
+            this.direction = this.nextDirection;
+        }
         const dir = Directions[this.direction];
         const head = this.snake[0];
         const newHead = { x: head.x + dir.x, y: head.y + dir.y };
@@ -2196,10 +2270,15 @@ class SnakeGame {
 
     spawnFood() {
         let emptyCells = [];
+        const botBody = (this.botEnabled && this.botController && this.botController.body) ? this.botController.body : [];
+        const obsList = this.obstacles || [];
         for (let y = 0; y < this.gridSize; y++) {
             for (let x = 0; x < this.gridSize; x++) {
-                if (!this.snake.some(seg => seg.x === x && seg.y === y) &&
-                    !(this.powerUpPosition && this.powerUpPosition.x === x && this.powerUpPosition.y === y)) {
+                const inSnake = this.snake.some(seg => seg.x === x && seg.y === y);
+                const inBot = botBody.some(seg => seg.x === x && seg.y === y);
+                const inObs = obsList.some(obs => obs.x === x && obs.y === y);
+                const isPowerUp = this.powerUpPosition && this.powerUpPosition.x === x && this.powerUpPosition.y === y;
+                if (!inSnake && !inBot && !inObs && !isPowerUp) {
                     emptyCells.push({ x, y });
                 }
             }
@@ -2228,29 +2307,24 @@ class SnakeGame {
         }
         if (this.hapticEnabled) this.vibrate(this.foodType === FoodType.BONUS ? 30 : 15);
 
-        const scoreResult = this.scoringEngine.registerFoodEat(this.foodType);
+        // Authoritative scoring calculation through ScoringEngine
+        let activeMultiplier = 1;
+        if (this.powerUps.isActive(PowerUpType.SCORE_FRENZY)) activeMultiplier *= 3;
+        if (this.powerUps.isActive(PowerUpType.DOUBLE_POINTS)) activeMultiplier *= 2;
 
-        // Apply active skill multipliers
-        let bonusMultiplier = 1;
-        if (this.powerUps.isActive(PowerUpType.SCORE_FRENZY)) bonusMultiplier *= 3;
-        if (this.powerUps.isActive(PowerUpType.DOUBLE_POINTS)) bonusMultiplier *= 2;
-        if (bonusMultiplier > 1) {
-            const extra = scoreResult.pointsEarned * (bonusMultiplier - 1);
-            this.scoringEngine.score += extra;
-        }
-
+        const scoreResult = this.scoringEngine.registerFoodEat(this.foodType, activeMultiplier);
         this.score = this.scoringEngine.score;
-        if (this.scoringEngine.highScore > this.highScore) {
-            this.highScore = this.scoringEngine.highScore;
-        }
+        this.highScore = this.scoringEngine.highScore;
         this.foodEaten++;
 
         // Update Quest progress
         if (this.questManager) {
             this.questManager.updateProgress({
+                normalEaten: this.foodType === FoodType.NORMAL ? 1 : 0,
                 bonusEaten: this.foodType === FoodType.BONUS ? 1 : 0,
                 level: this.level,
-                score: this.score
+                score: this.score,
+                comboCount: scoreResult.comboCount
             });
         }
 
@@ -2427,8 +2501,8 @@ class SnakeGame {
         // Snake
         this.drawSnake();
 
-        // AI Rival Snake
-        if (this.botController) {
+        // AI Rival Snake (only rendered in RIVAL mode)
+        if (this.botEnabled && this.botController) {
             this.drawBotSnake();
         }
 

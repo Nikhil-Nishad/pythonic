@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="google-site-verification" content="C5c5IPd-5aYbr9D3gmDY3KMXmtFjQ8MJgE35lwcDiU4" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finite State Machines in Browser Arcade Architecture | Modern Snake Blog</title>
+    <meta name="description" content="Architect robust game state machines in modern JavaScript. Cleanly handle Menu, Tutorial, Playing, Paused, LevelUp, and GameOver without boolean bugs.">
+    <meta name="keywords" content="finite state machine javascript, game architecture fsm, arcade game state management, canvas game state pattern, clean game dev architecture">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Frontend Systems Architecture Team">
+    <meta name="theme-color" content="#0d1117">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🕹️</text></svg>">
+    <link rel="canonical" href="https://pythonics.vercel.app/blog/state-machines-arcade-game-architecture">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://pythonics.vercel.app/blog/state-machines-arcade-game-architecture">
+    <meta property="og:title" content="Finite State Machines in Browser Arcade Architecture">
+    <meta property="og:description" content="Architect robust game state machines in modern JavaScript. Cleanly handle Menu, Tutorial, Playing, Paused, LevelUp, and GameOver without boolean bugs.">
+    <meta property="og:image" content="https://pythonics.vercel.app/assets/images/state-machines-arcade-game.webp">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Modern Snake Game">
+    <meta property="article:published_time" content="2026-11-13T00:00:00Z">
+    <meta property="article:modified_time" content="2026-11-13T00:00:00Z">
+    <meta property="article:author" content="Frontend Systems Architecture Team">
+
+    <!-- Twitter Card -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Finite State Machines in Browser Arcade Architecture">
+    <meta property="twitter:description" content="Architect robust game state machines in modern JavaScript. Cleanly handle Menu, Tutorial, Playing, Paused, LevelUp, and GameOver without boolean bugs.">
+    <meta property="twitter:image" content="https://pythonics.vercel.app/assets/images/state-machines-arcade-game.webp">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+
+    <!-- JSON-LD Structured Data: BlogPosting, BreadcrumbList, FAQPage -->
+    <script type="application/ld+json">
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Finite State Machines in Browser Arcade Architecture",
+        "description": "Architect robust game state machines in modern JavaScript. Cleanly handle Menu, Tutorial, Playing, Paused, LevelUp, and GameOver without boolean bugs.",
+        "datePublished": "2026-11-13T00:00:00Z",
+        "dateModified": "2026-11-13T00:00:00Z",
+        "author": {
+          "@type": "Organization",
+          "name": "Frontend Systems Architecture Team"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Modern Snake Game",
+          "url": "https://pythonics.vercel.app/"
+        },
+        "image": "https://pythonics.vercel.app/assets/images/state-machines-arcade-game.webp",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://pythonics.vercel.app/blog/state-machines-arcade-game-architecture"
+        }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://pythonics.vercel.app/" },
+          { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://pythonics.vercel.app/blog" },
+          { "@type": "ListItem", "position": 3, "name": "Finite State Machines in Browser Arcade Architecture", "item": "https://pythonics.vercel.app/blog/state-machines-arcade-game-architecture" }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+      {
+            "@type": "Question",
+            "name": "What is the difference between a Finite State Machine and a Hierarchical State Machine?",
+            "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "A standard FSM allows only one active state at a time. A Hierarchical State Machine (HSM or Statechart) allows states to contain nested substates (e.g. state 'IN_GAME' containing substate 'ATTACKING'), preventing repetitive transition declarations."
+            }
+      },
+      {
+            "@type": "Question",
+            "name": "Should game input processing live inside the State Machine?",
+            "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "The State Machine should receive input intents (e.g., 'PAUSE_REQUESTED', 'DIRECTION_CHANGED') and delegate them to the active state handler, preventing input handling logic from leaking across unrelated screens."
+            }
+      },
+      {
+            "@type": "Question",
+            "name": "How does using an FSM improve web game SEO and stability?",
+            "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "FSM architectures prevent unhandled runtime exceptions and console errors that Googlebot crawlers detect when evaluating page quality and Web Vitals, resulting in higher technical search rankings and zero user-facing lockups."
+            }
+      }
+]
+      }
+    ]
+    </script>
+</head>
+<body class="site-page">
+
+    <!-- Sticky Header Navigation -->
+    <header class="site-header" role="banner">
+        <div class="header-container">
+            <a href="/" class="site-logo">
+                <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                    <path d="M4 16C4 10.477 8.477 6 14 6H18C23.523 6 28 10.477 28 16C28 21.523 23.523 26 18 26H14C8.477 26 4 21.523 4 16Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Modern Snake</span>
+            </a>
+
+            <nav class="site-nav" aria-label="Main Navigation">
+                <a href="/" class="site-nav-link">Play Game</a>
+                <a href="/instructions" class="site-nav-link">How to Play</a>
+                <a href="/blog" class="site-nav-link active">Developer Blog</a>
+            </nav>
+
+            <div class="header-actions">
+                <button class="theme-toggle-btn" id="theme-toggle" aria-label="Toggle light or dark theme" title="Toggle Theme">🌙</button>
+                <a href="/" class="btn btn-primary" style="padding: 8px 18px; font-size: 0.9rem; border-radius: var(--radius-full);">Play Now</a>
+                <button class="hamburger-btn" id="hamburger-btn" aria-label="Open navigation menu" aria-expanded="false">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Nav Drawer -->
+    <div class="mobile-nav-drawer" id="mobile-nav-drawer" role="dialog" aria-label="Mobile Navigation" aria-modal="true">
+        <nav class="mobile-nav-panel">
+            <a href="/" class="site-nav-link">🎮 Play Game</a>
+            <a href="/instructions" class="site-nav-link">📖 How to Play</a>
+            <a href="/blog" class="site-nav-link active">📰 Developer Blog</a>
+            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-primary);">
+                <a href="/" class="btn btn-primary" style="display:block; text-align:center; padding: 12px 20px; border-radius: var(--radius-full); text-decoration:none;">Play Now →</a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content Reader Container -->
+    <main class="site-main" role="main">
+        <article class="article-page-container">
+            <!-- Breadcrumbs -->
+            <nav class="page-breadcrumb" aria-label="Breadcrumb" style="font-size: 0.85rem; color: var(--fg-muted); margin-bottom: 20px;">
+                <a href="/" style="color: var(--fg-muted); text-decoration: none;">🏠 Home</a>
+                <span aria-hidden="true"> / </span>
+                <a href="/blog" style="color: var(--fg-muted); text-decoration: none;">Blog</a>
+                <span aria-hidden="true"> / </span>
+                <span style="color: var(--fg-primary);">Finite State Machines in Browser Arcade Architecture</span>
+            </nav>
+
+            <header class="article-header">
+                <span class="badge badge-primary" style="margin-bottom: 12px; display: inline-block;">Software Patterns • Systems Architecture</span>
+                <h1 class="article-title-main">Finite State Machines in Browser Arcade Architecture</h1>
+                <p class="article-subtitle-lead">Eliminating boolean spaghetti (isPaused, isGameOver, isTutorialActive) with a formal, deterministic Finite State Machine that prevents invalid state transitions, race conditions, and lingering timer leaks.</p>
+                
+                <div class="article-meta-bar">
+                    <div class="article-author-info">
+                        <div class="article-author-avatar">FS</div>
+                        <div>
+                            <strong style="color: var(--fg-primary); display: block;">Frontend Systems Architecture Team</strong>
+                            <span>Published November 13, 2026</span>
+                        </div>
+                    </div>
+                    <span>•</span>
+                    <span>⏱️ 11 min read</span>
+                    <span>•</span>
+                    <button class="quick-jump-pill" id="share-btn" type="button" style="cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">🔗 Share Article</button>
+                </div>
+            </header>
+
+            <!-- Hero Visual (1200x630 WebP) -->
+            <figure class="article-hero-figure" style="margin: 28px 0; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border-primary);">
+                <img src="/assets/images/state-machines-arcade-game.webp" 
+                     alt="Finite State Machines in Browser Arcade Architecture - Technical Guide" 
+                     width="1200" 
+                     height="630" 
+                     style="width: 100%; height: auto; display: block;" 
+                     loading="eager" 
+                     fetchpriority="high">
+                <figcaption style="font-size: 0.85rem; color: var(--fg-muted); padding: 10px 16px; background: rgba(0,0,0,0.3); text-align: center;">
+                    Technical Architecture: Finite State Machines in Browser Arcade Architecture implemented in Modern Snake browser engine.
+                </figcaption>
+            </figure>
+
+            <!-- Table of Contents -->
+            <nav class="article-toc" aria-label="Table of Contents">
+                <h4>Table of Contents</h4>
+                <ul>
+                    <li><a href="#boolean-soup-trap">1. The 'Boolean Soup' Trap in Game Development</a></li>
+                    <li><a href="#fsm-core-concepts">2. Core Principles of a Finite State Machine (FSM)</a></li>
+                    <li><a href="#fsm-implementation">3. Clean JavaScript State Machine Implementation</a></li>
+                    <li><a href="#modern-snake-wiring">4. Wiring State Transitions in Modern Snake</a></li>
+                    <li><a href="#testing-state-machines">5. Unit Testing Game Logic Without a DOM</a></li>
+
+                    <li><a href="#faq">Frequently Asked Questions</a></li>
+                </ul>
+            </nav>
+
+            <div class="article-body">
+
+                <section class="article-section" id="boolean-soup-trap">
+                    <h2>1. The 'Boolean Soup' Trap in Game Development</h2>
+                    
+<p>As games grow beyond basic prototypes, state management frequently degrades into what engineers call <em>Boolean Soup</em>:</p>
+<pre><code class="language-javascript">// The Fragile Boolean Soup Anti-Pattern
+let isPlaying = false;
+let isPaused = false;
+let isGameOver = false;
+let isTutorialActive = false;
+let isLevelingUp = false;
+
+function handleKeypress(key) {
+    if (isPlaying &amp;&amp; !isPaused &amp;&amp; !isGameOver &amp;&amp; !isTutorialActive) {
+        changeDirection(key);
+    } else if (isGameOver &amp;&amp; key === 'Space') {
+        restartGame();
+    }
+}</code></pre>
+<p>With 5 booleans, you have <strong>2^5 = 32 possible state combinations</strong>. What happens when both <code>isPaused === true</code> and <code>isGameOver === true</code>? What happens when a player taps pause during the level-up celebration animation? Unhandled combinations produce catastrophic race conditions, lingering audio loops, and broken UI overlays.</p>
+
+                </section>
+
+                <section class="article-section" id="fsm-core-concepts">
+                    <h2>2. Core Principles of a Finite State Machine (FSM)</h2>
+                    
+<p>A Finite State Machine eliminates state ambiguity through mathematical rigor:</p>
+<ul>
+    <li><strong>Mutually Exclusive States:</strong> The game can only exist in exactly <em>one</em> state at any given millisecond (e.g., <code>MENU</code>, <code>TUTORIAL</code>, <code>PLAYING</code>, <code>PAUSED</code>, <code>LEVEL_UP</code>, <code>GAME_OVER</code>).</li>
+    <li><strong>Explicit Transition Matrix:</strong> States cannot change arbitrarily. A transition is only valid if explicitly declared in the transition map (e.g., you can transition from <code>PLAYING</code> to <code>PAUSED</code>, but not from <code>GAME_OVER</code> directly to <code>PAUSED</code>).</li>
+    <li><strong>Lifecycle Hooks (onEnter / onExit):</strong> When leaving a state, cleanup logic automatically runs (stopping timers, unbinding modal listeners). When entering a state, setup logic runs (displaying overlays, playing jingles).</li>
+</ul>
+
+                </section>
+
+                <section class="article-section" id="fsm-implementation">
+                    <h2>3. Clean JavaScript State Machine Implementation</h2>
+                    
+<p>Below is a lightweight, zero-dependency State Machine class tailored for browser arcade games:</p>
+<pre><code class="language-javascript">export const GameState = Object.freeze({
+    MENU: 'MENU',
+    TUTORIAL: 'TUTORIAL',
+    PLAYING: 'PLAYING',
+    PAUSED: 'PAUSED',
+    LEVEL_UP: 'LEVEL_UP',
+    GAME_OVER: 'GAME_OVER'
+});
+
+export class StateMachine {
+    constructor(initialState, transitions, context) {
+        this.currentState = initialState;
+        this.transitions = transitions;
+        this.context = context; // Reference to game instance
+        this.handlers = {};
+    }
+
+    registerHandler(state, { onEnter, onExit, onUpdate }) {
+        this.handlers[state] = { onEnter, onExit, onUpdate };
+    }
+
+    canTransition(toState) {
+        const allowed = this.transitions[this.currentState];
+        return allowed &amp;&amp; allowed.includes(toState);
+    }
+
+    transition(toState, payload = null) {
+        if (!this.canTransition(toState)) {
+            console.warn(`[FSM] Invalid state transition: ${this.currentState} -&gt; ${toState}`);
+            return false;
+        }
+
+        const currentHandler = this.handlers[this.currentState];
+        if (currentHandler &amp;&amp; currentHandler.onExit) {
+            currentHandler.onExit(this.context, toState);
+        }
+
+        const fromState = this.currentState;
+        this.currentState = toState;
+
+        const nextHandler = this.handlers[toState];
+        if (nextHandler &amp;&amp; nextHandler.onEnter) {
+            nextHandler.onEnter(this.context, fromState, payload);
+        }
+
+        return true;
+    }
+
+    update(delta) {
+        const handler = this.handlers[this.currentState];
+        if (handler &amp;&amp; handler.onUpdate) {
+            handler.onUpdate(this.context, delta);
+        }
+    }
+}</code></pre>
+
+                </section>
+
+                <section class="article-section" id="modern-snake-wiring">
+                    <h2>4. Wiring State Transitions in Modern Snake</h2>
+                    
+<p>Here is how the transition matrix cleanly defines the complete gameplay lifecycle:</p>
+<pre><code class="language-javascript">// Explicit Transition Matrix
+const transitions = {
+    [GameState.MENU]: [GameState.TUTORIAL, GameState.PLAYING],
+    [GameState.TUTORIAL]: [GameState.PLAYING, GameState.MENU],
+    [GameState.PLAYING]: [GameState.PAUSED, GameState.LEVEL_UP, GameState.GAME_OVER],
+    [GameState.PAUSED]: [GameState.PLAYING, GameState.MENU],
+    [GameState.LEVEL_UP]: [GameState.PLAYING, GameState.GAME_OVER],
+    [GameState.GAME_OVER]: [GameState.PLAYING, GameState.MENU]
+};</code></pre>
+<p>Notice the immense architectural clarity this provides:</p>
+<ul>
+    <li>The pause button can only trigger when <code>currentState === GameState.PLAYING</code>.</li>
+    <li>When entering <code>GAME_OVER</code>, the <code>onEnter</code> hook automatically reads final statistics, updates localStorage high scores, submits to the leaderboard, and reveals the game over modal with a single clean invocation.</li>
+    <li>Input events are routed to state-specific handlers: pressing 'Space' in <code>PAUSED</code> calls <code>resume()</code>, while in <code>GAME_OVER</code> it calls <code>restart()</code>.</li>
+</ul>
+
+                </section>
+
+                <section class="article-section" id="testing-state-machines">
+                    <h2>5. Unit Testing Game Logic Without a DOM</h2>
+                    
+<p>A huge advantage of separating your State Machine from rendering and DOM events is that your entire game flow becomes 100% unit-testable in Node.js with zero browser dependencies:</p>
+<pre><code class="language-javascript">// Automated State Machine Unit Test
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { StateMachine, GameState } from '../src/stateMachine.js';
+
+test('FSM rejects illegal transition from GAME_OVER to PAUSED', () => {
+    const fsm = new StateMachine(GameState.GAME_OVER, transitions, {});
+    const success = fsm.transition(GameState.PAUSED);
+
+    assert.equal(success, false);
+    assert.equal(fsm.currentState, GameState.GAME_OVER);
+});</code></pre>
+<p>By enforcing clear boundaries, your codebase remains maintainable, bug-free, and effortless to expand with new features like multiplayer lobbies and time-attack challenges.</p>
+
+                </section>
+
+
+                <!-- FAQ Section -->
+                <section class="article-section" id="faq">
+                    <h2>Frequently Asked Questions</h2>
+                    <div class="faq-accordion" style="display: flex; flex-direction: column; gap: 14px; margin-top: 16px;">
+
+                        <details class="faq-item" style="background: var(--bg-primary); border: 1px solid var(--border-primary); border-radius: var(--radius-sm); padding: 14px 18px;">
+                            <summary style="font-weight: 600; cursor: pointer; color: var(--fg-primary); outline: none;">What is the difference between a Finite State Machine and a Hierarchical State Machine?</summary>
+                            <p style="margin-top: 10px; color: var(--fg-secondary); line-height: 1.6; font-size: 0.95rem;">A standard FSM allows only one active state at a time. A Hierarchical State Machine (HSM or Statechart) allows states to contain nested substates (e.g. state 'IN_GAME' containing substate 'ATTACKING'), preventing repetitive transition declarations.</p>
+                        </details>
+
+                        <details class="faq-item" style="background: var(--bg-primary); border: 1px solid var(--border-primary); border-radius: var(--radius-sm); padding: 14px 18px;">
+                            <summary style="font-weight: 600; cursor: pointer; color: var(--fg-primary); outline: none;">Should game input processing live inside the State Machine?</summary>
+                            <p style="margin-top: 10px; color: var(--fg-secondary); line-height: 1.6; font-size: 0.95rem;">The State Machine should receive input intents (e.g., 'PAUSE_REQUESTED', 'DIRECTION_CHANGED') and delegate them to the active state handler, preventing input handling logic from leaking across unrelated screens.</p>
+                        </details>
+
+                        <details class="faq-item" style="background: var(--bg-primary); border: 1px solid var(--border-primary); border-radius: var(--radius-sm); padding: 14px 18px;">
+                            <summary style="font-weight: 600; cursor: pointer; color: var(--fg-primary); outline: none;">How does using an FSM improve web game SEO and stability?</summary>
+                            <p style="margin-top: 10px; color: var(--fg-secondary); line-height: 1.6; font-size: 0.95rem;">FSM architectures prevent unhandled runtime exceptions and console errors that Googlebot crawlers detect when evaluating page quality and Web Vitals, resulting in higher technical search rankings and zero user-facing lockups.</p>
+                        </details>
+
+                    </div>
+                </section>
+
+                <!-- Call to action: Play the game -->
+                <div class="article-cta-box" style="margin-top: 48px; padding: 32px; background: var(--bg-secondary); border: 1px solid var(--border-primary); border-radius: var(--radius-lg); text-align: center;">
+                    <h3 style="font-size: 1.5rem; margin-bottom: 8px; color: var(--fg-primary);">Experience This Architecture in Action</h3>
+                    <p style="color: var(--fg-secondary); max-width: 540px; margin: 0 auto 20px auto; font-size: 0.95rem;">
+                        Modern Snake runs these exact systems: locked 60FPS deterministic game loops, real-time A* pathfinding, spatial bitboards, and procedural Web Audio synthesis.
+                    </p>
+                    <a href="/" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px; border-radius: var(--radius-full); text-decoration: none; font-weight: 700;">
+                        🎮 Launch Modern Snake
+                    </a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer" role="contentinfo" style="margin-top: 60px; border-top: 1px solid var(--border-primary); background: var(--bg-secondary);">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <a href="/" class="site-logo">
+                    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                        <path d="M4 16C4 10.477 8.477 6 14 6H18C23.523 6 28 10.477 28 16C28 21.523 23.523 26 18 26H14C8.477 26 4 21.523 4 16Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Modern Snake</span>
+                </a>
+                <p>High-performance, mobile-friendly browser arcade game featuring locked 60FPS canvas graphics, Web Audio API procedural sound synthesis, real-time A* pathfinding AI rivals, customizable snake skins, and global leaderboards.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Quick Navigation</h4>
+                <ul class="footer-links">
+                    <li><a href="/">Play Game Online</a></li>
+                    <li><a href="/instructions">How to Play &amp; Strategy Guide</a></li>
+                    <li><a href="/blog">Developer &amp; Strategy Blog</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Key Features</h4>
+                <ul class="footer-links">
+                    <li><a href="/blog/deterministic-game-loops-fixed-timestep-canvas">Deterministic Game Loop</a></li>
+                    <li><a href="/blog/flood-fill-safety-check-snake-ai">Flood Fill AI Safety</a></li>
+                    <li><a href="/blog/spatial-partitioning-2d-grid-collisions">Spatial Grid Collisions</a></li>
+                    <li><a href="/blog/designing-chiptune-audio-web-audio-api">Web Audio Chiptune</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Modern Snake by Pythonics. Free, open-source browser arcade game. Designed for high-framerate web performance.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Dark/Light Theme Toggle
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        let isDark = localStorage.getItem('snake_theme') ? localStorage.getItem('snake_theme') === 'dark' : prefersDark;
+        
+        function applyTheme(dark) {
+            document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+            if (themeToggleBtn) themeToggleBtn.textContent = dark ? '🌙' : '☀️';
+            try { localStorage.setItem('snake_theme', dark ? 'dark' : 'light'); } catch(e) {}
+        }
+        applyTheme(isDark);
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                isDark = !isDark;
+                applyTheme(isDark);
+            });
+        }
+
+        // Mobile Nav Drawer Toggle
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const mobileNavDrawer = document.getElementById('mobile-nav-drawer');
+        if (hamburgerBtn && mobileNavDrawer) {
+            hamburgerBtn.addEventListener('click', () => {
+                const isOpen = mobileNavDrawer.classList.toggle('open');
+                hamburgerBtn.setAttribute('aria-expanded', isOpen);
+            });
+            document.addEventListener('click', (e) => {
+                if (!mobileNavDrawer.contains(e.target) && !hamburgerBtn.contains(e.target) && mobileNavDrawer.classList.contains('open')) {
+                    mobileNavDrawer.classList.remove('open');
+                    hamburgerBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+
+        // Share button functionality
+        const shareBtn = document.getElementById('share-btn');
+        if (shareBtn) {
+            shareBtn.addEventListener('click', () => {
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(window.location.href).then(() => alert('Article link copied to clipboard!'));
+                } else {
+                    alert('Article URL: ' + window.location.href);
+                }
+            });
+        }
+    
+        // Copy Code to Clipboard Feature
+        document.querySelectorAll('pre').forEach(pre => {
+            if (pre.querySelector('.copy-code-btn')) return;
+            const copyBtn = document.createElement('button');
+            copyBtn.className = 'copy-code-btn';
+            copyBtn.setAttribute('aria-label', 'Copy code to clipboard');
+            copyBtn.innerHTML = '📋 Copy';
+            copyBtn.addEventListener('click', () => {
+                const codeElem = pre.querySelector('code');
+                const textToCopy = codeElem ? codeElem.innerText : pre.innerText;
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        copyBtn.innerHTML = '✅ Copied!';
+                        copyBtn.classList.add('copied');
+                        setTimeout(() => {
+                            copyBtn.innerHTML = '📋 Copy';
+                            copyBtn.classList.remove('copied');
+                        }, 2000);
+                    });
+                }
+            });
+            pre.appendChild(copyBtn);
+        });
+    </script>
+</body>
+</html>

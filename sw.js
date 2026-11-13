@@ -1,4 +1,4 @@
-const CACHE_NAME = 'snake-game-v5.3.0';
+const CACHE_NAME = 'snake-game-v6.0.0';
 const ASSETS_TO_CACHE = [
     '/',
     '/instructions',
@@ -8,6 +8,11 @@ const ASSETS_TO_CACHE = [
     './manifest.webmanifest',
     './instructions.html',
     './blog.html',
+    './blog/deterministic-game-loops-fixed-timestep-canvas.html',
+    './blog/flood-fill-safety-check-snake-ai.html',
+    './blog/spatial-partitioning-2d-grid-collisions.html',
+    './blog/designing-chiptune-audio-web-audio-api.html',
+    './blog/state-machines-arcade-game-architecture.html',
     './blog/unblocked-snake-games-guide.html',
     './blog/maximum-score-snake-hamiltonian-cycle.html',
     './blog/best-snake-games-compared.html',
@@ -29,6 +34,11 @@ const ASSETS_TO_CACHE = [
     './blog/python-grid-pathfinding-bfs-dijkstra-astar.html',
     './blog/python-oop-refactoring-game-classes.html',
     './blog/debugging-common-python-game-loop-bugs.html',
+    './assets/images/deterministic-game-loops-canvas.webp',
+    './assets/images/flood-fill-safety-snake-ai.webp',
+    './assets/images/spatial-partitioning-grid-collisions.webp',
+    './assets/images/chiptune-audio-web-audio-api.webp',
+    './assets/images/state-machines-arcade-game.webp',
     './assets/images/python-snake-pygame-tutorial.webp',
     './assets/images/python-deque-data-structures.webp',
     './assets/images/what-is-pythonic-patterns.webp',

@@ -301,17 +301,19 @@
 
                 <div style="background: var(--bg-primary); padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-primary); margin-bottom: 16px;">
                     <code style="color: var(--accent-primary); font-size: 0.95rem; font-weight: 700;">
-                        Points Yield = (Base Food Value × Level Multiplier) × Combo Multiplier
+                        Points Yield = (Base Food Points + Combo Streak Bonus + Speed Bonus) × Skill Multiplier
                     </code>
                     <p style="font-size: 0.85rem; color: var(--fg-muted); margin-top: 6px;">
-                        • <strong>Combo Window:</strong> Consume food within 3.5 seconds to build multipliers (1x → 2x → 3x → 4x → 5x MAX).
+                        • <strong>Combo Window:</strong> Consume food within 3.5 seconds to build streak bonus (+2 pts per streak, up to +20 pts MAX).<br>
+                        • <strong>Skill Multipliers:</strong> Double Points (2x) or Score Frenzy (3x) multiply total points per eat.<br>
+                        • <strong>Level Progression:</strong> Every 100 points advances to the next speed tier.
                     </p>
                 </div>
 
                 <!-- Interactive Score Calculator Widget -->
                 <div class="calculator-widget">
-                    <h3 style="font-size: 1rem; color: var(--fg-primary);">🧮 Interactive Score Calculator</h3>
-                    <p style="font-size: 0.8rem; color: var(--fg-muted);">Adjust parameters below to estimate exact point calculations in real-time.</p>
+                    <h3 style="font-size: 1rem; color: var(--fg-primary);">🧮 Authoritative Score Calculator</h3>
+                    <p style="font-size: 0.8rem; color: var(--fg-muted);">Adjust parameters below to calculate exact point yield matching the authoritative game engine.</p>
 
                     <div class="calc-row">
                         <label for="calc-food">
@@ -326,19 +328,23 @@
                     </div>
 
                     <div class="calc-row">
-                        <label for="calc-level">
-                            <span>Current Level</span>
-                            <span id="calc-level-val" style="color: var(--accent-primary);">Level 1 (1.0x)</span>
+                        <label for="calc-combo">
+                            <span>Combo Streak Count (within 3.5s)</span>
+                            <span id="calc-combo-val" style="color: var(--accent-primary);">0 Streak (+0 pts bonus)</span>
                         </label>
-                        <input type="range" id="calc-level" min="1" max="10" value="1">
+                        <input type="range" id="calc-combo" min="0" max="10" value="0">
                     </div>
 
                     <div class="calc-row">
-                        <label for="calc-combo">
-                            <span>Combo Streak</span>
-                            <span id="calc-combo-val" style="color: var(--accent-primary);">1x Multiplier</span>
+                        <label for="calc-multiplier">
+                            <span>Active Skill Multiplier</span>
+                            <span id="calc-multiplier-val" style="color: var(--accent-primary);">1x (Standard)</span>
                         </label>
-                        <input type="range" id="calc-combo" min="1" max="5" value="1">
+                        <select id="calc-multiplier">
+                            <option value="1">1x (Standard No Skill Active)</option>
+                            <option value="2">2x (Double Points Active)</option>
+                            <option value="3">3x (Score Frenzy Active)</option>
+                        </select>
                     </div>
 
                     <div class="calc-results">
@@ -348,11 +354,11 @@
                         </div>
                         <div class="calc-res-box">
                             <div class="calc-res-val" id="res-mult">1.0x</div>
-                            <div class="calc-res-lbl">Effective Boost</div>
+                            <div class="calc-res-lbl">Effective Multiplier</div>
                         </div>
                         <div class="calc-res-box">
                             <div class="calc-res-val" id="res-10eats">+100</div>
-                            <div class="calc-res-lbl">10-Streak Total</div>
+                            <div class="calc-res-lbl">Estimated 10-Eat Total</div>
                         </div>
                     </div>
                 </div>
@@ -604,14 +610,14 @@
             testerStatus.textContent = `Input Detected: Mobile Touch Swipe [${dir}]`;
         }, { passive: true });
 
-        // Interactive Score Calculator Widget
+        // Interactive Score Calculator Widget (Matches ScoringEngine Authoritative Calculation)
         const foodSelect = document.getElementById('calc-food');
-        const levelInput = document.getElementById('calc-level');
         const comboInput = document.getElementById('calc-combo');
+        const multSelect = document.getElementById('calc-multiplier');
 
         const foodValLbl = document.getElementById('calc-food-val');
-        const levelValLbl = document.getElementById('calc-level-val');
         const comboValLbl = document.getElementById('calc-combo-val');
+        const multValLbl = document.getElementById('calc-multiplier-val');
 
         const resPoints = document.getElementById('res-points');
         const resMult = document.getElementById('res-mult');
@@ -619,28 +625,30 @@
 
         function updateCalculator() {
             const baseFood = parseInt(foodSelect.value, 10);
-            const level = parseInt(levelInput.value, 10);
-            const combo = parseInt(comboInput.value, 10);
+            const comboStreak = parseInt(comboInput.value, 10);
+            const multiplier = parseInt(multSelect.value, 10);
 
-            const levelMult = 1 + (level - 1) * 0.2;
-            const totalMult = levelMult * combo;
-            const pointsPerEat = Math.round(baseFood * totalMult);
+            // Replicate ScoringEngine.calculatePoints
+            const comboBonus = Math.min(comboStreak * 2, 20); // capped at 20
+            const pointsPerEat = Math.floor((baseFood + comboBonus) * multiplier);
             const total10 = pointsPerEat * 10;
 
-            const selectedText = foodSelect.options[foodSelect.selectedIndex].text;
-            foodValLbl.textContent = selectedText.split('(')[0].trim();
-            levelValLbl.textContent = `Level ${level} (${levelMult.toFixed(1)}x)`;
-            comboValLbl.textContent = `${combo}x Multiplier`;
+            const selectedFoodText = foodSelect.options[foodSelect.selectedIndex].text;
+            foodValLbl.textContent = selectedFoodText.split('(')[0].trim() + ` (+${baseFood} pts)`;
+            comboValLbl.textContent = `${comboStreak} Streak (+${comboBonus} pts bonus)`;
+            multValLbl.textContent = `${multiplier}x (${multiplier === 1 ? 'Standard' : multiplier === 2 ? 'Double Points' : 'Score Frenzy'})`;
 
             resPoints.textContent = `+${pointsPerEat}`;
-            resMult.textContent = `${totalMult.toFixed(1)}x`;
+            resMult.textContent = `${multiplier}.0x`;
             res10Eats.textContent = `+${total10}`;
         }
 
-        foodSelect.addEventListener('change', updateCalculator);
-        levelInput.addEventListener('input', updateCalculator);
-        comboInput.addEventListener('input', updateCalculator);
-        updateCalculator();
+        if (foodSelect && comboInput && multSelect) {
+            foodSelect.addEventListener('change', updateCalculator);
+            comboInput.addEventListener('input', updateCalculator);
+            multSelect.addEventListener('change', updateCalculator);
+            updateCalculator();
+        }
 
         // Search & Filter FAQ Accordion
         const faqSearch = document.getElementById('faq-search');

@@ -159,6 +159,10 @@
                         <span class="stat-label">Level</span>
                         <span class="stat-value" id="level">1</span>
                     </div>
+                    <div class="stat mode-stat">
+                        <span class="stat-label">Mode</span>
+                        <span class="stat-value active-mode-badge" id="active-mode-badge">Classic</span>
+                    </div>
                 </div>
             </header>
 
@@ -169,6 +173,25 @@
                     <div class="overlay-content">
                         <h2 id="overlay-title">Snake</h2>
                         <p class="overlay-subtitle">Classic reimagined</p>
+
+                        <!-- Game Mode Selector -->
+                        <div class="mode-selector-wrapper" role="radiogroup" aria-label="Game Mode Selection">
+                            <div class="mode-selector-tabs">
+                                <button type="button" class="mode-tab-btn active" data-mode="classic" role="radio" aria-checked="true" title="Classic arcade rules: walls kill">
+                                    <span class="mode-icon">🟩</span>
+                                    <span class="mode-text">Classic</span>
+                                </button>
+                                <button type="button" class="mode-tab-btn" data-mode="wrap" role="radio" aria-checked="false" title="Wrap-around mode: pass through borders freely">
+                                    <span class="mode-icon">🌀</span>
+                                    <span class="mode-text">Wrap-Around</span>
+                                </button>
+                                <button type="button" class="mode-tab-btn" data-mode="rival" role="radio" aria-checked="false" title="AI Rival Battle: compete against an autonomous A* bot">
+                                    <span class="mode-icon">🤖</span>
+                                    <span class="mode-text">AI Rival</span>
+                                </button>
+                            </div>
+                            <p class="mode-description" id="mode-desc">Classic arcade rules: walls kill, high precision navigation.</p>
+                        </div>
                         <div class="controls-preview" aria-label="Control instructions">
                             <div class="control-row">
                                 <kbd class="key" aria-label="Up">↑</kbd>

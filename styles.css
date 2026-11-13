@@ -3081,3 +3081,77 @@ pre {
     border-color: #22c55e !important;
     background: rgba(34, 197, 94, 0.15) !important;
 }
+
+/* ==========================================================================
+   Game Mode Selector Tabs & Active Badge (Modern Retro Arcade)
+   ========================================================================== */
+.mode-selector-wrapper {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.mode-selector-tabs {
+    display: inline-flex;
+    background: var(--bg-secondary, #161b22);
+    padding: 4px;
+    border-radius: var(--radius-full, 9999px);
+    border: 1px solid var(--border-primary, #30363d);
+    gap: 4px;
+    max-width: 100%;
+}
+
+.mode-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: var(--radius-full, 9999px);
+    border: none;
+    background: transparent;
+    color: var(--fg-secondary, #8b949e);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    white-space: nowrap;
+    user-select: none;
+}
+
+.mode-tab-btn:hover {
+    color: var(--fg-primary, #f0f6fc);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.mode-tab-btn.active {
+    background: var(--accent-neon, #10b981);
+    color: #0d1117;
+    font-weight: 700;
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.35);
+}
+
+.mode-description {
+    font-size: 0.82rem;
+    color: var(--fg-muted, #8b949e);
+    text-align: center;
+    min-height: 1.2rem;
+    max-width: 360px;
+    line-height: 1.4;
+}
+
+.active-mode-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--accent-neon, #10b981);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
